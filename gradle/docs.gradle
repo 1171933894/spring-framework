@@ -68,16 +68,7 @@ dokka {
 		def kotlinDirs = project.sourceSets.main.kotlin.srcDirs.collect()
 		kotlinDirs -= project.sourceSets.main.java.srcDirs
 	})
-	externalDocumentationLink {
-		url = new URL("https://docs.spring.io/spring-framework/docs/$version/javadoc-api/")
-		packageListUrl = new File(buildDir, "api/package-list").toURI().toURL()
-	}
-	externalDocumentationLink {
-		url = new URL("https://projectreactor.io/docs/core/release/api/")
-	}
-	externalDocumentationLink {
-		url = new URL("https://www.reactive-streams.org/reactive-streams-1.0.1-javadoc/")
-	}
+
 }
 
 asciidoctor {
@@ -143,20 +134,28 @@ task schemaZip(type: Zip) {
 	baseName = "spring-framework"
 	classifier = "schema"
 	description = "Builds -${classifier} archive containing all " +
-			"XSDs for deployment at https://springframework.org/schema."
+			"XSDs for deployment at http://springframework.org/schema."
 	duplicatesStrategy 'exclude'
+
+	//当前系统是否是windows的标志
+	def isWindows = System.properties['os.name'].toUpperCase().contains('WINDOWS')
+
+	//不同的操作系统，表示子目录的符号是不同的
+	def schemaPath = isWindows ? "META-INF\\spring.schemas" : "META-INF/spring.schemas"
+
 	moduleProjects.each { subproject ->
 		def Properties schemas = new Properties();
 
 		subproject.sourceSets.main.resources.find {
-			it.path.endsWith("META-INF/spring.schemas")
+			it.path.endsWith(schemaPath)
 		}?.withInputStream { schemas.load(it) }
 
 		for (def key : schemas.keySet()) {
 			def shortName = key.replaceAll(/http.*schema.(.*).spring-.*/, '$1')
 			assert shortName != key
 			File xsdFile = subproject.sourceSets.main.resources.find {
-				it.path.endsWith(schemas.get(key))
+				//如果是windows环境，就要对路径中的分隔符做替换
+				isWindows ? it.path.endsWith(schemas.get(key).replaceAll('\\/','\\\\')) : it.path.endsWith(schemas.get(key))
 			}
 			assert xsdFile != null
 			into (shortName) {
