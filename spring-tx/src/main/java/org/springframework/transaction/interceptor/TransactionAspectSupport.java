@@ -382,6 +382,12 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	/**
 	 * Determine the specific transaction manager to use for the given transaction.
 	 */
+	/**
+	 * 于 明式 务的处理与编程式 务的处理，第 点区别在于 性上， 程式的
+	 * 事务处理是不需要有 务属性的，第 别就是在 TransactionManag 上， Cal I back.Preferring
+	 * PlatformTransactionManager PlatfonnTransactionManager 接口， 露出 个方 用于执行
+	 * 务处理中的回调
+	 */
 	@Nullable
 	protected PlatformTransactionManager determineTransactionManager(@Nullable TransactionAttribute txAttr) {
 		// Do not attempt to lookup tx manager if no tx attributes are set
@@ -469,6 +475,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			@Nullable TransactionAttribute txAttr, final String joinpointIdentification) {
 
 		// If no name specified, apply method identification as transaction name.
+		// 如果没有名称指定则使用方法唯一标识，并使用DelegatingTransactionAttribute封装txAttr
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionAttribute(txAttr) {
 				@Override
@@ -481,6 +488,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		TransactionStatus status = null;
 		if (txAttr != null) {
 			if (tm != null) {
+				// 获取TransactionStatus
 				status = tm.getTransaction(txAttr);
 			}
 			else {
@@ -490,6 +498,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 		}
+		// 根据指定的属性与status准备一个TransactionInfo
 		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
 	}
 
