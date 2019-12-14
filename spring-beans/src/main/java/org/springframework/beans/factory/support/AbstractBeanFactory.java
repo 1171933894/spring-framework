@@ -239,6 +239,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
+		// 或许很多人不理解转换对应 beanNarne 是什么意思，传人的参数 name 不就是 beanNarne
+		// 吗？其实不是，这里传入的参数可能是别名，也可能是 FactoryBean ，所以需要进行一系列的
+		// 碎析，这些解析内容包括如下内容
+		// 1、这些解析内容包括如下内容 FactoryBean 的修饰符，也就是如果阳ηe＝&aa”，那么会首先去除＆而使 na1ne aa
+		// 2、取指定 alias 所表示的最终 eanNam巳，例如别 指向名称为 bean 则返回 B;
+		// 若别名 指向别名 ，另 ］名 又指向名称为 bean 则返回
 		final String beanName = transformedBeanName(name);// 提取对应的beanName
 		Object bean;
 
@@ -310,6 +316,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
+				// 寻找依赖
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				// 若存在依赖则需要递归实例化依赖的bean
