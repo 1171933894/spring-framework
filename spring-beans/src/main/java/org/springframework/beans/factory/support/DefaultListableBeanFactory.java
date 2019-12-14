@@ -881,6 +881,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
+				// 注册前的最后一次校验，这里的检验不同于之前的XML文件校验
+				// 主要是对于 AbstractBea Definition 周怕中的 methodOverrides 校验，
+				// 佼验 methodOverrides 是否与工厂方法并存或者 methodOverrides 对应的方法根本习帝在
 				((AbstractBeanDefinition) beanDefinition).validate();
 			}
 			catch (BeanDefinitionValidationException ex) {
@@ -889,9 +892,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
+		// 因为 beanDefinitionMap 是全局变量 这里定会存在:J 二发访问的情况
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
-		if (existingDefinition != null) {
-			if (!isAllowBeanDefinitionOverriding()) {
+		if (existingDefinition != null) {// 处理注册已经注册的beanName情况
+			if (!isAllowBeanDefinitionOverriding()) {// 如果对应的 BeanName 已经注册且在配置中配置了 bean 不允许被覆盖，贝IJ 抛出异常
 				throw new BeanDefinitionOverrideException(beanName, beanDefinition, existingDefinition);
 			}
 			else if (existingDefinition.getRole() < beanDefinition.getRole()) {
@@ -932,7 +936,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			else {
 				// Still in startup registration phase
-				this.beanDefinitionMap.put(beanName, beanDefinition);
+				this.beanDefinitionMap.put(beanName, beanDefinition);// 注册beanDefinition
 				this.beanDefinitionNames.add(beanName);
 				removeManualSingletonName(beanName);
 			}
@@ -940,7 +944,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		if (existingDefinition != null || containsSingleton(beanName)) {
-			resetBeanDefinition(beanName);
+			resetBeanDefinition(beanName);// 重置所有beanName对应的缓存
 		}
 	}
 
