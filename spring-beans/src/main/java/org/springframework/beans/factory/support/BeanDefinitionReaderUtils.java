@@ -62,6 +62,8 @@ public abstract class BeanDefinitionReaderUtils {
 		bd.setParentName(parentName);
 		if (className != null) {
 			if (classLoader != null) {
+				// 如果 classLoader 不为空， 则使用以传人的 classLoader 同－i;草拟trLJm 类对象，否则只是
+				// 记录className
 				bd.setBeanClass(ClassUtils.forName(className, classLoader));
 			}
 			else {
