@@ -409,6 +409,7 @@ public abstract class BeanUtils {
 	 * @throws BeansException if PropertyDescriptor look fails
 	 */
 	public static PropertyDescriptor[] getPropertyDescriptors(Class<?> clazz) throws BeansException {
+		// CachedIntrospectionResults类是对PropertyDescriptor的一个封装实现，看forClass方法的实现
 		CachedIntrospectionResults cr = CachedIntrospectionResults.forClass(clazz);
 		return cr.getPropertyDescriptors();
 	}
@@ -660,10 +661,16 @@ public abstract class BeanUtils {
 	private static void copyProperties(Object source, Object target, @Nullable Class<?> editable,
 			@Nullable String... ignoreProperties) throws BeansException {
 
+		// 检查source和target对象是否为null，否则抛运行时异常
 		Assert.notNull(source, "Source must not be null");
 		Assert.notNull(target, "Target must not be null");
 
+		// 获取target对象的类信息
 		Class<?> actualEditable = target.getClass();
+		// 若editable不为null，检查target对象是否是editable类的实例，若不是则抛出运行时异常
+		// 这里的editable类是为了做属性拷贝时限制用的
+		// 若actualEditable和editable相同，则拷贝actualEditable的所有属性
+		// 若actualEditable是editable的子类，则只拷贝editable类中的属性
 		if (editable != null) {
 			if (!editable.isInstance(target)) {
 				throw new IllegalArgumentException("Target class [" + target.getClass().getName() +
@@ -671,25 +678,37 @@ public abstract class BeanUtils {
 			}
 			actualEditable = editable;
 		}
+		// 获取目标类的所有PropertyDescriptor，getPropertyDescriptors这个方法请看下方
 		PropertyDescriptor[] targetPds = getPropertyDescriptors(actualEditable);
 		List<String> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);
 
 		for (PropertyDescriptor targetPd : targetPds) {
+			// 获取该属性对应的set方法
 			Method writeMethod = targetPd.getWriteMethod();
+			// 属性的set方法存在 且 该属性不包含在忽略属性列表中
 			if (writeMethod != null && (ignoreList == null || !ignoreList.contains(targetPd.getName()))) {
+				// 获取source类相同名字的PropertyDescriptor, getPropertyDescriptor的具体实现看下方
 				PropertyDescriptor sourcePd = getPropertyDescriptor(source.getClass(), targetPd.getName());
 				if (sourcePd != null) {
+					// 获取对应的get方法
 					Method readMethod = sourcePd.getReadMethod();
+					// set方法存在 且 target的set方法的入参是source的get方法返回值的父类或父接口或者类型相同
+					// 具体ClassUtils.isAssignable()的实现方式请看下面详解
 					if (readMethod != null &&
 							ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType())) {
 						try {
+							// get方法是否是public的
 							if (!Modifier.isPublic(readMethod.getDeclaringClass().getModifiers())) {
+								// 暴力反射，取消权限控制检查
 								readMethod.setAccessible(true);
 							}
+							// 获取get方法的返回值
 							Object value = readMethod.invoke(source);
+							// 原理同上
 							if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) {
 								writeMethod.setAccessible(true);
 							}
+							// 将get方法的返回值 赋值给set方法作为入参
 							writeMethod.invoke(target, value);
 						}
 						catch (Throwable ex) {

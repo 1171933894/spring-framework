@@ -165,10 +165,13 @@ public final class CachedIntrospectionResults {
 	 */
 	@SuppressWarnings("unchecked")
 	static CachedIntrospectionResults forClass(Class<?> beanClass) throws BeansException {
+		// 由于线程安全的需要，使用ConcurrentHashMap作为实现
 		CachedIntrospectionResults results = strongClassCache.get(beanClass);
 		if (results != null) {
 			return results;
 		}
+		// 若strongClassCache中不存在，则去softClassCache去获取
+		// ConcurrentReferenceHashMap是Spring实现的可以指定entry引用级别的ConcurrentHashMap，默认的引用级别是soft，可以防止OOM
 		results = softClassCache.get(beanClass);
 		if (results != null) {
 			return results;
@@ -177,6 +180,8 @@ public final class CachedIntrospectionResults {
 		results = new CachedIntrospectionResults(beanClass);
 		ConcurrentMap<Class<?>, CachedIntrospectionResults> classCacheToUse;
 
+		// isCacheSafe方法检查给定的beanClass是否由入参中的classloader或者此classloader的祖先加载的（双亲委派的原理）
+		// isClassLoaderAccepted检查加载beanClass的classloader是否在可以接受的classloader的集合中 或者是集合中classloader的祖先
 		if (ClassUtils.isCacheSafe(beanClass, CachedIntrospectionResults.class.getClassLoader()) ||
 				isClassLoaderAccepted(beanClass.getClassLoader())) {
 			classCacheToUse = strongClassCache;
@@ -188,6 +193,7 @@ public final class CachedIntrospectionResults {
 			classCacheToUse = softClassCache;
 		}
 
+		// 根据classloader的结果，将类信息加载到对应的缓存中
 		CachedIntrospectionResults existing = classCacheToUse.putIfAbsent(beanClass, results);
 		return (existing != null ? existing : results);
 	}

@@ -529,19 +529,24 @@ public abstract class ClassUtils {
 	 * @return if the target type is assignable from the value type
 	 * @see TypeUtils#isAssignable
 	 */
+	// ClassUtils.isAssignable()方法扩展了Class的isAssignableFrom()方法，即将Java的基本类型和包装类型做了兼容。
 	public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
 		Assert.notNull(lhsType, "Left-hand side type must not be null");
 		Assert.notNull(rhsType, "Right-hand side type must not be null");
+		// 若左边类型 是右边类型的父类、父接口，或者左边类型等于右边类型
 		if (lhsType.isAssignableFrom(rhsType)) {
 			return true;
 		}
+		// 左边入参是否是基本类型
 		if (lhsType.isPrimitive()) {
+			// primitiveWrapperTypeMap是从包装类型到基本类型的map，将右边入参转化为基本类型
 			Class<?> resolvedPrimitive = primitiveWrapperTypeMap.get(rhsType);
 			if (lhsType == resolvedPrimitive) {
 				return true;
 			}
 		}
 		else {
+			// 将右边入参转化为包装类型
 			Class<?> resolvedWrapper = primitiveTypeToWrapperMap.get(rhsType);
 			if (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper)) {
 				return true;
