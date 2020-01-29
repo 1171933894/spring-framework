@@ -276,6 +276,7 @@ public class ContextLoader {
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
 			if (this.context == null) {
+				// 创建WebApplicationContext
 				this.context = createWebApplicationContext(servletContext);
 			}
 			if (this.context instanceof ConfigurableWebApplicationContext) {
@@ -292,13 +293,19 @@ public class ContextLoader {
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}
+			// 将其保存到该webapp的servletContext中
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 
+			// 获取线程上下文类加载器，默认为WebAppClassLoader
 			ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+			// 如果spring的jar包放在每个webapp自己的目录中
+			// 此时线程上下文类加载器会与本类的类加载器（加载spring的）相同，都是WebAppClassLoader
 			if (ccl == ContextLoader.class.getClassLoader()) {
 				currentContext = this.context;
 			}
 			else if (ccl != null) {
+				// 如果不同，也就是上面说的那个问题的情况，那么用一个map把刚才创建的WebApplicationContext及对应的WebAppClassLoader存下来
+				// 一个webapp对应一个记录，后续调用时直接根据WebAppClassLoader来取出
 				currentContextPerThread.put(ccl, this.context);
 			}
 
