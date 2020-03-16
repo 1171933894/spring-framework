@@ -49,6 +49,14 @@ import org.springframework.lang.Nullable;
  * @see ByteArrayResource
  * @see InputStreamResource
  */
+
+/**
+ * Resource 接口抽象了所有 Spring 内部使用到的底层资源： File、URL、Classpath等
+ *
+ * 对不同来源的资源文件都有相应的 Resource 实现：文件（FileSystemResource）、 Classpath
+ * 资源（ClassPathResource）、 URL 资源（UrlResource ）、 InputStream 资源（ InputStreamResource）
+ * Byte 数组（ByteArrayResource ）等
+ */
 public interface Resource extends InputStreamSource {
 
 	/**
