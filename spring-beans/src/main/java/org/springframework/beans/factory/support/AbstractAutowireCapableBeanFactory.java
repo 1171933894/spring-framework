@@ -172,6 +172,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	public AbstractAutowireCapableBeanFactory() {
 		super();
 		// 忽略给定接口的自动装配功能
+		/**
+		 * 举例来说，当A中有属性B，那么 Spring 在获取 Bean 的时候如果其属性还没有初始化，
+		 * 那么 spring 会自动初始化，这也是 spring 中提供的一个重要特性。但是，某些情况
+		 * 下，不会被初始化，其中的一种情况就是实现了 BeanNameAware 接口。 Spring 中是
+		 * 这样介绍的：自动装配时忽略给定的依赖接口，典型应用是通过其他方式解析 Application
+		 * 上下文注册依赖，类似于 BeanFactory 通过 BeanFactoryAware 进行注入或者
+		 * ApplicationContext 通过 ApplicationContextAware 进行注入
+		 */
 		ignoreDependencyInterface(BeanNameAware.class);
 		ignoreDependencyInterface(BeanFactoryAware.class);
 		ignoreDependencyInterface(BeanClassLoaderAware.class);

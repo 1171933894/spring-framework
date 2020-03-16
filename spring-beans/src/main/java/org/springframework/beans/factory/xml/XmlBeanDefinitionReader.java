@@ -256,6 +256,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	/**
 	 * Return the EntityResolver to use, building a default resolver
 	 * if none specified.
+	 *
+	 * EntityResolver的作用是项目本身就可以提供一个如何寻找 DTD 声明的方法，即由程序来
+	 * 实现寻找 DTD 声明的过程，比如我们将 DTD 文件放到项目中某处，在实现时直接将此文档读
+	 * 取并返回给 SAX 即可 这样就避免了通过网络来找相应的声明
 	 */
 	protected EntityResolver getEntityResolver() {
 		if (this.entityResolver == null) {
@@ -302,7 +306,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 */
 	@Override
 	public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
-		// 其中的主要逻辑体现在 getRead （）方法中， 置了编码属性的时候 Spri 吨会使用相应的编码作为输入流的编码
+		// 其中的主要逻辑体现在 getRead（）方法中， 设置了编码属性的时候 Spring 会使用相应的编码作为输入流的编码
+		// 1、装资源文件。当进入 XmlBeanDefinitionReader 后首先对 Resource 使用 EncodedResource 类进行封装
 		return loadBeanDefinitions(new EncodedResource(resource));
 	}
 
@@ -330,15 +335,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
 		try {
-			// 从 encodedResource 叶’ ll'ii. tJ 经封装 Resource X•J' Jj: 月次从 Res urce 巾获取其中的 input Stream
+			// 2、获取输入流 Resource 中获取对应的 InputStream 并构造 InputSource
 			InputStream inputStream = encodedResource.getResource().getInputStream();
 			try {
-				// lnputSource 这个类并不米自于 Spring ，它的全路径是。rg xrnl sax . InputSource
+				// InputSource 这个类并不米自于 Spring ，它的全路径是org.xml.sax.InputSource
 				InputSource inputSource = new InputSource(inputStream);
 				if (encodedResource.getEncoding() != null) {
 					inputSource.setEncoding(encodedResource.getEncoding());
 				}
-				// 进入了逻辑核心部分
+				// 3、通过构造的 InputSource 实例和 Resource 实例继续调用函数 doLoadBeanDefinitions
 				return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 			}
 			finally {
@@ -396,7 +401,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
-			// 加载XML文件的验证模式
+			// 加载XML文件的验证模式，加载 XML 文件，并得到对应的 Document
 			Document doc = doLoadDocument(inputSource, resource);
 			// 根据返回的Document注册Bean信息
 			int count = registerBeanDefinitions(doc, resource);
