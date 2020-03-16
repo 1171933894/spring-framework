@@ -345,16 +345,15 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		// 首先委托 BeanDefinitionDel gate 类的 parseBeanDefinitio nE lement 方法进行元 解析，
-		// 返回 BeanDefinitionHolder 类型的实例 bdHo lder 过这个方法后， bdHolder 实例已
-		// 文件中配 的各种属性了，例如 class nam id alias 的属性
+		// 1、首先委托 BeanDefinitionDelegate 类的 parseBeanDefinitionElement 方法进行元素解析，
+		// 返回 BeanDefinitionHolder 类型的实例 bdHolder，经过这个方法后， bdHolder 实例已经包含了
+		// 文件中配置的各种属性了，例如 class、name、id、alias 的属性
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
-			// 当返回的 bdHol 不为 的情况下 存在 认标 节点下再有自定义 需要
-			// 再次对自定义标签进行解析
+			// 2、当返回的 bdHolder 不为空的情况下若存在默认标签的子节点下再有自定义属性，还需要再次对自定义标签进行解析
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
-				// 解析完成后， 要对解析后的 bdHolder 进行注册
+				// 3、解析完成后， 要对解析后的 bdHolder 进行注册，同样，注册操作委托给了BeanDefinitionReaderUtils的registerBeanDefinition方法
 				// Register the final decorated instance.
 				BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
 			}
@@ -363,7 +362,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
 			// Send registration event.
-			// 最后发出 件，通知相关的监昕器，这个 bean 加载 成了
+			// 4、最后发出响应事件，通知相关的监昕器，这个 bean 加载完成了
 			/**
 			 * 通过代码 getRead rContextO reComponentRegistered(new BeanComponentDefinition(bdHolder))
 			 * 完成此工作，这里的实现只为扩展，当程序开发人员需要对注册 BeanDefinition 事件进行监听
