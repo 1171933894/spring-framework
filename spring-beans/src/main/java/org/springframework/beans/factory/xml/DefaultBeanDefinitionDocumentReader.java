@@ -364,7 +364,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			// Send registration event.
 			// 4、最后发出响应事件，通知相关的监昕器，这个 bean 加载完成了
 			/**
-			 * 通过代码 getRead rContextO reComponentRegistered(new BeanComponentDefinition(bdHolder))
+			 * 通过代码 getReaderContextO reComponentRegistered(new BeanComponentDefinition(bdHolder))
 			 * 完成此工作，这里的实现只为扩展，当程序开发人员需要对注册 BeanDefinition 事件进行监听
 			 * 时可以通过注册J~I 听器的方式并将处理逻辑 入监｜听器巾，目前在 Spring 中并没有对此事件做
 			 * 任何逻辑处理

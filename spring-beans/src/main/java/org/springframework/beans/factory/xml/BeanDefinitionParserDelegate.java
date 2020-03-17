@@ -412,6 +412,9 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
+		/**
+		 * 1、提取元素中的id以及name属性
+		 */
 		String id = ele.getAttribute(ID_ATTRIBUTE);// 解析id属性
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);// 解析name属性
 
@@ -435,8 +438,12 @@ public class BeanDefinitionParserDelegate {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		/**
+		 * 2、进一步解析其他所有属性并统一封装至GenericBeanDefinition类型的实例中
+		 */
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
+			// 3、如果检测到bean没有指定beanName，那么使用默认规则为此Bean生成beanName
 			if (!StringUtils.hasText(beanName)) {
 				try {
 					// 如果不存在beanName那么根据Spring中提供的命名规则为当前bean生成对应的beanName
@@ -467,6 +474,7 @@ public class BeanDefinitionParserDelegate {
 				}
 			}
 			String[] aliasesArray = StringUtils.toStringArray(aliases);
+			// 4、将获取到的信息封装到 BeanDefinitionHolder 实例中
 			return new BeanDefinitionHolder(beanDefinition, beanName, aliasesArray);
 		}
 
@@ -528,7 +536,7 @@ public class BeanDefinitionParserDelegate {
 			parseMetaElements(ele, bd);
 			// 解析lookup-method属性
 			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
-			// 解析repaced-method属性
+			// 解析replaced-method属性
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
 			// 解析构造函数参数
@@ -578,6 +586,7 @@ public class BeanDefinitionParserDelegate {
 		}// 在嵌入 bean Difinition 情况下且没有单独指定 scope 属性则佼用父类默认的属性
 		else if (containingBean != null) {
 			// Take default from containing bean in case of an inner bean definition.
+			// 在嵌入 beanDifinition 情况下且没有单独指定 scope 属性则佼用父类默认的属性
 			bd.setScope(containingBean.getScope());
 		}
 
