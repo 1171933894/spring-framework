@@ -58,7 +58,7 @@ import org.springframework.core.io.Resource;
  * 法去实现，而唯独与父类不同的个性化实现就是增加了 XmlBeanDefinitionReader 类型的 reader
  * 属性 XmlBeanFactory 中主要使用 reade 属性对资源文件进行读取和注册
  */
-public class XmlBeanFactory extends DefaultListableBeanFactory {
+public class XmlBeanFactory extends DefaultListableBeanFactory {// Listable：可列出的
 
 	private final XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this);
 
