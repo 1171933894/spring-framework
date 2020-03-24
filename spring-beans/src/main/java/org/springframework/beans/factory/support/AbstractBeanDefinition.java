@@ -173,8 +173,8 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	private String[] dependsOn;
 
 	/**
-	 * autowire-candidate属性设置为false，这样容器在查找自动装配对象时，
-	 * 将不考虑bean，即它不会被考虑作为其他bean自动装配的候选者，但是该bean本身还是可以使用自动装配来注入其他bean的
+	 * autowire-candidate属性设置为false，这样容器在查找自动装配对象时，将不考虑该bean，即它不
+	 * 会被考虑作为其他bean自动装配的候选者，但是该bean本身还是可以使用自动装配来注入其他bean的
 	 */
 	private boolean autowireCandidate = true;
 
@@ -211,9 +211,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	private boolean lenientConstructorResolution = true;
 
 	/**
-	 * 对应bean属性factory-bean，用法
-	 * <bean id currentT me factory-bean= ” l nstanceFac ryBean factory-me th d ＝
-	 * createTime” />
+	 * 对应bean属性factory-bean，用法:
+	 * <bean id="instanceFactoryBean" class="example.chapter3.InstanceFactoryBean" />
+	 * <bean id="currentTime" factory-bean="instanceFactoryBean" factory-method ＝"createTime"/>
 	 */
 	@Nullable
 	private String factoryBeanName;

@@ -159,6 +159,10 @@ public abstract class BeanDefinitionReaderUtils {
 	 * @param registry the bean factory to register with
 	 * @throws BeanDefinitionStoreException if registration failed
 	 */
+	/**
+	 * 解析的 beanDefinition 都会被注册到 BeanDefinitionRegistry 类型的实例 registry 中，
+	 * 对于 beanDefinition 的注册分成了两部分：通过 beanName 的注册以及通过别名的注册
+	 */
 	public static void registerBeanDefinition(
 			BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)
 			throws BeanDefinitionStoreException {

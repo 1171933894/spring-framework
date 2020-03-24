@@ -590,6 +590,15 @@ public class BeanDefinitionParserDelegate {
 			 */
 			parsePropertyElements(ele, bd);
 			// 解析qualifier子元素
+			/**
+			 * 在使用 Spring 架中进行自动注入时， Spring 器中匹配的候选 Bean 数目必须有且仅有一个。 当找不到一个匹配的 Bean 时，
+			 * Spring 器将抛出 BeanCreationException 异常，Spring 允许我们通过 Qualifier 指定注入 Bean 名称， 这样歧义就消除了
+			 */
+			/**
+			 * <bean id="myTestBean" class="bean.MyTestBean"></bean>
+			 * 	<qualifier type="org.Springframework.beans.factory.annotation.Qualifier” value="gf" />
+			 * </bean>
+			 */
 			parseQualifierElements(ele, bd);
 
 			bd.setResource(this.readerContext.getResource());
@@ -1545,6 +1554,14 @@ public class BeanDefinitionParserDelegate {
 	 * @param originalDef the current bean definition
 	 * @param containingBd the containing bean definition (if any)
 	 * @return the decorated bean definition
+	 */
+	/**
+	 * 第三个参数是父类 bean ，当对某个嵌套配置进行分析时，这里需要传递父类 beanDefinition。分析源码
+	 * 得知这里传递的参数其实是为了使用父类的 scope 属性，以备子类若没有设置 scope 默认使用父类的属性
+	 *
+	 * 在 decorateBeanDefinitionIfRequired 中我们可以看到对于程序默认的标签的处理其实是直接略过的，
+	 * 因为默认的标签到这里已经被处理完了， 这里只对自定义的标签或者 bean 的自定义属性感兴趣。在方法中
+	 * 实现了寻找自定义标签并根据自定义标签寻找命名空间处理器， 并进行进一步的解析。
 	 */
 	public BeanDefinitionHolder decorateBeanDefinitionIfRequired(
 			Element ele, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
