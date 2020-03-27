@@ -278,8 +278,8 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			// 如果是相对地址则根据相对地址计算出绝对地址
 			try {
 				int importCount;
-				//Resource 存在多个子实现类，女 VfsResource FileSystemResource 等，
-				// mi 每个 resource createRelative 方式实现在11 不一样，所以这里先使用子类的方法尝
+				// Resource 存在多个子实现类，如 VfsResource、FileSystemResource 等，
+				// 而每个 resource 的 createRelative 方式实现都不一样，所以这里先使用子类的方法尝
 				// 试解析
 				Resource relativeResource = getReaderContext().getResource().createRelative(location);
 				if (relativeResource.exists()) {
@@ -311,6 +311,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 	/**
 	 * Process the given alias element, registering the alias with the registry.
+	 */
+	/**
+	 *  将别名与 beanName 组成一对注册至 registry 中
 	 */
 	protected void processAliasRegistration(Element ele) {
 		// 获取beanName
