@@ -1668,6 +1668,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param mbd the merged bean definition
 	 * @return the object to expose for the bean
 	 */
+	/**
+	 * 我们得到 bean 的实例后 做的第一步就是调用这个方法来检测一下正确性，其实就是用于检测当前 bean 是否是 Factory Bean
+	 * 类型的 bean ，如果是，那么需要调用该 bean 对应的 FactoryBean 实例中的 getObject（）作为返回值。
+	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
@@ -1685,9 +1689,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		// ／现在我们有了个 bean 的实 fY1J. 这个实例可能会是正~？，·（ bean TI.X: .fi·J; FactoryBear
-		// MMU FactoryBean J.li; 们攸HJ 它创ill实例，但是如果川户但要 ＇！：按 ~xll 工厂叉’例而不是士厂
-		// getOb ect 方法开 应的实例那么传人的 nam 应该Jm 1'iti 级品
+		// 现在我们有了个 bean 的实例. 这个实例可能会是正常的 bean 或者是 FactoryBean
+		// 如果是 FactoryBean 我们使用它创建实例，但是如果用户想要直接获取工厂实例而不是工厂
+		// getObject 方法对应的实例那么传入的 name 应该加入前缀&
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
@@ -1705,7 +1709,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Caches object obtained from FactoryBean if it is a singleton.
 			// 是否定义beanName
 			if (mbd == null && containsBeanDefinition(beanName)) {
-				// 将储存XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果
+				// 将存储XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果
 				// 指定的BeanName是子Bean的话同时会合并父亲的相关属性
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}

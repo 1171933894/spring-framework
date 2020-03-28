@@ -56,6 +56,19 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.aop.framework.ProxyFactoryBean
  * @see org.springframework.jndi.JndiObjectFactoryBean
  */
+
+/**
+ * 当配置文件中＜bean＞的 class 属性配置的实现类是 FactoryBean 时，通过 getBean（）方法返
+ * 回的不 FactoryBean 本身，而是 FactoryBean#getObject（）方法所返回的对象，相当于
+ * FactoryBean#getObject（）代理了 getBean （）方法
+ *
+ * <bean id="car" class="com.test.factorybean.CarFactoryBean" carInfo= "超级跑车,400,200000" /＞
+ *
+ * 当调用 getBean（"car"）时， Spring 通过反射机制发现 CarFactoryBean 实现了 FactoryBean
+ * 的接口，这时 Spring 容器就调用接口方法 CarFactoryBean#getObject（）方法返回。如果希望获取
+ * CarFactoryBean 的实例，则需要在使用 getBean(beanName) 方法时在 beanName 前显示的加上
+ * ”＆”前缀，例 getBean(”＆car)
+ */
 public interface FactoryBean<T> {
 
 	/**

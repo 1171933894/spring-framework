@@ -84,7 +84,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/** Cache of early singleton objects: bean name to bean instance. */
 	/**
-	 * 用于保存BeanName和创建bean的工厂之间的关系的不同之处在于，当一个单 bean 被放到这里面后，那么当 bean
+	 * 用于保存BeanName和创建bean的工厂之间的关系的不同之处在于，当一个单例 bean 被放到这里面后，那么当 bean
 	 * 在创建过程中，就可以通过 getBean 方法获取到了，其目的是用来检测循环引用
 	 */
 	private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
@@ -142,6 +142,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param singletonObject the singleton object
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
+		// 将结果记录至缓存并删除加载 bean 过程中所有记录的各种辅助状态
 		synchronized (this.singletonObjects) {
 			this.singletonObjects.put(beanName, singletonObject);
 			this.singletonFactories.remove(beanName);
@@ -358,6 +359,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void beforeSingletonCreation(String beanName) {
+		// 记录加载状态，也就是通过 this.singletonsCurrentlylInCeation.add(beanName）将当前要创建的 bean 记录在缓存中，这样便可以对循环依赖进行检测
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
 			throw new BeanCurrentlyInCreationException(beanName);
 		}
@@ -370,6 +372,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void afterSingletonCreation(String beanName) {
+		// 当 bean 加载结束后需要移除缓存中对该 bean 的正在加载状态的记录
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.remove(beanName)) {
 			throw new IllegalStateException("Singleton '" + beanName + "' isn't currently in creation");
 		}
