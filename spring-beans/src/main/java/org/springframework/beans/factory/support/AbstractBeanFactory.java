@@ -248,13 +248,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		final String beanName = transformedBeanName(name);// 提取对应的beanName
 		Object bean;
 
-		// 检查缓存中或者：主：例工厂 是否有对应的；生：例
-		// 为 么首先会使用这段代码呢
-		// 应 为在 illJ'(！例 bean 的时候会存在依赖注入的忻说，而在创:ill依赖的 候为了避免循环依~＇.（；！
-		// Spring :ill bean 的原则是不等 bean 创建完成就会将创建 bean Ob ectFactory 提早眼光
-		// 也就是将 ObjectFactory 加入到缓存巾， 一旦下个 bean {i:1J1J!IN1庆市要依赖上个 bear：贝Object: Factory
-		// Eagerly check singleton cache for manually registered singletons.
+		// 检查缓存中或者实例工厂中是否有对应的实例，
+		// 为什么首先会使用这段代码呢，
+		// 因为在创建单例bean的时候会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖，
+		// Spring创建bean的原则是不等 bean 创建完成就会将创建 bean 的 ObjectFactory 提早曝光
+		// 也就是将 ObjectFactory 加入到缓存中， 一旦下个 bean 创建时候需要依赖上个 bean 则直接使用 ObjectFactory
 		// 直接尝试从缓存获取或者singletonFacotries中的ObjectFactory中获取
+		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -282,8 +282,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
-			// 如果beanDefinitionMap中也就是在所有已经加载的类中不包括beanName则尝试从
-			// parentBeanFactory中检测
+			// 如果beanDefinitionMap中也就是在所有已经加载的类中不包括beanName则尝试从parentBeanFactory中检测
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -292,6 +291,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					return ((AbstractBeanFactory) parentBeanFactory).doGetBean(
 							nameToLookup, requiredType, args, typeCheckOnly);
 				}
+				// 递归到 BeanFactory 中寻找
 				else if (args != null) {
 					// Delegation to parent with explicit args.
 					return (T) parentBeanFactory.getBean(nameToLookup, args);
