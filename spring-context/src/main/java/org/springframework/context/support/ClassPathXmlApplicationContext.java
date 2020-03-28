@@ -142,7 +142,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 		super(parent);
 		setConfigLocations(configLocations);
 		if (refresh) {
-			refresh();
+			refresh();// 解析及其功能实现都在refresh()中实现
 		}
 	}
 

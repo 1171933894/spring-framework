@@ -593,6 +593,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Prepare this context for refreshing, setting its startup date and
 	 * active flag as well as performing any initialization of property sources.
 	 */
+	/**
+	 * prepareRefresh 函数主要是做些准备工作，例如对系统属性及环境变量的初始化及验证
+	 */
 	protected void prepareRefresh() {
 		// Switch to active.
 		this.startupDate = System.currentTimeMillis();
