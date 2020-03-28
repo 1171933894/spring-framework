@@ -157,6 +157,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 		// 解析前处理，留给子类实现
 		preProcessXml(root);
+		// 解析并注册BeanDefinition
 		parseBeanDefinitions(root, this.delegate);
 		// 解析后处理，留给子类实现
 		postProcessXml(root);
@@ -177,11 +178,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * "import", "alias", "bean".
 	 * @param root the DOM root element of the document
 	 */
-	// 解析并注册BeanDefinition
-
 	/**
 	 * XML 里面有两大类 Bean, 一个是默认的，如：
-	 * <bean id="test" class="test TestBean" />
+	 * <bean id="test" class="test.TestBean" />
 	 * 另一类就是自定义的，如：
 	 * <tx:annotation-driven/>
 	 */
@@ -205,6 +204,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 		else {
+			// 解析自定义标签
 			delegate.parseCustomElement(root);
 		}
 	}
