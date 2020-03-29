@@ -609,16 +609,20 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 			logger.debug("Executing prepared SQL statement" + (sql != null ? " [" + sql + "]" : ""));
 		}
 
+		// 获取数据库连接
 		Connection con = DataSourceUtils.getConnection(obtainDataSource());
 		PreparedStatement ps = null;
 		try {
 			ps = psc.createPreparedStatement(con);
+			// 应用用户设定的输入参数
 			applyStatementSettings(ps);
+			// 调用回调函数
 			T result = action.doInPreparedStatement(ps);
 			handleWarnings(ps);
 			return result;
 		}
 		catch (SQLException ex) {
+			// 释放数据库连接避免当异常转换器没有被初始的时候出现潜在的连接池死锁
 			// Release Connection early, to avoid potential connection pool deadlock
 			// in the case when the exception translator hasn't been initialized yet.
 			if (psc instanceof ParameterDisposer) {
@@ -862,6 +866,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 		return updateCount(execute(psc, ps -> {
 			try {
 				if (pss != null) {
+					// 设置 PreparedStatement 所需的全部参数
 					pss.setValues(ps);
 				}
 				int rows = ps.executeUpdate();
@@ -1363,10 +1368,20 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	protected void applyStatementSettings(Statement stmt) throws SQLException {
 		int fetchSize = getFetchSize();
 		if (fetchSize != -1) {
+			/**
+			 * setFetchSize 要是为了减少网络交互次数设计的。访问 ResultSet 时，如果它每次只从
+			 * 服务器上读取一行数据，则会产生很大的开销。setFetchSize 是当调用 rs.next 时， ResultSet
+			 * 会一次性从服务器上取得多少行数据回来，这样在下次 rs.next 时， 它可以直接从内存中获取数
+			 * 据而不需要网络交互，提高了效率。 这个设置可能会被某些 JDBC 驱动忽略，而且设置过大
+			 * 也会造成内存的上升
+			 */
 			stmt.setFetchSize(fetchSize);
 		}
 		int maxRows = getMaxRows();
 		if (maxRows != -1) {
+			/**
+			 * setMaxRows 将此 Statement 对象生成的所有 ResultSet 对象可以包含的最大行数限制设置为给定数
+			 */
 			stmt.setMaxRows(maxRows);
 		}
 		DataSourceUtils.applyTimeout(stmt, getDataSource(), getQueryTimeout());
@@ -1402,9 +1417,14 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	 * @throws SQLWarningException if not ignoring warnings
 	 * @see org.springframework.jdbc.SQLWarningException
 	 */
+	/**
+	 * DataTruncation: DataTruncation 直接接继 SQLWarning，由于某种原因意外地截断数据值时会以DataTruncation 警告形式报告异常
+	 */
 	protected void handleWarnings(Statement stmt) throws SQLException {
+		// 当设置为忽略警告时只尝试打印日志
 		if (isIgnoreWarnings()) {
 			if (logger.isDebugEnabled()) {
+				// 如果日志开启的情况下打印日志
 				SQLWarning warningToLog = stmt.getWarnings();
 				while (warningToLog != null) {
 					logger.debug("SQLWarning ignored: SQL state '" + warningToLog.getSQLState() + "', error code '" +
