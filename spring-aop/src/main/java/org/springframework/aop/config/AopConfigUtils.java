@@ -100,13 +100,53 @@ public abstract class AopConfigUtils {
 		return registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator.class, registry, source);
 	}
 
+	// 强制使用的过程其实是一个属性设置的过程
 	public static void forceAutoProxyCreatorToUseClassProxying(BeanDefinitionRegistry registry) {
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition definition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
+			/**
+			 * 强制使用 CGLIB 代理需要 <aop:config＞ 的 proxyTargetClass 属性设为 true
+			 * <aop:config proxy-target-class=” true ” > . . </aop-config>
+			 *
+			 * 当需要使用 CGLIB 代理和 AspectJ 自动代理支持，可以按照以下方式设置 ＜aop:aspectj-
+			 * auto-proxy> 的 proxy-target-class 属性：
+			 * <aop:aspectJ-autoproxy proxy-target-class= ” true ” />
+			 */
 			definition.getPropertyValues().add("proxyTargetClass", Boolean.TRUE);
 		}
 	}
 
+	/**
+	 * expose-proxy ：有时候目标对象内部的自我调用将无法实施切面中的增强，实例如下：
+	 *
+	 * public interface AService {
+	 *
+	 * 		public void a () ;
+	 * 		public void b () ;
+	 *
+	 * 	}
+	 *
+	 * 	@Service ()
+	 * 	public class AServiceimpll implements AService{
+	 *
+	 * 		@Transactional (propagation = Propagation . REQUIRED)
+	 * 		public void a () {
+	 * 			this . b() ;
+	 * 		}
+	 *
+	 * 		@Transactional (propagation = Propaga on REQUIRES_NEW)
+	 * 		public void b () {
+	 * 		}
+	 *
+	 * 	}
+	 *
+	 * 此处的 this 指向目标对象，因此调用 this.b （）将不会执行事务切面，即不执行事务增强，
+	 * 因业b方法的事务定义“ Transactional(propagation = Propagation.REQUIRES_NEW）”将不会
+	 * 实施，为了解决这个问题，我们可以这样做
+	 * <aop:aspectj-autoproxy expose-proxy= ” true ” />
+	 * 然后将以上代码中的“this.b（）；”修改为 ((AService) AopContext.currentProxy()).b（）；”即可
+	 * 通过以上的修改便可以完成对a和b方法的同时增强
+	 */
 	public static void forceAutoProxyCreatorToExposeProxy(BeanDefinitionRegistry registry) {
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition definition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
@@ -120,15 +160,18 @@ public abstract class AopConfigUtils {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 
+		// 如果已经存在了自动代理创建器且存在的自动代理创建者旦与现在的不一致，那么需要根据优先级来判断到底需要使用哪个
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
 				int currentPriority = findPriorityForClass(apcDefinition.getBeanClassName());
 				int requiredPriority = findPriorityForClass(cls);
 				if (currentPriority < requiredPriority) {
+					// 改变 bean 最重要的就是 bean 所对应的 className 属性
 					apcDefinition.setBeanClassName(cls.getName());
 				}
 			}
+			// 如果已经存在自动代理创建器并且与将要创建的一致，那么无须再次创建
 			return null;
 		}
 

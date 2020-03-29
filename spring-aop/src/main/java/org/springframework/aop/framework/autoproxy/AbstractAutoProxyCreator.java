@@ -304,6 +304,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
 			// 是否是由于避免循环依赖而创建的bean代理
 			if (this.earlyProxyReferences.remove(cacheKey) != bean) {
+				// 如果它适合被代理，则需要封装指定 bean
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
 		}
@@ -358,7 +359,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		// Create proxy if we have advice.
+		// 如果存在增强方法则创建代理
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
+		// 如果获取到了增强则需要针对增强创建代理
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
 			Object proxy = createProxy(
