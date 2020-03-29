@@ -53,7 +53,7 @@ public class TxNamespaceHandler extends NamespaceHandlerSupport {
 	@Override
 	public void init() {
 		registerBeanDefinitionParser("advice", new TxAdviceBeanDefinitionParser());
-		// 在遇到诸如＜tx:annotation -dri ven 开头的配置后， Spring 使用 AnnotationDri venBeanDefinitionParser 类的 parse 方法进行解析
+		// 在遇到诸如＜tx:annotation-driven 开头的配置后， Spring 使用 AnnotationDrivenBeanDefinitionParser 类的 parse 方法进行解析
 		registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenBeanDefinitionParser());
 		registerBeanDefinitionParser("jta-transaction-manager", new JtaTransactionManagerBeanDefinitionParser());
 	}
