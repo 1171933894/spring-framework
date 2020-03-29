@@ -45,7 +45,7 @@ public abstract class DaoSupport implements InitializingBean {
 
 		// Let concrete implementations initialize themselves.
 		try {
-			initDao();
+			initDao();// 模板方法
 		}
 		catch (Exception ex) {
 			throw new BeanInitializationException("Initialization of DAO failed", ex);
