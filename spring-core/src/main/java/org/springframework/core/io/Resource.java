@@ -172,6 +172,7 @@ public interface Resource extends InputStreamSource {
 	 * have a filename.
 	 */
 	@Nullable
+	// 获取文件名（不带路径信息的文件名）
 	String getFilename();
 
 	/**
@@ -181,6 +182,7 @@ public interface Resource extends InputStreamSource {
 	 * from their {@code toString} method.
 	 * @see Object#toString()
 	 */
+	// 在错误处理中需要详细地打印出错的资源文件
 	String getDescription();
 
 }

@@ -41,6 +41,13 @@ import org.springframework.util.StringUtils;
  * @see ClassLoader#getResourceAsStream(String)
  * @see Class#getResourceAsStream(String)
  */
+
+/**
+ * important note：<br/>
+ * 在日常的开发工作中，资源文件的加载也是经常用到的，可以直接使用 spring 提供的类，比如在希望加载文件时可以使用以下代码：
+ * Resource resource = new ClassPathResource("beanFactoryTest.xml");
+ * InputStream inputStream = resource.getInputStream();
+ */
 public class ClassPathResource extends AbstractFileResolvingResource {
 
 	private final String path;
