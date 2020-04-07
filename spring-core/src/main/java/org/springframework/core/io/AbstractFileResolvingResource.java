@@ -40,7 +40,7 @@ import org.springframework.util.ResourceUtils;
  * @author Juergen Hoeller
  * @since 3.0
  */
-public abstract class AbstractFileResolvingResource extends AbstractResource {
+public abstract class AbstractFileResolvingResource extends AbstractResource {// resolve：解析
 
 	@Override
 	public boolean exists() {

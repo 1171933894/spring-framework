@@ -112,7 +112,7 @@ import org.springframework.util.StringValueResolver;
 // 综合 FactoryBeanRegistrySupport 和 ConfigurableBeanFactory 的功能
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
-	/** Parent bean factory, for bean inheritance support. */
+	/** Parent bean factory, for bean inheritance（继承） support. */
 	@Nullable
 	private BeanFactory parentBeanFactory;
 

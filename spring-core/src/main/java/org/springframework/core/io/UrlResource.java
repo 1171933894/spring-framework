@@ -54,7 +54,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	private final URL url;
 
 	/**
-	 * Cleaned URL (with normalized path), used for comparisons.
+	 * Cleaned（已清洗） URL (with normalized（归一化） path), used for comparisons（比较）.
 	 */
 	private final URL cleanedUrl;
 

@@ -367,6 +367,11 @@ public abstract class ResourceUtils {
 	 * @see java.net.URL#toURI()
 	 */
 	public static URI toURI(URL url) throws URISyntaxException {
+		/**
+		 * 为什么会有URL转换为URI的逻辑？
+		 * URI可以表示各种资源（包括Web上的，本地的等），而URL主要用于表示Web上的资源。http，ftp这种。
+		 * File是被定义用来读取本地的资源文件，而不是读取Web上的资源文件。所以按设计来说，File的参数不能是URL。
+		 */
 		return toURI(url.toString());
 	}
 
