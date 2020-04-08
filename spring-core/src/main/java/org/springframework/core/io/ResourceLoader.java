@@ -39,9 +39,23 @@ import org.springframework.util.ResourceUtils;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+// ResourceLoader接口用于返回Resource对象；其实现可以看作是一个生产Resource的工厂类。
+
+/**
+ * 可以分为两类：<br/>
+ *
+ * 第一类：默认资源加载器DefaultResourceLoader及其子类；
+ * Spring提供了一个适用于所有环境的DefaultResourceLoader实现，可以返回ClassPathResource、UrlResource；还提供一个用于web环境的
+ * ServletContextResourceLoader，它继承了DefaultResourceLoader的所有功能，又额外提供了获取ServletContextResource的支持。
+ *
+ * 第二类: 应用上下文ApplicationContext接口及其实现类；
+ * ApplicationContext的主要实现类ClassPathXmlApplicationContext和FileSystemXmlApplicationContext，前者默认从类路径加载配置
+ * 文件，后者默认从文件系统中装载配置文件。本次不做说明，后面会单独介绍ApplicationContext。
+ */
 public interface ResourceLoader {
 
 	/** Pseudo URL prefix for loading from the class path: "classpath:". */
+	// 加载的类路径伪URL前缀："classpath:"
 	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;
 
 
@@ -64,6 +78,7 @@ public interface ResourceLoader {
 	 * @see Resource#exists()
 	 * @see Resource#getInputStream()
 	 */
+	// 根据提供的location参数返回相应的Resource对象
 	Resource getResource(String location);
 
 	/**
@@ -76,6 +91,7 @@ public interface ResourceLoader {
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()
 	 * @see org.springframework.util.ClassUtils#forName(String, ClassLoader)
 	 */
+	// 返回加载这些Resource的ClassLoader
 	@Nullable
 	ClassLoader getClassLoader();
 

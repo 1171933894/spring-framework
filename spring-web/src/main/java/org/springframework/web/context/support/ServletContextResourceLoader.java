@@ -37,6 +37,7 @@ import org.springframework.core.io.Resource;
  * @see org.springframework.web.servlet.HttpServletBean
  * @see org.springframework.web.filter.GenericFilterBean
  */
+// servlet上下文资源加载器
 public class ServletContextResourceLoader extends DefaultResourceLoader {
 
 	private final ServletContext servletContext;
@@ -46,6 +47,7 @@ public class ServletContextResourceLoader extends DefaultResourceLoader {
 	 * Create a new ServletContextResourceLoader.
 	 * @param servletContext the ServletContext to load resources with
 	 */
+	// 构造函数
 	public ServletContextResourceLoader(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
@@ -54,6 +56,7 @@ public class ServletContextResourceLoader extends DefaultResourceLoader {
 	 * This implementation supports file paths beneath the root of the web application.
 	 * @see ServletContextResource
 	 */
+	// 此实现支持Web应用程序根目录下的文件路径
 	@Override
 	protected Resource getResourceByPath(String path) {
 		return new ServletContextResource(this.servletContext, path);

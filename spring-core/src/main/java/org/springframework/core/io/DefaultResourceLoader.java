@@ -47,6 +47,7 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultResourceLoader implements ResourceLoader {
 
+	// 加载该资源类加载器
 	@Nullable
 	private ClassLoader classLoader;
 
@@ -61,7 +62,9 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * at the time of this ResourceLoader's initialization.
 	 * @see java.lang.Thread#getContextClassLoader()
 	 */
+	// 构造函数
 	public DefaultResourceLoader() {
+		// 默认：实际资源访问时使用的线程上下文类加载器
 		this.classLoader = ClassUtils.getDefaultClassLoader();
 	}
 
@@ -70,6 +73,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * @param classLoader the ClassLoader to load class path resources with, or {@code null}
 	 * for using the thread context class loader at the time of actual resource access
 	 */
+	// 构造函数
 	public DefaultResourceLoader(@Nullable ClassLoader classLoader) {
 		this.classLoader = classLoader;
 	}
@@ -81,6 +85,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * <p>The default is that ClassLoader access will happen using the thread context
 	 * class loader at the time of this ResourceLoader's initialization.
 	 */
+	// 设置类加载器
 	public void setClassLoader(@Nullable ClassLoader classLoader) {
 		this.classLoader = classLoader;
 	}
@@ -91,6 +96,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * ClassPathResource objects created by this resource loader.
 	 * @see ClassPathResource
 	 */
+	// 获取类加载器，未设置，则返回实际资源访问时使用的线程上下文类加载器
 	@Override
 	@Nullable
 	public ClassLoader getClassLoader() {
@@ -139,7 +145,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 		this.resourceCaches.clear();
 	}
 
-
+	// 根据提供的location参数返回相应的资源句柄Resource。
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
@@ -154,16 +160,19 @@ public class DefaultResourceLoader implements ResourceLoader {
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
+		// "classpath:"前缀，返回ClassPathResource对象
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
 				// Try to parse the location as a URL...
+				// 尝试将location转化为URL，再返回UrlResource对象
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			}
 			catch (MalformedURLException ex) {
+				// 不是URL，则解析为资源路径。
 				// No URL -> resolve as resource path.
 				return getResourceByPath(location);
 			}
@@ -181,7 +190,9 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * @see org.springframework.context.support.FileSystemXmlApplicationContext#getResourceByPath
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext#getResourceByPath
 	 */
+	// 返回给定路径path上资源的资源句柄Resource。
 	protected Resource getResourceByPath(String path) {
+		// 默认实现支持类路径位置
 		return new ClassPathContextResource(path, getClassLoader());
 	}
 
@@ -190,6 +201,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * ClassPathResource that explicitly expresses a context-relative path
 	 * through implementing the ContextResource interface.
 	 */
+	// 类加载路径下的资源
 	protected static class ClassPathContextResource extends ClassPathResource implements ContextResource {
 
 		public ClassPathContextResource(String path, @Nullable ClassLoader classLoader) {
@@ -201,6 +213,9 @@ public class DefaultResourceLoader implements ResourceLoader {
 			return getPath();
 		}
 
+		// 关键 -> 创建相对于当前资源路径下的资源。
+		// 假设当前的 file 路径为 D:/DEMO/HELLO.TXT，且 relativePath = GOOD.TXT
+		// 则该方法创建的资源路径为 D:/DEMO/GOOD.TXT
 		@Override
 		public Resource createRelative(String relativePath) {
 			String pathToUse = StringUtils.applyRelativePath(getPath(), relativePath);
