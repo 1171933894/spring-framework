@@ -30,7 +30,7 @@ package org.springframework.core.io;
 public interface ContextResource extends Resource {
 
 	/**
-	 * Return the path within the enclosing 'context'.
+	 * Return the path within the enclosing (封闭) 'context'.
 	 * <p>This is typically path relative to a context-specific root directory,
 	 * e.g. a ServletContext root or a PortletContext root.
 	 */

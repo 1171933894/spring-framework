@@ -41,7 +41,7 @@ import java.io.InputStream;
 
 /**
  * InputStreamSource 封装任何能返回 InputStream 的类，比如 File、Classpath 下的资源和 Byte
- * Array等。 它只有一个方法定义 getlnputStream（），该方法返回一个新的 InputStream 对象
+ * Array等。 它只有一个方法定义 getInputStream（），该方法返回一个新的 InputStream 对象
  */
 public interface InputStreamSource {
 

@@ -32,7 +32,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.2.6
  */
-public class DescriptiveResource extends AbstractResource {
+public class DescriptiveResource extends AbstractResource {// descriptive：描述性
 
 	private final String description;
 

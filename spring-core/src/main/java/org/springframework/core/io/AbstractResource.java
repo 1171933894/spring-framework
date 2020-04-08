@@ -55,7 +55,7 @@ public abstract class AbstractResource implements Resource {
 			return getFile().exists();
 		}
 		catch (IOException ex) {
-			// Fall back to stream existence: can we open the stream?
+			// Fall back to (退回到) stream existence: can we open the stream?
 			try {
 				getInputStream().close();
 				return true;
@@ -70,6 +70,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation always returns {@code true} for a resource
 	 * that {@link #exists() exists} (revised as of 5.1).
 	 */
+	// 存在即可读
 	@Override
 	public boolean isReadable() {
 		return exists();
@@ -92,7 +93,7 @@ public abstract class AbstractResource implements Resource {
 	}
 
 	/**
-	 * This implementation throws a FileNotFoundException, assuming
+	 * This implementation throws a FileNotFoundException, assuming（假设）
 	 * that the resource cannot be resolved to a URL.
 	 */
 	@Override
@@ -121,7 +122,7 @@ public abstract class AbstractResource implements Resource {
 	 */
 	@Override
 	public File getFile() throws IOException {
-		throw new FileNotFoundException(getDescription() + " cannot be resolved to absolute file path");
+		throw new FileNotFoundException(getDescription() + " cannot be resolved to absolute file path");// absolute：绝对
 	}
 
 	/**
