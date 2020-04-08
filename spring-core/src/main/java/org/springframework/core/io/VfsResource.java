@@ -39,6 +39,7 @@ import org.springframework.util.Assert;
  * @since 3.0
  * @see org.jboss.vfs.VirtualFile
  */
+// 对VFS资源的封装，提供对VFS资源访问及操作，内部则是调用VfsUtils实现的
 public class VfsResource extends AbstractResource {
 
 	private final Object resource;

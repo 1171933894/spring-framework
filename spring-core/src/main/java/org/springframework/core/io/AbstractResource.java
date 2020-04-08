@@ -41,6 +41,7 @@ import org.springframework.util.ResourceUtils;
  * @author Juergen Hoeller
  * @since 28.12.2003
  */
+// Resource的基础实现抽象类
 public abstract class AbstractResource implements Resource {
 
 	/**
@@ -48,6 +49,7 @@ public abstract class AbstractResource implements Resource {
 	 * falling back to whether an InputStream can be opened.
 	 * This will cover both directories and content resources.
 	 */
+	// 资源是否存在
 	@Override
 	public boolean exists() {
 		// Try file existence: can we find the file in the file system?
@@ -70,7 +72,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation always returns {@code true} for a resource
 	 * that {@link #exists() exists} (revised as of 5.1).
 	 */
-	// 存在即可读
+	// 默认实现:可读
 	@Override
 	public boolean isReadable() {
 		return exists();
@@ -79,6 +81,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation always returns {@code false}.
 	 */
+	// 默认实现:资源不含有开放的句柄
 	@Override
 	public boolean isOpen() {
 		return false;
@@ -96,6 +99,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation throws a FileNotFoundException, assuming（假设）
 	 * that the resource cannot be resolved to a URL.
 	 */
+	// 默认实现报错，需子类自己实现
 	@Override
 	public URL getURL() throws IOException {
 		throw new FileNotFoundException(getDescription() + " cannot be resolved to URL");
@@ -105,6 +109,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation builds a URI based on the URL returned
 	 * by {@link #getURL()}.
 	 */
+	// 默认实现:先获取URL，再转URI
 	@Override
 	public URI getURI() throws IOException {
 		URL url = getURL();
@@ -120,6 +125,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that the resource cannot be resolved to an absolute file path.
 	 */
+	// 默认实现报错，需子类自己实现
 	@Override
 	public File getFile() throws IOException {
 		throw new FileNotFoundException(getDescription() + " cannot be resolved to absolute file path");// absolute：绝对
@@ -142,8 +148,10 @@ public abstract class AbstractResource implements Resource {
 	 * a more optimal version of this, e.g. checking a File length.
 	 * @see #getInputStream()
 	 */
+	// 返回此资源的内容长度
 	@Override
 	public long contentLength() throws IOException {
+		// 获取文件流，再获取长度
 		InputStream is = getInputStream();
 		try {
 			long size = 0;
@@ -168,6 +176,7 @@ public abstract class AbstractResource implements Resource {
 	 * if available.
 	 * @see #getFileForLastModifiedCheck()
 	 */
+	// 返回此资源的最后修改时间戳
 	@Override
 	public long lastModified() throws IOException {
 		File fileToCheck = getFileForLastModifiedCheck();
@@ -187,6 +196,7 @@ public abstract class AbstractResource implements Resource {
 	 * an absolute file path, i.e. is not available in a file system
 	 * @throws IOException in case of general resolution/reading failures
 	 */
+	// 返回File对象，调用getFile()
 	protected File getFileForLastModifiedCheck() throws IOException {
 		return getFile();
 	}

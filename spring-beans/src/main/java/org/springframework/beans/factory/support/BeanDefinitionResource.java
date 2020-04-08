@@ -32,6 +32,7 @@ import org.springframework.util.Assert;
  * @since 2.5.2
  * @see org.springframework.core.io.DescriptiveResource
  */
+//  每个bean实际上也是资源的资源，而BeanDefinitionResource则是一个beanDefinition资源的封装
 class BeanDefinitionResource extends AbstractResource {
 
 	private final BeanDefinition beanDefinition;

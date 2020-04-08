@@ -32,6 +32,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.2.6
  */
+// 包含资源的描述，但不指向实际的资源。例如：当API需要一个资源resource作为参数，但不一定用于实际读取，只用作占位符。
 public class DescriptiveResource extends AbstractResource {// descriptive：描述性
 
 	private final String description;

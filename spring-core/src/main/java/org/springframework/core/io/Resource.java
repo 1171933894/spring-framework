@@ -71,6 +71,7 @@ public interface Resource extends InputStreamSource {
 	 * existence of a {@code Resource} handle only guarantees a valid
 	 * descriptor handle.
 	 */
+	// 是否存在
 	boolean exists();
 
 	/**
@@ -84,6 +85,7 @@ public interface Resource extends InputStreamSource {
 	 * @see #getInputStream()
 	 * @see #exists()
 	 */
+	// 是否可读
 	default boolean isReadable() {
 		return exists();
 	}
@@ -94,6 +96,7 @@ public interface Resource extends InputStreamSource {
 	 * and must be read and closed to avoid resource leaks.
 	 * <p>Will be {@code false} for typical resource descriptors.
 	 */
+	// 返回此资源是否表示具有开放流的句柄。如果是真的，无法读取InputStream的多次，并必须予以封闭，以防止资源泄漏
 	default boolean isOpen() {
 		return false;
 	}
@@ -115,6 +118,7 @@ public interface Resource extends InputStreamSource {
 	 * @throws IOException if the resource cannot be resolved as URL,
 	 * i.e. if the resource is not available as descriptor
 	 */
+	// 返回此资源的URL句柄
 	URL getURL() throws IOException;
 
 	/**
@@ -123,6 +127,7 @@ public interface Resource extends InputStreamSource {
 	 * i.e. if the resource is not available as descriptor
 	 * @since 2.5
 	 */
+	// 返回此资源的URI句柄
 	URI getURI() throws IOException;
 
 	/**
@@ -132,6 +137,7 @@ public interface Resource extends InputStreamSource {
 	 * @throws IOException in case of general resolution/reading failures
 	 * @see #getInputStream()
 	 */
+	// 返回此资源的文件句柄
 	File getFile() throws IOException;
 
 	/**
@@ -154,6 +160,7 @@ public interface Resource extends InputStreamSource {
 	 * @throws IOException if the resource cannot be resolved
 	 * (in the file system or as some other known physical resource type)
 	 */
+	// 返回此资源的内容长度
 	long contentLength() throws IOException;
 
 	/**
@@ -161,6 +168,7 @@ public interface Resource extends InputStreamSource {
 	 * @throws IOException if the resource cannot be resolved
 	 * (in the file system or as some other known physical resource type)
 	 */
+	// 返回此资源的最后修改时间戳
 	long lastModified() throws IOException;
 
 	/**
@@ -169,6 +177,7 @@ public interface Resource extends InputStreamSource {
 	 * @return the resource handle for the relative resource
 	 * @throws IOException if the relative resource cannot be determined
 	 */
+	// 创建与此资源相对应的资源,并返回对应资源的资源句柄。relativepath相对路径（相对于这个资源）
 	Resource createRelative(String relativePath) throws IOException;
 
 	/**

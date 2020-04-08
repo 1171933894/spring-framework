@@ -55,11 +55,14 @@ import org.springframework.util.StringUtils;
  */
 public class ClassPathResource extends AbstractFileResolvingResource {
 
+	// 路径
 	private final String path;
 
+	// 类加器
 	@Nullable
 	private ClassLoader classLoader;
 
+	// 字节码对象
 	@Nullable
 	private Class<?> clazz;
 
@@ -141,8 +144,10 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	/**
 	 * Return the ClassLoader that this resource will be obtained from.
 	 */
+	// 获取类加载器
 	@Nullable
 	public final ClassLoader getClassLoader() {
+		// clazz不为空，获取clazz的类加载，否则返回classLoader
 		return (this.clazz != null ? this.clazz.getClassLoader() : this.classLoader);
 	}
 
@@ -161,14 +166,18 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * Resolves a URL for the underlying class path resource.
 	 * @return the resolved URL, or {@code null} if not resolvable
 	 */
+	// 解析底层类路径资源的URL
 	@Nullable
 	protected URL resolveURL() {
+		// 1. path不以'/'开头时，默认是从此类所在的包下取资源；path以'/'开头时，则是从项目的ClassPath根下获取资源，获取path的资源路径
 		if (this.clazz != null) {
 			return this.clazz.getResource(this.path);
 		}
+		// 2.path不能以'/'开头时，path是指类加载器的加载范围（在资源加载的过程中，使用的逐级向上委托的形式加载的），'/'表示Boot ClassLoader中的加载范围，获取path的资源路径
 		else if (this.classLoader != null) {
 			return this.classLoader.getResource(this.path);
 		}
+		// 3.加载当前类的类加器，获取path的资源路径
 		else {
 			return ClassLoader.getSystemResource(this.path);
 		}
@@ -179,7 +188,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @see java.lang.ClassLoader#getResourceAsStream(String)
 	 * @see java.lang.Class#getResourceAsStream(String)
 	 */
-	// 通过 class 或者 classLoader 提供的底层方法进行调用
+	// 通过 class 或者 classLoader 提供的底层方法进行调用来获取文件流
 	@Override
 	public InputStream getInputStream() throws IOException {
 		InputStream is;
@@ -206,6 +215,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @see java.lang.ClassLoader#getResource(String)
 	 * @see java.lang.Class#getResource(String)
 	 */
+	// 此实现返回底层类路径资源的URL，如果可用的话
 	@Override
 	public URL getURL() throws IOException {
 		URL url = resolveURL();// 获取URL
@@ -220,6 +230,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * relative to the path of the underlying resource of this descriptor.
 	 * @see org.springframework.util.StringUtils#applyRelativePath(String, String)
 	 */
+	// 给定相对于该描述符的底层资源的路径，创建一个ClassPathResource对象
 	@Override
 	public Resource createRelative(String relativePath) {
 		String pathToUse = StringUtils.applyRelativePath(this.path, relativePath);
