@@ -27,6 +27,7 @@ package org.springframework.core.io;
  * @since 2.5
  * @see org.springframework.web.context.support.ServletContextResource
  */
+// 通过上下文获取Resource
 public interface ContextResource extends Resource {
 
 	/**

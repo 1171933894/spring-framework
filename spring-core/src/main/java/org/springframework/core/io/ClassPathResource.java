@@ -44,7 +44,12 @@ import org.springframework.util.StringUtils;
 
 /**
  * important note：<br/>
+ *
+ * ClassPathResource用来访问类加载路径下的资源，相对于其他Resource实现类，主要优势是 方便访问类加载路径中的资源，尤
+ * 其针对Web应用。ClassPathResource可以自动搜索位于WEB-INF/classes下的资源文件，无须使用绝对路径访问。
+ *
  * 在日常的开发工作中，资源文件的加载也是经常用到的，可以直接使用 spring 提供的类，比如在希望加载文件时可以使用以下代码：
+ *
  * Resource resource = new ClassPathResource("beanFactoryTest.xml");
  * InputStream inputStream = resource.getInputStream();
  */
@@ -69,6 +74,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @see java.lang.ClassLoader#getResourceAsStream(String)
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()
 	 */
+	// 指定了当前文件的绝对路径。对应构造方法如下：
 	public ClassPathResource(String path) {
 		this(path, (ClassLoader) null);
 	}
@@ -84,11 +90,13 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, @Nullable ClassLoader classLoader) {
 		Assert.notNull(path, "Path must not be null");
+		// 处理传入的路径，比如 \\ 置换为 /
 		String pathToUse = StringUtils.cleanPath(path);
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}
 		this.path = pathToUse;
+		// 如果类加载器为空，则获取默认的类加载器
 		this.classLoader = (classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader());
 	}
 
@@ -175,9 +183,11 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	@Override
 	public InputStream getInputStream() throws IOException {
 		InputStream is;
+		// clazz对象是否为空，不为空通过clazz获取输入流
 		if (this.clazz != null) {
 			is = this.clazz.getResourceAsStream(this.path);
 		}
+		// 通过类加载器
 		else if (this.classLoader != null) {
 			is = this.classLoader.getResourceAsStream(this.path);
 		}
@@ -198,7 +208,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	@Override
 	public URL getURL() throws IOException {
-		URL url = resolveURL();
+		URL url = resolveURL();// 获取URL
 		if (url == null) {
 			throw new FileNotFoundException(getDescription() + " cannot be resolved to URL because it does not exist");
 		}
@@ -231,6 +241,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	/**
 	 * This implementation returns a description that includes the class path location.
 	 */
+	// 获取对应的资源描述
 	@Override
 	public String getDescription() {
 		StringBuilder builder = new StringBuilder("class path resource [");

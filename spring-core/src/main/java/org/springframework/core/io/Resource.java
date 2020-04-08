@@ -56,6 +56,12 @@ import org.springframework.lang.Nullable;
  * 对不同来源的资源文件都有相应的 Resource 实现：文件（FileSystemResource）、 Classpath
  * 资源（ClassPathResource）、 URL 资源（UrlResource ）、 InputStream 资源（ InputStreamResource）
  * Byte 数组（ByteArrayResource ）等
+ *
+ * 常用的有以下三种：<br/>
+ * 1、通过 FileSystemResource 以文件系统绝对路径的方式进行访问；
+ * 2、通过 ClassPathResource 以类路径的方式进行访问；
+ * 3、通过 ServletContextResource 以相对于Web应用根目录的方式进行访问。
+ *
  */
 public interface Resource extends InputStreamSource {
 

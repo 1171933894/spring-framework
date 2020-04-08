@@ -54,6 +54,7 @@ import org.springframework.util.StringUtils;
  * @see java.io.File
  * @see java.nio.file.Files
  */
+// FileSystemResource用于访问文件系统资源，使用FileSystemResource访问文件系统资源优势不是太大，因为File类也可以实现此方法
 public class FileSystemResource extends AbstractResource implements WritableResource {
 
 	private final String path;
@@ -78,6 +79,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	public FileSystemResource(String path) {
 		Assert.notNull(path, "Path must not be null");
 		this.path = StringUtils.cleanPath(path);
+		// FileSystemResource内部，还是使用的File
 		this.file = new File(path);
 		this.filePath = this.file.toPath();
 	}
