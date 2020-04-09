@@ -93,6 +93,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	@Override
 	public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext) {
 		this.readerContext = readerContext;
+		// 对XML真正的进行解析
 		doRegisterBeanDefinitions(doc.getDocumentElement());
 	}
 
@@ -137,6 +138,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			 * 	    ...
 			 * 	</beans>
 			 * </beans>
+			 */
+			// 集成到 Web 环境中时，在 web.xml 下代码：
+			/**
+			 * <context-param>
+			 * 	<param-name>Spring.profiles.active</param-name>
+			 * 	<param-value>dev</param-value>
+			 * </context-param>
 			 */
 			String profileSpec = root.getAttribute(PROFILE_ATTRIBUTE);
 			if (StringUtils.hasText(profileSpec)) {
