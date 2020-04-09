@@ -39,6 +39,7 @@ import org.springframework.lang.Nullable;
  */
 
 /**
+ * 解释一：<br/>
  * BeanDefinition 是一个接口，在 Spring 中存在三种实现： RootBeanDefinition、ChildBeanDefinition
  * 以及 GenericBeanDefinition 种实现均继承了 AbstractBeanDefiniton ，其中
  * BeanDefinition 是配置文件＜bean＞元素标签在容器中的内部表示形式。＜bean＞元素标签拥有
@@ -46,6 +47,11 @@ import org.springframework.lang.Nullable;
  * 属性， BeanDefinition＜bean＞中的属性是一一对应的。RootBeanDefinition 是最常用的实现
  * 类，它对应一般性的＜bean＞元素标签， GenericBeanDefinition 是自2.5版本以后新加入的 bean
  * 文件配置属性定义类，是一站式服务类
+ *
+ * 解释二：<br/>
+ * 配置文件元素标签在容器中内部表示形式，一个BeanDefinition描述了一个bean的实例，包括属性值，构造方法参数值和继承自它的类的更多信息。
+ * BeanDefinition仅仅是一个最简单的接口，主要功能是允许BeanFactoryPostProcessor，比如实现类 PropertyPlaceHolderConfigure
+ * 能够检索并修改属性值和别的bean的元数据。
  */
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 

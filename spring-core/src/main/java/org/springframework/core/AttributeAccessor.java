@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
  * @author Rob Harrop
  * @since 2.0
  */
-public interface AttributeAccessor {
+public interface AttributeAccessor {// accessor：存取器
 
 	/**
 	 * Set the attribute defined by {@code name} to the supplied {@code value}.
