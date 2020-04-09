@@ -75,24 +75,28 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Constant that indicates no external autowiring at all.
 	 * @see #setAutowireMode
 	 */
+	// 不自动装配
 	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
 
 	/**
 	 * Constant that indicates autowiring bean properties by name.
 	 * @see #setAutowireMode
 	 */
+	// 按名称装配
 	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
 
 	/**
 	 * Constant that indicates autowiring bean properties by type.
 	 * @see #setAutowireMode
 	 */
+	// 按类型装配
 	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 	/**
 	 * Constant that indicates autowiring a constructor.
 	 * @see #setAutowireMode
 	 */
+	// 构造器装配
 	public static final int AUTOWIRE_CONSTRUCTOR = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;
 
 	/**
@@ -102,6 +106,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
 	 * use annotation-based autowiring for clearer demarcation of autowiring needs.
 	 */
+	// 已过时，不赞成使用
 	@Deprecated
 	public static final int AUTOWIRE_AUTODETECT = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
 
@@ -109,12 +114,14 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Constant that indicates no dependency check at all.
 	 * @see #setDependencyCheck
 	 */
+	// 依赖检查：无依赖
 	public static final int DEPENDENCY_CHECK_NONE = 0;
 
 	/**
 	 * Constant that indicates dependency checking for object references.
 	 * @see #setDependencyCheck
 	 */
+	// 依赖检查：对象间引用
 	public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
 	/**
@@ -122,6 +129,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @see #setDependencyCheck
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
 	 */
+	// 依赖检查：会核对所有的原始类型和String类型的属性
 	public static final int DEPENDENCY_CHECK_SIMPLE = 2;
 
 	/**
@@ -129,6 +137,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * (object references as well as "simple" properties).
 	 * @see #setDependencyCheck
 	 */
+	// 依赖检查：所有属性
 	public static final int DEPENDENCY_CHECK_ALL = 3;
 
 	/**
@@ -141,6 +150,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * <p>Currently, the method names detected during destroy method inference
 	 * are "close" and "shutdown", if present on the specific bean class.
 	 */
+	// bean标签中 destroyMethod=""
 	public static final String INFER_METHOD = "(inferred)";
 
 
@@ -314,6 +324,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * bean definition.
 	 * @param original the original bean definition to copy from
 	 */
+	// 深复制一个原有的beandefinition
 	protected AbstractBeanDefinition(BeanDefinition original) {
 		setParentName(original.getParentName());
 		setBeanClassName(original.getBeanClassName());
@@ -380,6 +391,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * in the given bean definition.
 	 * </ul>
 	 */
+	// 覆盖当前BeanDefinition
 	public void overrideFrom(BeanDefinition other) {
 		if (StringUtils.hasLength(other.getBeanClassName())) {
 			setBeanClassName(other.getBeanClassName());
@@ -445,6 +457,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @param defaults the default settings to apply
 	 * @since 2.5
 	 */
+	// 将提供的默认值应用于此bean
 	public void applyDefaults(BeanDefinitionDefaults defaults) {
 		setLazyInit(defaults.isLazyInit());
 		setAutowireMode(defaults.getAutowireMode());
@@ -495,6 +508,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @see #setBeanClass(Class)
 	 * @see #resolveBeanClass(ClassLoader)
 	 */
+	// 若已经解析就返回这个包装类
 	public Class<?> getBeanClass() throws IllegalStateException {
 		Object beanClassObject = this.beanClass;
 		if (beanClassObject == null) {
@@ -525,6 +539,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @return the resolved bean class
 	 * @throws ClassNotFoundException if the class name could be resolved
 	 */
+	// 解析类
 	@Nullable
 	public Class<?> resolveBeanClass(@Nullable ClassLoader classLoader) throws ClassNotFoundException {
 		String className = getBeanClassName();
@@ -824,6 +839,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * members as far as they have been annotated. This setting applies to
 	 * externalized metadata in this bean definition only.
 	 */
+	// 指定是否允许访问非公共构造函数和方法
 	public void setNonPublicAccessAllowed(boolean nonPublicAccessAllowed) {
 		this.nonPublicAccessAllowed = nonPublicAccessAllowed;
 	}
@@ -841,6 +857,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * in case of ambiguous constructors that all match when converting the arguments,
 	 * whereas lenient mode would use the one with the 'closest' type matches).
 	 */
+	// 构造器宽松模式或非宽松模式
 	public void setLenientConstructorResolution(boolean lenientConstructorResolution) {
 		this.lenientConstructorResolution = lenientConstructorResolution;
 	}
@@ -896,6 +913,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Specify constructor argument values for this bean.
 	 */
+	// 构造函数参数
 	public void setConstructorArgumentValues(ConstructorArgumentValues constructorArgumentValues) {
 		this.constructorArgumentValues = constructorArgumentValues;
 	}
@@ -1164,6 +1182,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Checks for existence of a method with the specified name.
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
+	// 校验这个bean定义的需要覆盖的方面
 	public void prepareMethodOverrides() throws BeanDefinitionValidationException {
 		// Check that lookup methods exist and determine their overloaded status.
 		if (hasMethodOverrides()) {
