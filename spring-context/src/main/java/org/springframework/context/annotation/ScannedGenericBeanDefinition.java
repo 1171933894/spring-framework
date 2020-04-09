@@ -45,6 +45,7 @@ import org.springframework.util.Assert;
  * @see org.springframework.core.type.classreading.MetadataReaderFactory
  * @see AnnotatedGenericBeanDefinition
  */
+// 基于asm的类解析器，是GenericBeanDefinition类的扩展，支持注解元数据，这种支持通过AnnotatedBeanDefinition接口实现
 @SuppressWarnings("serial")
 public class ScannedGenericBeanDefinition extends GenericBeanDefinition implements AnnotatedBeanDefinition {
 

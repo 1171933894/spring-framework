@@ -51,6 +51,7 @@ import org.springframework.util.Assert;
  * @see GenericBeanDefinition
  * @see ChildBeanDefinition
  */
+// RootBeanDefinition用来在配置阶段进行注册bean definition
 @SuppressWarnings("serial")
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
@@ -134,6 +135,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * @param beanClass the class of the bean to instantiate
 	 * @see #setBeanClass
 	 */
+	// 创建一个单例的RootBeanDefinition
 	public RootBeanDefinition(@Nullable Class<?> beanClass) {
 		super();
 		setBeanClass(beanClass);
@@ -230,6 +232,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * bean definition.
 	 * @param original the original bean definition to copy from
 	 */
+	// 创建RootBeanDefinition，深度复制参数中的bean definition
 	public RootBeanDefinition(RootBeanDefinition original) {
 		super(original);
 		this.decoratedDefinition = original.decoratedDefinition;
@@ -355,6 +358,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Specify a factory method name that refers to a non-overloaded method.
 	 */
+	// 指定一个工厂方法的名称,唯一、无重载的
 	public void setUniqueFactoryMethodName(String name) {
 		Assert.hasText(name, "Factory method name must not be empty");
 		setFactoryMethodName(name);
@@ -364,6 +368,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Check whether the given candidate qualifies as a factory method.
 	 */
+	// 检查参数方法是能成为factory method
 	public boolean isFactoryMethod(Method candidate) {
 		return candidate.getName().equals(getFactoryMethodName());
 	}
@@ -372,6 +377,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * Return the resolved factory method as a Java Method object, if available.
 	 * @return the factory method, or {@code null} if not found or not resolved yet
 	 */
+	// 返回解析后的工厂方法作为Java对象方法,如果可用
 	@Nullable
 	public Method getResolvedFactoryMethod() {
 		return this.factoryMethodToIntrospect;

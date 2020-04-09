@@ -59,6 +59,7 @@ public class ChildBeanDefinition extends AbstractBeanDefinition {
 	 * @see #setConstructorArgumentValues
 	 * @see #setPropertyValues
 	 */
+	// 指定父类名称，创建子类
 	public ChildBeanDefinition(String parentName) {
 		super();
 		this.parentName = parentName;

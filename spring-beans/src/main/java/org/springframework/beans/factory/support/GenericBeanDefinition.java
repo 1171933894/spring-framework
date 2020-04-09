@@ -37,6 +37,11 @@ import org.springframework.util.ObjectUtils;
  * @see RootBeanDefinition
  * @see ChildBeanDefinition
  */
+
+/**
+ * GenericBeanDefinition是通用的标准bean definition，除了具有指定类可选的构造参数值、属性参数或其它
+ * bean definition一样的特性外，还具有parenetName属性，这也意味着可以用来灵活设置parent bean definition
+ */
 @SuppressWarnings("serial")
 public class GenericBeanDefinition extends AbstractBeanDefinition {
 
@@ -61,6 +66,7 @@ public class GenericBeanDefinition extends AbstractBeanDefinition {
 	 * bean definition.
 	 * @param original the original bean definition to copy from
 	 */
+	// 深度复制
 	public GenericBeanDefinition(BeanDefinition original) {
 		super(original);
 	}
