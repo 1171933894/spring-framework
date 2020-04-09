@@ -42,6 +42,7 @@ import org.springframework.util.ObjectUtils;
  * @see java.io.Reader
  * @see java.nio.charset.Charset
  */
+// EncodedResource并不是Resource的实现类，实际上它相当于一个工具类，用于给资源进行编码
 public class EncodedResource implements InputStreamSource {
 
 	private final Resource resource;

@@ -88,6 +88,9 @@ public class XmlValidationModeDetector {
 	 * @see #VALIDATION_DTD
 	 * @see #VALIDATION_XSD
 	 */
+	/**
+	 * Spring 来检测验证模式的办法就是判断是否包含 DOCTYPE ，如果包含就是 DTD ，否则就 XSD
+	 */
 	public int detectValidationMode(InputStream inputStream) throws IOException {
 		// Peek into the file to look for DOCTYPE.
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

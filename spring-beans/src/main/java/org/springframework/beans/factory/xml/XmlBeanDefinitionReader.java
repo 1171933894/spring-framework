@@ -317,7 +317,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	@Override
 	public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
 		// 其中的主要逻辑体现在 getRead（）方法中， 设置了编码属性的时候 Spring 会使用相应的编码作为输入流的编码
-		// 1、装资源文件。当进入 XmlBeanDefinitionReader 后首先对 Resource 使用 EncodedResource 类进行封装
+		// 封装资源文件。当进入 XmlBeanDefinitionReader 后首先对 Resource 使用 EncodedResource 类进行封装
 		return loadBeanDefinitions(new EncodedResource(resource));
 	}
 
@@ -469,7 +469,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 */
 	protected int getValidationModeForResource(Resource resource) {
 		int validationModeToUse = getValidationMode();
-		// 如果手动指定了验证模式则使用指定的验证模式
+		// 如果手动指定了验证模式则使用指定的验证模式（可以通过对调用 XmlBeanDefinitionReader 中的 setValidationMode 方法进行设定）
 		if (validationModeToUse != VALIDATION_AUTO) {
 			return validationModeToUse;
 		}
