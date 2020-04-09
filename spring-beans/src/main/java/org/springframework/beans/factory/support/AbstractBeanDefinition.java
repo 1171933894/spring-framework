@@ -54,6 +54,12 @@ import org.springframework.util.StringUtils;
  * @see RootBeanDefinition
  * @see ChildBeanDefinition
  */
+
+/**
+ * 配置文件元素标签在容器中内部表示形式，一个BeanDefinition描述了一个bean的实例，包括属性值，构造方法参数值和继承自它的类的更多信息。
+ * BeanDefinition仅仅是一个最简单的接口，主要功能是允许BeanFactoryPostProcessor，比如实现类 PropertyPlaceHolderConfigure
+ * 能够检索并修改属性值和别的bean的元数据。
+ */
 @SuppressWarnings("serial")
 public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccessor
 		implements BeanDefinition, Cloneable {
@@ -62,6 +68,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Constant for the default scope name: {@code ""}, equivalent to singleton
 	 * status unless overridden from a parent bean definition (if applicable).
 	 */
+	// 默认作用域singleton，单例
 	public static final String SCOPE_DEFAULT = "";
 
 	/**

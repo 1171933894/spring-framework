@@ -60,20 +60,22 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
 	 */
-	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
+	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;// 单例作用域:singleton
 
 	/**
 	 * Scope identifier for the standard prototype scope: "prototype".
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
 	 */
-	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;// 原型作用域:prototype
 
+	// ---------------------------------------------------------------Bean角色
 
 	/**
 	 * Role hint indicating that a {@code BeanDefinition} is a major part
 	 * of the application. Typically corresponds to a user-defined bean.
 	 */
+	// 应用程序重要组成部分
 	int ROLE_APPLICATION = 0;
 
 	/**
@@ -85,6 +87,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition},
 	 * but not when looking at the overall configuration of an application.
 	 */
+	// 做为大量配置的一部分（支持、扩展类）
 	int ROLE_SUPPORT = 1;
 
 	/**
@@ -93,6 +96,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * used when registering beans that are completely part of the internal workings
 	 * of a {@link org.springframework.beans.factory.parsing.ComponentDefinition}.
 	 */
+	// 指内部工作的基础构造
 	int ROLE_INFRASTRUCTURE = 2;
 
 
@@ -170,6 +174,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return the bean names that this bean depends on.
 	 */
+	// 获取依赖 bean name（详见depends-on属性用法）
 	@Nullable
 	String[] getDependsOn();
 
@@ -185,6 +190,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return whether this bean is a candidate for getting autowired into some other bean.
 	 */
+	// 自动装配
 	boolean isAutowireCandidate();
 
 	/**
