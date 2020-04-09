@@ -21,12 +21,12 @@ import java.util.LinkedList;
 import org.springframework.lang.Nullable;
 
 /**
- * Simple {@link LinkedList}-based structure for tracking the logical position during
+ * Simple {@link LinkedList}-based structure (结构体) for tracking（追踪） the logical（合乎逻辑的） position during
  * a parsing process. {@link Entry entries} are added to the LinkedList at
  * each point during the parse phase in a reader-specific manner.
  *
- * <p>Calling {@link #toString()} will render a tree-style view of the current logical
- * position in the parse phase. This representation is intended for use in
+ * <p>Calling {@link #toString()} will render（渲染） a tree-style view of the current logical
+ * position in the parse phase. This representation（表示） is intended（意向的） for use in
  * error messages.
  *
  * @author Rob Harrop
@@ -86,7 +86,7 @@ public final class ParseState {
 	}
 
 	/**
-	 * Create a new instance of {@link ParseState} which is an independent snapshot
+	 * Create a new instance of {@link ParseState} which is an independent（独立） snapshot
 	 * of this instance.
 	 */
 	public ParseState snapshot() {
