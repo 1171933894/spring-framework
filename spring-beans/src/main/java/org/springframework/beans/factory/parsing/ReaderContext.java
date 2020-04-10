@@ -20,8 +20,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
 
 /**
- * Context that gets passed along a bean definition reading process,
- * encapsulating all relevant configuration as well as state.
+ * Context that gets passed along（过去了） a bean definition reading process,
+ * encapsulating（封装） all relevant（相关的） configuration as well as state.
  *
  * @author Rob Harrop
  * @author Juergen Hoeller

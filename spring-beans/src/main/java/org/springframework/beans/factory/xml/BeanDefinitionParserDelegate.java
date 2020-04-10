@@ -1663,6 +1663,12 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public String getNamespaceURI(Node node) {
+		/**
+		 * 标签的解析是从命名空间的提起开始的，无论是区分 Spring 中默认标签和自定义标签还是
+		 * 区分自定义标签中不同标签的处理器都是以标签所提供的命名空间为基础的，而至于如何提取
+		 * 对应元素的命名空间其实并不需要我们亲自去实现，在 org.w3c.dom.Node 中已经提供了方法供
+		 * 我们直接调用。
+		 */
 		return node.getNamespaceURI();
 	}
 

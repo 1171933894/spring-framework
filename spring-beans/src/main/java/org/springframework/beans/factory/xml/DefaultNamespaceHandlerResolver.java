@@ -130,6 +130,7 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 			// 没有做过解析，则返回的是类路径
 			String className = (String) handlerOrClassName;
 			try {
+				// 使用反射将类路径转化为类
 				Class<?> handlerClass = ClassUtils.forName(className, this.classLoader);
 				if (!NamespaceHandler.class.isAssignableFrom(handlerClass)) {
 					throw new FatalBeanException("Class [" + className + "] for namespace [" + namespaceUri +
@@ -138,6 +139,13 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 				// 初始化类
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
 				// 调用自定义的 NamespaceHandler 的初始化方法
+				/**
+				 * public class MyNamespaceHandler extends NamespaceHandlerSupport {
+				 * 		public void init() {
+				 * 			registerBeanDefinitionParser (”user”, new UserBeanDefinitionParser());
+				 * 		}
+				 * }
+				 */
 				namespaceHandler.init();
 				// 记录在缓存
 				handlerMappings.put(namespaceUri, namespaceHandler);
