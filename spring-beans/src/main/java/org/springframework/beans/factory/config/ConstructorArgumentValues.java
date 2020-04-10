@@ -32,7 +32,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Holder for constructor argument values, typically as part of a bean definition.
+ * Holder（持有人） for constructor argument values, typically（通常） as part of a bean definition.
  *
  * <p>Supports values for a specific index in the constructor argument list
  * as well as for generic argument matches by type.
@@ -184,7 +184,7 @@ public class ConstructorArgumentValues {
 
 
 	/**
-	 * Add a generic argument value to be matched by type.
+	 * Add a generic（通用的） argument value to be matched by type.
 	 * <p>Note: A single generic argument value will just be used once,
 	 * rather than matched multiple times.
 	 * @param value the argument value
@@ -431,7 +431,7 @@ public class ConstructorArgumentValues {
 
 	/**
 	 * Holder for a constructor argument value, with an optional type
-	 * attribute indicating the target type of the actual constructor argument.
+	 * attribute indicating（指示） the target type of the actual constructor argument.
 	 */
 	public static class ValueHolder implements BeanMetadataElement {
 
