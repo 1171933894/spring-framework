@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.springframework.lang.Nullable;
 
 /**
- * Set of method overrides, determining which, if any, methods on a
+ * Set of method overrides（覆写）, determining which, if any, methods on a
  * managed object the Spring IoC container will override at runtime.
  *
  * <p>The currently supported {@link MethodOverride} variants are

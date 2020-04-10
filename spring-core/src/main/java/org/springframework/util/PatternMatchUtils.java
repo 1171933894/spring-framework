@@ -28,9 +28,9 @@ import org.springframework.lang.Nullable;
 public abstract class PatternMatchUtils {
 
 	/**
-	 * Match a String against the given pattern, supporting the following simple
+	 * Match a String against（针对）the given pattern, supporting the following simple
 	 * pattern styles: "xxx*", "*xxx", "*xxx*" and "xxx*yyy" matches (with an
-	 * arbitrary number of pattern parts), as well as direct equality.
+	 * arbitrary（任意的）number of pattern parts), as well as direct equality.
 	 * @param pattern the pattern to match against
 	 * @param str the String to match
 	 * @return whether the String matches the given pattern

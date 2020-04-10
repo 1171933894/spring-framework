@@ -534,14 +534,14 @@ public class BeanDefinitionParserDelegate {
 
 			// 解析元数据
 			/**
-			 * <bean id＝ myTestBea class= "bean.MyTestBean">
+			 * <bean id＝ myTestBean class= "bean.MyTestBean">
 			 * 	<meta key="testStr" value= "aaaaaaaa" />
 			 * </bean＞
 			 * 这段代码并不会体现在 MyTestBean 的属性中，而是一个额外的声明，当需要使用里面
 			 * 的信息的时候可以通过 BeanDefinition.getAttribute(key）方法进行获取
 			 */
 			parseMetaElements(ele, bd);
-			// 解析lookup-method属性
+			// 解析lookup-method属性，获取器注入：用来设计可插拔功能
 			/**
 			 * <bean id="getBeanTest" class="test.lookup.app.GetBeanTest">
 			 * 	<lookup-method name="getBean" bean＝"student" />
@@ -641,7 +641,7 @@ public class BeanDefinitionParserDelegate {
 		}// 在嵌入 bean Difinition 情况下且没有单独指定 scope 属性则佼用父类默认的属性
 		else if (containingBean != null) {
 			// Take default from containing bean in case of an inner bean definition.
-			// 在嵌入 beanDifinition 情况下且没有单独指定 scope 属性则佼用父类默认的属性
+			// 在嵌入 beanDifinition 情况下且没有单独指定 scope 属性则使用父类默认的属性
 			bd.setScope(containingBean.getScope());
 		}
 
