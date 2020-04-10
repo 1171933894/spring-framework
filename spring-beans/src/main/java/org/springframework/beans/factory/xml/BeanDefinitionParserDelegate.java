@@ -82,6 +82,12 @@ import org.springframework.util.xml.DomUtils;
  * @see ParserContext
  * @see DefaultBeanDefinitionDocumentReader
  */
+
+/**
+ * BeanDefinitioDocumentReader将Document对象中获取到Element对象，最终交给BeanDefinitionParserDelegate
+ * 来完成BeanDefinition对象的解析和创建工作。
+ * <p>BeanDefinitionParserDelegate并不会解析Spring配置文件中的所有元素，仅仅会解析在其命名空间中的元素</p>
+ */
 public class BeanDefinitionParserDelegate {
 
 	public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
@@ -1543,7 +1549,7 @@ public class BeanDefinitionParserDelegate {
 	}
 
 	/**
-	 * Decorate the given bean definition through a namespace handler, if applicable.
+	 * Decorate the given bean definition through a namespace handler, if applicable（适用的）.
 	 * @param ele the current element
 	 * @param originalDef the current bean definition
 	 * @return the decorated bean definition

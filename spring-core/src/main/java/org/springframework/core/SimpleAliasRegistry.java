@@ -77,7 +77,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 								registeredName + "' with new target name '" + name + "'");
 					}
 				}
-				// alias循环检查：当A->B 存在时，若再次出现A->C->B时候则会抛出异常
+				// alias循环检查：当A->B存在时，若再次出现A->C->B时候则会抛出异常
 				checkForAliasCircle(name, alias);
 				this.aliasMap.put(alias, name);
 				if (logger.isTraceEnabled()) {

@@ -364,7 +364,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			// 2、当返回的 bdHolder 不为空的情况下若存在默认标签的子节点下再有自定义属性，还需要再次对自定义标签进行解析
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
-				// 3、解析完成后， 要对解析后的 bdHolder 进行注册，同样，注册操作委托给了BeanDefinitionReaderUtils的registerBeanDefinition方法
+				// 3、解析完成后，要对解析后的 bdHolder 进行注册，同样，注册操作委托给了BeanDefinitionReaderUtils的registerBeanDefinition方法
 				// Register the final decorated instance.
 				BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
 			}
