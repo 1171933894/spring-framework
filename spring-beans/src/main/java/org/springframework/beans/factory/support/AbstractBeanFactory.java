@@ -240,12 +240,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
-		// 或许很多人不理解转换对应 beanNarne 是什么意思，传人的参数 name 不就是 beanNarne
-		// 吗？其实不是，这里传入的参数可能是别名，也可能是 FactoryBean ，所以需要进行一系列的
-		// 碎析，这些解析内容包括如下内容
-		// 1、这些解析内容包括如下内容 FactoryBean 的修饰符，也就是如果阳ηe＝&aa”，那么会首先去除＆而使 na1ne aa
-		// 2、取指定 alias 所表示的最终 eanNam巳，例如别 指向名称为 bean 则返回 B;
-		// 若别名 指向别名 ，另 ］名 又指向名称为 bean 则返回
+		// 或许很多人不理解转换对应 beanNarne 是什么意思，传入的参数 name 不就是 beanName
+		// 吗？其实不是，这里传入的参数可能是别名，也可能是 FactoryBean，所以需要进行一系列的
+		// 解析，这些解析内容包括如下内容：
+		// 1、这些解析内容包括如下内容 FactoryBean 的修饰符，也就是如果name＝"&aa"，那么会首先去除＆而使 name = aa。
+		// 2、取指定 alias 所表示的最终 beanName，例如别名指向名称为 bean 则返回 B; 若别名又指向别名C，别名又指向名称为 bean 则返回 C。
 		final String beanName = transformedBeanName(name);// 提取对应的beanName
 		Object bean;
 
@@ -253,7 +252,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 为什么首先会使用这段代码呢，
 		// 因为在创建单例bean的时候会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖，
 		// Spring创建bean的原则是不等 bean 创建完成就会将创建 bean 的 ObjectFactory 提早曝光
-		// 也就是将 ObjectFactory 加入到缓存中， 一旦下个 bean 创建时候需要依赖上个 bean 则直接使用 ObjectFactory
+		// 也就是将 ObjectFactory 加入到缓存中，一旦下个 bean 创建时候需要依赖上个 bean 则直接使用 ObjectFactory
 		// 直接尝试从缓存获取或者singletonFacotries中的ObjectFactory中获取
 		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
@@ -1155,7 +1154,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * Return the bean name, stripping out the factory dereference prefix if necessary,
-	 * and resolving aliases to canonical names.
+	 * and resolving aliases to canonical（典范） names.
 	 * @param name the user-specified name
 	 * @return the transformed bean name
 	 */
