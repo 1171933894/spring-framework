@@ -97,7 +97,7 @@ public abstract class AopConfigUtils {
 	public static BeanDefinition registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
 
-		return registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator.class, registry, source);
+		return registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator.class, registry, source);//escalate：升级
 	}
 
 	// 强制使用的过程其实是一个属性设置的过程
@@ -108,8 +108,7 @@ public abstract class AopConfigUtils {
 			 * 强制使用 CGLIB 代理需要 <aop:config＞ 的 proxyTargetClass 属性设为 true
 			 * <aop:config proxy-target-class=” true ” > . . </aop-config>
 			 *
-			 * 当需要使用 CGLIB 代理和 AspectJ 自动代理支持，可以按照以下方式设置 ＜aop:aspectj-
-			 * auto-proxy> 的 proxy-target-class 属性：
+			 * 当需要使用 CGLIB 代理和 AspectJ 自动代理支持，可以按照以下方式设置 ＜aop:aspectj-auto-proxy> 的 proxy-target-class 属性：
 			 * <aop:aspectJ-autoproxy proxy-target-class= ” true ” />
 			 */
 			definition.getPropertyValues().add("proxyTargetClass", Boolean.TRUE);
@@ -160,7 +159,7 @@ public abstract class AopConfigUtils {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 
-		// 如果已经存在了自动代理创建器且存在的自动代理创建者旦与现在的不一致，那么需要根据优先级来判断到底需要使用哪个
+		// 如果已经存在了自动代理创建器且存在的自动代理创建器与现在的不一致，那么需要根据优先级来判断到底需要使用哪个
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
