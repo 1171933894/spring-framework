@@ -514,6 +514,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
 			// 给BeanPostProcessors一个机会来返回代理来替代真正的实例
+			/**
+			 * 【短路判断】当经过前置处理后返回的结果如果不为空，那么会直接略过后续 bean 的创建而直接返回结
+			 * 果。这一特性虽然很容易被忽略，但是却起 至关重要的作用，我们熟知的 AOP 功能就是基于这里的判断的
+			 */
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;

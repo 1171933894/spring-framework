@@ -1197,6 +1197,12 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @param mo the MethodOverride object to validate
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
+	/**
+	 * 如果一个类中存在若干个重载方法，那么，在函数调用及增强的时候还需要根据参数类型进行匹
+	 * 配，来最终确认当前调用的到底是哪个函数。但是， Spring 将一部分匹配工作在这里完成了，
+	 * 如果当前类中的方法只有一个，那么就设置重载方法没有被重载，这样在后续调用的时候便可以直
+	 * 接使用找到的方法，而不需要进行方法的参数匹配验证了，而且还可以提前对方法存在性进行验证
+	 */
 	protected void prepareMethodOverride(MethodOverride mo) throws BeanDefinitionValidationException {
 		// 获取对应类中对应方法名的个数
 		int count = ClassUtils.getMethodCountForName(getBeanClass(), mo.getMethodName());
