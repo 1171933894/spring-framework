@@ -976,6 +976,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @param bean the raw bean instance
 	 * @return the object to expose as bean reference
 	 */
+	/**
+	 * 在B中创建依赖A时通过 ObjectFactory 提供的实例化方法来中断A中的属性填充，
+	 * 使B中持有的A仅仅是刚刚初始化并没有填充任何属性的A，而这正初始A的步骤还是开始
+	 * 时候进行的，但是因为A与B中的A所表示的属性性地址是一样，所以在A创建好的属性
+	 * 填充自然可通过B中的A获取，这样就解决了循环依赖的问题
+	 */
 	protected Object getEarlyBeanReference(String beanName, RootBeanDefinition mbd, Object bean) {
 		Object exposedObject = bean;
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
@@ -1253,7 +1259,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @since 5.0
 	 * @see #getObjectForBeanInstance
 	 */
-	protected BeanWrapper obtainFromSupplier(Supplier<?> instanceSupplier, String beanName) {
+	protected BeanWrapper obtainFromSupplier(Supplier<?> instanceSupplier, String beanName) {// obtain：获得
 		Object instance;
 
 		String outerBean = this.currentlyCreatedBean.get();
