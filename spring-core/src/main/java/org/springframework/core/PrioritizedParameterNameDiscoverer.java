@@ -34,7 +34,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 2.0
  */
-public class PrioritizedParameterNameDiscoverer implements ParameterNameDiscoverer {
+public class PrioritizedParameterNameDiscoverer implements ParameterNameDiscoverer {// prioritized：优先
 
 	private final List<ParameterNameDiscoverer> parameterNameDiscoverers = new LinkedList<>();
 

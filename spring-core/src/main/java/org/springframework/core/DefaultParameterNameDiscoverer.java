@@ -39,6 +39,12 @@ package org.springframework.core;
 public class DefaultParameterNameDiscoverer extends PrioritizedParameterNameDiscoverer {
 
 	public DefaultParameterNameDiscoverer() {
+		/**
+		 * 注册了三个解析器 <br/>
+		 * 1、StandardReflectionParameterNameDiscoverer是标准的根据反射拿到参数名的方式，只在jdk8下有效
+		 * 2、LocalVariableTableParameterNameDiscoverer通过第三方库如ASM获取.java文件读取字节码，在字节码中找到
+		 * 3、...
+		 */
 		if (!GraalDetector.inImageCode()) {
 			if (KotlinDetector.isKotlinReflectPresent()) {
 				addDiscoverer(new KotlinReflectionParameterNameDiscoverer());
