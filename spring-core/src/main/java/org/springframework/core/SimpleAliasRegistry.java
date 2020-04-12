@@ -151,7 +151,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
-	 * Transitively retrieve all aliases for the given name.
+	 * Transitively retrieve（检索） all aliases for the given name.
 	 * @param name the target name to find aliases for
 	 * @param result the resulting aliases list
 	 */

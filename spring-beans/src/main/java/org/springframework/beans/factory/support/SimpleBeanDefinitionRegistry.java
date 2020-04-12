@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
  * Can for example be used for testing bean definition readers.
  *
  * @author Juergen Hoeller
- * @since 2.5.2
+ * @since 2.5.2 可以看到提供得还是比较晚的
  */
 public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements BeanDefinitionRegistry {
 
@@ -56,6 +56,7 @@ public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements
 		}
 	}
 
+	// 需要注意的是：如果没有Bean定义，是抛出的异常，而不是返回null这点需要注意
 	@Override
 	public BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException {
 		BeanDefinition bd = this.beanDefinitionMap.get(beanName);
@@ -80,6 +81,8 @@ public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements
 		return this.beanDefinitionMap.size();
 	}
 
+	// beanName是个已存在的别名，或者已经包含此Bean定义了，那就证明在使用了嘛
+	// 它比单纯的containsBeanDefinition()范围更大些~~~
 	@Override
 	public boolean isBeanNameInUse(String beanName) {
 		return isAlias(beanName) || containsBeanDefinition(beanName);
