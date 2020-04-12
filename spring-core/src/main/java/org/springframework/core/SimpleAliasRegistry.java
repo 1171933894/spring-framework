@@ -54,6 +54,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	public void registerAlias(String name, String alias) {
 		Assert.hasText(name, "'name' must not be empty");
 		Assert.hasText(alias, "'alias' must not be empty");
+		//此处注意：很多人疑问的地方，用了ConcurrentHashMap，为何此处还要加锁呢？有必要吗？
+		//答：非常有必要的。因为ConcurrentHashMap只能保证单个put、remove方法的原子性。而不能保证多个操作同时的原子性。比如我一边添加、一边删除  显然这是不被允许的
 		synchronized (this.aliasMap) {
 			// 如果 beanName 与 alias 相同的话不记录 alias， 并删除对应的 alias
 			if (alias.equals(name)) {
@@ -106,12 +108,20 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	public boolean hasAlias(String name, String alias) {
 		for (Map.Entry<String, String> entry : this.aliasMap.entrySet()) {
 			String registeredName = entry.getValue();
+
 			if (registeredName.equals(name)) {
+
 				String registeredAlias = entry.getKey();
+
+				// 如果此alias和传入的alias相同，返回true  证明name有这个alias
+				// 一般人可能上面那一步就算了直接return了，但是，但是，但是还有一种情况也必须考虑到：倘若这个已经注册过的registeredAlias和传入的alias不相等。
+				// 但是把他作为name去找是否有alias的时候，如果有也得判断是true，表示有。 防止了a -> b  b->c  c->a的循环的情况  此处处理可以说是非常的优雅和谨慎了
 				if (registeredAlias.equals(alias) || hasAlias(registeredAlias, alias)) {
 					return true;
 				}
+
 			}
+
 		}
 		return false;
 	}
