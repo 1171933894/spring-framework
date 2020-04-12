@@ -39,11 +39,13 @@ import org.springframework.util.StringValueResolver;
  * @since 2.5.2
  */
 // 主要使用 map 作为 alias 的缓存，并对接口 AliasRegistry 进行实现
+// 此类在Spring中都是被Bean定义、创建的时候继承使用，和Bean的定义相关联
 public class SimpleAliasRegistry implements AliasRegistry {
 
 	/** Logger available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	// key为alias别名，value为name真实值
 	/** Map from alias to canonical name. */
 	private final Map<String, String> aliasMap = new ConcurrentHashMap<>(16);
 

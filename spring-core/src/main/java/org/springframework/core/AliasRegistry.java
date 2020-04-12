@@ -24,6 +24,16 @@ package org.springframework.core;
  * @since 2.5.2
  */
 // 定义对 alias 的简单增删改等操作
+
+/**
+ * 在Spring环境下，我们很容易的为一个Bean定义一个或者多个别名：
+ * <bean id="app:dataSource" class="...">
+ *     <alias name="app:dataSoure" alias="user:dataSoure"/>
+ *     <alias name="app:dataSoure" alias="device:dataSoure"/>
+ * </bean>
+ * 或者直接使用bean标签的name属性，就是别名:
+ * <bean id="aaa" name="bbb,ccc,ddd"/>
+ */
 public interface AliasRegistry {
 
 	/**
@@ -33,6 +43,7 @@ public interface AliasRegistry {
 	 * @throws IllegalStateException if the alias is already in use
 	 * and may not be overridden
 	 */
+	// 增  给name新增一个别名alias
 	void registerAlias(String name, String alias);
 
 	/**
@@ -40,6 +51,7 @@ public interface AliasRegistry {
 	 * @param alias the alias to remove
 	 * @throws IllegalStateException if no such alias was found
 	 */
+	// 删  删除一个别名
 	void removeAlias(String alias);
 
 	/**
@@ -48,6 +60,7 @@ public interface AliasRegistry {
 	 * @param name the name to check
 	 * @return whether the given name is an alias
 	 */
+	// 此name是否含有别名
 	boolean isAlias(String name);
 
 	/**
@@ -55,6 +68,7 @@ public interface AliasRegistry {
 	 * @param name the name to check for aliases
 	 * @return the aliases, or an empty array if none
 	 */
+	// 获取此name对应的所有的别名
 	String[] getAliases(String name);
 
 }
