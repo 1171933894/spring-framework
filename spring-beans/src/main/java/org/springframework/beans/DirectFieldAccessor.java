@@ -45,6 +45,12 @@ import org.springframework.util.ReflectionUtils;
  * @see org.springframework.validation.DirectFieldBindingResult
  * @see org.springframework.validation.DataBinder#initDirectFieldAccess()
  */
+
+/**
+ * 这个实现类的功能比较弱，它只支持存取Bean中普通属性的值，不支持嵌套属性，也不支持索引属性(数组|集合|Map)，它的是通过调用
+ * Field.get(target)和field.set(target,value)实现功能的，在该类的构造函数中会解析传入的目标对象，获取其中的field对象，
+ * 并缓存起来
+ */
 public class DirectFieldAccessor extends AbstractNestablePropertyAccessor {
 
 	private final Map<String, FieldPropertyHandler> fieldMap = new HashMap<>();

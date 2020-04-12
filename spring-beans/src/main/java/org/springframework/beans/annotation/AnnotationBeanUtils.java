@@ -36,6 +36,7 @@ import org.springframework.util.StringValueResolver;
  * @author Juergen Hoeller
  * @since 2.0
  */
+// 拷贝注解值到指定的类中
 public abstract class AnnotationBeanUtils {
 
 	/**
@@ -65,16 +66,17 @@ public abstract class AnnotationBeanUtils {
 
 		Set<String> excluded = (excludedProperties.length == 0 ? Collections.emptySet() :
 				new HashSet<>(Arrays.asList(excludedProperties)));
-		Method[] annotationProperties = ann.annotationType().getDeclaredMethods();
-		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(bean);
-		for (Method annotationProperty : annotationProperties) {
-			String propertyName = annotationProperty.getName();
+		Method[] annotationProperties = ann.annotationType().getDeclaredMethods();// 获取注解上的方法
+		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(bean);// 通过bean对象获取bean的定义BeanDefinition
+		for (Method annotationProperty : annotationProperties) {// 遍历方法
+			String propertyName = annotationProperty.getName();// 获取方法名
 			if (!excluded.contains(propertyName) && bw.isWritableProperty(propertyName)) {
-				Object value = ReflectionUtils.invokeMethod(annotationProperty, ann);
+				Object value = ReflectionUtils.invokeMethod(annotationProperty, ann);// 获取注解方法上的值
 				if (valueResolver != null && value instanceof String) {
+					// 处理value的值，StringValueResolver的作用比如处理占位符${}
 					value = valueResolver.resolveStringValue((String) value);
 				}
-				bw.setPropertyValue(propertyName, value);
+				bw.setPropertyValue(propertyName, value);// 把该值设置到bean定义上
 			}
 		}
 	}
