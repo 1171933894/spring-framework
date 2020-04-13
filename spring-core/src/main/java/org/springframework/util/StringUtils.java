@@ -488,7 +488,7 @@ public abstract class StringUtils {
 	 * @return the quoted {@code String} (e.g. "'myString'"),
 	 * or {@code null} if the input was {@code null}
 	 */
-	@Nullable
+	@Nullable// quote：引用
 	public static String quote(@Nullable String str) {
 		return (str != null ? "'" + str + "'" : null);
 	}
@@ -506,7 +506,7 @@ public abstract class StringUtils {
 	}
 
 	/**
-	 * Unqualify a string qualified by a '.' dot character. For example,
+	 * Unqualify（不合格） a string qualified by a '.' dot character. For example,
 	 * "this.name.is.qualified", returns "qualified".
 	 * @param qualifiedName the qualified name
 	 */
@@ -531,6 +531,7 @@ public abstract class StringUtils {
 	 * @param str the {@code String} to capitalize
 	 * @return the capitalized {@code String}
 	 */
+	// capitalize：大写
 	public static String capitalize(String str) {
 		return changeFirstCharacterCase(str, true);
 	}
@@ -669,6 +670,7 @@ public abstract class StringUtils {
 		// first path element. This is necessary to correctly parse paths like
 		// "file:core/../core/io/Resource.class", where the ".." should just
 		// strip the first "core" directory while keeping the "file:" prefix.
+		// 处理一些文件前缀。如"file:", "jndi:"等等
 		int prefixIndex = pathToUse.indexOf(':');
 		String prefix = "";
 		if (prefixIndex != -1) {
@@ -685,25 +687,31 @@ public abstract class StringUtils {
 			pathToUse = pathToUse.substring(1);
 		}
 
+		// 分解成String token
 		String[] pathArray = delimitedListToStringArray(pathToUse, FOLDER_SEPARATOR);
+		// 用于储存clean后的path tokens
 		LinkedList<String> pathElements = new LinkedList<>();
+		// 用于记录有“../”的个数
 		int tops = 0;
 
 		for (int i = pathArray.length - 1; i >= 0; i--) {
 			String element = pathArray[i];
+			// 如果是"./"当前目录，则不用处理，注意此处的if...elseif...else，使得第一个if相当于continue效果
 			if (CURRENT_PATH.equals(element)) {
 				// Points to current directory - drop it.
 			}
 			else if (TOP_PATH.equals(element)) {
 				// Registering top path found.
-				tops++;
+				tops++;// 记录下“../”已出现的个数
 			}
 			else {
+				// 如果还有“../”没被“抵消”，那么没向上走一级，则可用于“抵消”一次“../”
 				if (tops > 0) {
 					// Merging path element with element corresponding to top path.
 					tops--;
 				}
 				else {
+					// 如果“../”已经抵消完毕，那么走到此处，只要将token一一存起来即可，注意越高层次的token越应放得考前（其实或者刚好相反），所以每次都插在链表的头部。
 					// Normal path element found.
 					pathElements.add(0, element);
 				}
@@ -719,6 +727,7 @@ public abstract class StringUtils {
 			pathElements.add(0, CURRENT_PATH);
 		}
 
+		// 生成clean后的新的path
 		return prefix + collectionToDelimitedString(pathElements, FOLDER_SEPARATOR);
 	}
 
@@ -950,7 +959,7 @@ public abstract class StringUtils {
 	 * @param array2 the second array (can be {@code null})
 	 * @return the new array ({@code null} if both given arrays were {@code null})
 	 */
-	@Nullable
+	@Nullable// concatenate:级联
 	public static String[] concatenateStringArrays(@Nullable String[] array1, @Nullable String[] array2) {
 		if (ObjectUtils.isEmpty(array1)) {
 			return array2;
