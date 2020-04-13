@@ -31,7 +31,7 @@ import org.springframework.util.Assert;
  * @since 2.0.1
  * @see #getNestedComponents()
  */
-public class CompositeComponentDefinition extends AbstractComponentDefinition {
+public class CompositeComponentDefinition extends AbstractComponentDefinition {// composite：综合
 
 	private final String name;
 
