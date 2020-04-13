@@ -36,16 +36,16 @@ import java.util.TimeZone;
 import org.springframework.lang.Nullable;
 
 /**
- * Miscellaneous {@link String} utility methods.
+ * Miscellaneous {@link String} utility（效用） methods.
  *
  * <p>Mainly for internal use within the framework; consider
  * <a href="https://commons.apache.org/proper/commons-lang/">Apache's Commons Lang</a>
  * for a more comprehensive suite of {@code String} utilities.
  *
- * <p>This class delivers some simple functionality that should really be
+ * <p>This class delivers（交付） some simple functionality that should really be
  * provided by the core Java {@link String} and {@link StringBuilder}
  * classes. It also provides easy-to-use methods to convert between
- * delimited strings, such as CSV strings, and collections and arrays.
+ * delimited（定界） strings, such as CSV strings, and collections and arrays.
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -90,6 +90,7 @@ public abstract class StringUtils {
 	 * @see #hasLength(String)
 	 * @see #hasText(String)
 	 */
+	// 判断字符串是否为空，如果为nul或者""则返回true，否则返回false
 	public static boolean isEmpty(@Nullable Object str) {
 		return (str == null || "".equals(str));
 	}
@@ -110,6 +111,8 @@ public abstract class StringUtils {
 	 * @see #hasLength(String)
 	 * @see #hasText(CharSequence)
 	 */
+	// 判断字符串是否有长度，不等于null同时长度大于0，则为true
+	//这里重载两个hasLength方法，其中CharSequence是String的父类，是接口
 	public static boolean hasLength(@Nullable CharSequence str) {
 		return (str != null && str.length() > 0);
 	}
@@ -146,6 +149,7 @@ public abstract class StringUtils {
 	 * @see #hasLength(CharSequence)
 	 * @see Character#isWhitespace
 	 */
+	// 如果为空则直接返回false，如果字符串中有一个不是空白，则表示有内容，返回true
 	public static boolean hasText(@Nullable CharSequence str) {
 		return (str != null && str.length() > 0 && containsText(str));
 	}
@@ -183,6 +187,7 @@ public abstract class StringUtils {
 	 * contains at least 1 whitespace character
 	 * @see Character#isWhitespace
 	 */
+	// 判断字符串是否包含空白，如果为空则直接返回false，遍历字符序列，如果其中有一个字符是空白，则返回true，如果都不是，返回false
 	public static boolean containsWhitespace(@Nullable CharSequence str) {
 		if (!hasLength(str)) {
 			return false;
@@ -214,6 +219,7 @@ public abstract class StringUtils {
 	 * @return the trimmed {@code String}
 	 * @see java.lang.Character#isWhitespace
 	 */
+	// 去除字符串前后的空白
 	public static String trimWhitespace(String str) {
 		if (!hasLength(str)) {
 			return str;
@@ -222,6 +228,7 @@ public abstract class StringUtils {
 		int beginIndex = 0;
 		int endIndex = str.length() - 1;
 
+		// 去除字符串前导空白
 		while (beginIndex <= endIndex && Character.isWhitespace(str.charAt(beginIndex))) {
 			beginIndex++;
 		}
@@ -230,6 +237,7 @@ public abstract class StringUtils {
 			endIndex--;
 		}
 
+		// 去除字符串后导空白
 		return str.substring(beginIndex, endIndex + 1);
 	}
 
@@ -240,6 +248,7 @@ public abstract class StringUtils {
 	 * @return the trimmed {@code String}
 	 * @see java.lang.Character#isWhitespace
 	 */
+	// 去除字符串所有空白
 	public static String trimAllWhitespace(String str) {
 		if (!hasLength(str)) {
 			return str;
@@ -262,12 +271,14 @@ public abstract class StringUtils {
 	 * @return the trimmed {@code String}
 	 * @see java.lang.Character#isWhitespace
 	 */
+	// 去除前导空白，只取空白的前一部分
 	public static String trimLeadingWhitespace(String str) {
 		if (!hasLength(str)) {
 			return str;
 		}
 
 		StringBuilder sb = new StringBuilder(str);
+		// 去除前导空白
 		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0))) {
 			sb.deleteCharAt(0);
 		}
@@ -280,12 +291,14 @@ public abstract class StringUtils {
 	 * @return the trimmed {@code String}
 	 * @see java.lang.Character#isWhitespace
 	 */
+	// 去除后导空白,取去除空白后一部分
 	public static String trimTrailingWhitespace(String str) {
 		if (!hasLength(str)) {
 			return str;
 		}
 
 		StringBuilder sb = new StringBuilder(str);
+		// 去除后导空白
 		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(sb.length() - 1))) {
 			sb.deleteCharAt(sb.length() - 1);
 		}
@@ -298,6 +311,7 @@ public abstract class StringUtils {
 	 * @param leadingCharacter the leading character to be trimmed
 	 * @return the trimmed {@code String}
 	 */
+	// 删除前导为leadingCharacter的字符
 	public static String trimLeadingCharacter(String str, char leadingCharacter) {
 		if (!hasLength(str)) {
 			return str;
@@ -316,11 +330,13 @@ public abstract class StringUtils {
 	 * @param trailingCharacter the trailing character to be trimmed
 	 * @return the trimmed {@code String}
 	 */
+	// 删除后导字符trailingCharacter
 	public static String trimTrailingCharacter(String str, char trailingCharacter) {
 		if (!hasLength(str)) {
 			return str;
 		}
 
+		// 只要后导是指定字符则删除
 		StringBuilder sb = new StringBuilder(str);
 		while (sb.length() > 0 && sb.charAt(sb.length() - 1) == trailingCharacter) {
 			sb.deleteCharAt(sb.length() - 1);
@@ -335,6 +351,7 @@ public abstract class StringUtils {
 	 * @param prefix the prefix to look for
 	 * @see java.lang.String#startsWith
 	 */
+	// 忽略大小写，判断字符串是否以prefix开始
 	public static boolean startsWithIgnoreCase(@Nullable String str, @Nullable String prefix) {
 		return (str != null && prefix != null && str.length() >= prefix.length() &&
 				str.regionMatches(true, 0, prefix, 0, prefix.length()));
