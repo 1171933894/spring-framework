@@ -811,8 +811,9 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * @param propertyPath property path, which may be nested
 	 * @return a property accessor for the target bean
 	 */
-	@SuppressWarnings("unchecked")  // avoid nested generic
+	@SuppressWarnings("unchecked")  // avoid（避免）nested generic
 	protected AbstractNestablePropertyAccessor getPropertyAccessorForPropertyPath(String propertyPath) {
+		// 获取第一个内嵌属性的位置，分隔符是"."
 		int pos = PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex(propertyPath);
 		// Handle nested properties recursively.
 		if (pos > -1) {
@@ -827,7 +828,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	/**
-	 * Retrieve a Property accessor for the given nested property.
+	 * Retrieve（取回）a Property accessor for the given nested property.
 	 * Create a new one if not found in the cache.
 	 * <p>Note: Caching nested PropertyAccessors is necessary now,
 	 * to keep registered custom editors for nested properties.
@@ -839,6 +840,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			this.nestedPropertyAccessors = new HashMap<>();
 		}
 		// Get value of bean property.
+		// 根据属性名获取PropertyTokenHolder
 		PropertyTokenHolder tokens = getPropertyNameTokens(nestedProperty);
 		String canonicalName = tokens.canonicalName;
 		Object value = getPropertyValue(tokens);
@@ -1045,9 +1047,9 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			this.canonicalName = name;
 		}
 
-		public String actualName;
+		public String actualName;// 实际名称
 
-		public String canonicalName;
+		public String canonicalName;// 规范名称
 
 		@Nullable
 		public String[] keys;

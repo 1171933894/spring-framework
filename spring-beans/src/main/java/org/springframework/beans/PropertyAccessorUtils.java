@@ -59,7 +59,7 @@ public abstract class PropertyAccessorUtils {
 	}
 
 	/**
-	 * Determine the first nested property separator in the
+	 * Determine（确定）the first nested property separator in the
 	 * given property path, ignoring dots in keys (like "map[my.key]").
 	 * @param propertyPath the property path to check
 	 * @return the index of the nested property separator, or -1 if none
