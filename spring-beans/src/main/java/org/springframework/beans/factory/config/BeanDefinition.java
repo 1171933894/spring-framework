@@ -167,7 +167,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Set the names of the beans that this bean depends on being initialized.
-	 * The bean factory will guarantee that these beans get initialized first.
+	 * The bean factory will guarantee（保证）that these beans get initialized first.
 	 */
 	void setDependsOn(@Nullable String... dependsOn);
 
