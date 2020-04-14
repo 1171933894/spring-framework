@@ -57,6 +57,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	 * <p>Property values can be added with the {@code add} method.
 	 * @see #add(String, Object)
 	 */
+	// mutable：可变的
 	public MutablePropertyValues() {
 		this.propertyValueList = new ArrayList<>(0);
 	}
