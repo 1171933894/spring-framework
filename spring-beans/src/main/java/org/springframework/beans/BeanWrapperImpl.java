@@ -67,7 +67,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	 * the cost of JavaBeans introspection every time.
 	 */
 	@Nullable
-	private CachedIntrospectionResults cachedIntrospectionResults;
+	private CachedIntrospectionResults cachedIntrospectionResults;// introspection：内省
 
 	/**
 	 * The security context used for invoking the property methods.

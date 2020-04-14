@@ -71,6 +71,7 @@ import org.springframework.util.StringUtils;
  * @see #clearClassLoader(ClassLoader)
  * @see #forClass(Class)
  */
+// 保存了被包装bean的内省分析结果
 public final class CachedIntrospectionResults {
 
 	/**

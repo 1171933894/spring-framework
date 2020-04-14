@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
  * "Implementation-Version" manifest attribute from the jar file.
  *
  * <p>Note that some ClassLoaders do not expose the package metadata,
- * hence this class might not be able to determine the Spring version
+ * hence（因此）this class might not be able to determine the Spring version
  * in all environments. Consider using a reflection-based check instead:
  * For example, checking for the presence of a specific Spring 5.0
  * method that you intend to call.
@@ -45,6 +45,10 @@ public final class SpringVersion {
 	@Nullable
 	public static String getVersion() {
 		Package pkg = SpringVersion.class.getPackage();
+		/**
+		 * 产品发布会打成一个JAR包.JAR除了包含.class文件外,还包括一个META-INF
+		 * 文件夹.它下面又包含了一个MANIFEST.MF的文件.它包含了这个产品的产品信息
+		 */
 		return (pkg != null ? pkg.getImplementationVersion() : null);
 	}
 
