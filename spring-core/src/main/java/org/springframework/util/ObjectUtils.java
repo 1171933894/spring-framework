@@ -42,16 +42,30 @@ import org.springframework.lang.Nullable;
  * @see CollectionUtils
  * @see StringUtils
  */
+// 该工具类采用抽象类定义，抽象类内部全采用静态方法
+/**
+ * 通常情况下定义工具类有如下方法：
+ * Method I:定义final类，私有化构造函数，类内部全采用静态方法
+ * Method II:定义abstract类，类内部全采用静态方法
+ * Method III:不建议采用接口+静态方法 或者 非私有化构造函数+静态方法
+ */
 public abstract class ObjectUtils {
 
+	/** 初始Hash */
 	private static final int INITIAL_HASH = 7;
+	/** Hash乘数 */
 	private static final int MULTIPLIER = 31;
 
+	/** 逻辑空串 */
 	private static final String EMPTY_STRING = "";
+	/** 实际空串 */
 	private static final String NULL_STRING = "null";
+	/** 数组开始 */
 	private static final String ARRAY_START = "{";
+	/** 数组结尾 */
 	private static final String ARRAY_END = "}";
 	private static final String EMPTY_ARRAY = ARRAY_START + ARRAY_END;
+	/** 数组分隔符 */
 	private static final String ARRAY_ELEMENT_SEPARATOR = ", ";
 
 
@@ -64,6 +78,7 @@ public abstract class ObjectUtils {
 	 * @see java.lang.RuntimeException
 	 * @see java.lang.Error
 	 */
+	// 判断对象是否为可检查异常，即是RuntimeException或Error的实例
 	public static boolean isCheckedException(Throwable ex) {
 		return !(ex instanceof RuntimeException || ex instanceof Error);
 	}
@@ -75,6 +90,7 @@ public abstract class ObjectUtils {
 	 * @param declaredExceptions the exception types declared in the throws clause
 	 * @return whether the given exception is compatible
 	 */
+	// 是否可兼容异常，即是继承自RuntimeException和Error的异常或者自定义的declaredExceptions的实例（compatible：兼容）
 	public static boolean isCompatibleWithThrowsClause(Throwable ex, @Nullable Class<?>... declaredExceptions) {
 		if (!isCheckedException(ex)) {
 			return true;
@@ -94,6 +110,7 @@ public abstract class ObjectUtils {
 	 * either an Object array or a primitive array.
 	 * @param obj the object to check
 	 */
+	// 判断对象是否为数组obj.getClass().isArray()
 	public static boolean isArray(@Nullable Object obj) {
 		return (obj != null && obj.getClass().isArray());
 	}
@@ -104,6 +121,7 @@ public abstract class ObjectUtils {
 	 * @param array the array to check
 	 * @see #isEmpty(Object)
 	 */
+	// 判断数组为空
 	public static boolean isEmpty(@Nullable Object[] array) {
 		return (array == null || array.length == 0);
 	}
@@ -184,11 +202,13 @@ public abstract class ObjectUtils {
 	 * @param element the element to check for
 	 * @return whether the element has been found in the given array
 	 */
+	// 判断数组包含元素
 	public static boolean containsElement(@Nullable Object[] array, Object element) {
 		if (array == null) {
 			return false;
 		}
 		for (Object arrayEle : array) {
+			// 非空安全相等，即在同为空值时默认不相等
 			if (nullSafeEquals(arrayEle, element)) {
 				return true;
 			}
@@ -203,6 +223,7 @@ public abstract class ObjectUtils {
 	 * @param constant the constant name to find (must not be null or empty string)
 	 * @return whether the constant has been found in the given array
 	 */
+	// 包含常量，对枚举类型有效
 	public static boolean containsConstant(Enum<?>[] enumValues, String constant) {
 		return containsConstant(enumValues, constant, false);
 	}
@@ -214,6 +235,7 @@ public abstract class ObjectUtils {
 	 * @param caseSensitive whether case is significant in determining a match
 	 * @return whether the constant has been found in the given array
 	 */
+	// 包含常量，对枚举类型有效，大小写敏感
 	public static boolean containsConstant(Enum<?>[] enumValues, String constant, boolean caseSensitive) {
 		for (Enum<?> candidate : enumValues) {
 			if (caseSensitive ? candidate.toString().equals(constant) :
@@ -232,6 +254,7 @@ public abstract class ObjectUtils {
 	 * @throws IllegalArgumentException if the given constant is not found in the given array
 	 * of enum values. Use {@link #containsConstant(Enum[], String)} as a guard to avoid this exception.
 	 */
+	// 枚举类型的大小写不敏感valueOf()
 	public static <E extends Enum<?>> E caseInsensitiveValueOf(E[] enumValues, String constant) {
 		for (E candidate : enumValues) {
 			if (candidate.toString().equalsIgnoreCase(constant)) {
@@ -249,6 +272,7 @@ public abstract class ObjectUtils {
 	 * @param obj the object to append
 	 * @return the new array (of the same component type; never {@code null})
 	 */
+	// 数组添加元素，被添加的元素必须是A元素的子类以保证数组元素类型的一致性
 	public static <A, O extends A> A[] addObjectToArray(@Nullable A[] array, @Nullable O obj) {
 		Class<?> compType = Object.class;
 		if (array != null) {
