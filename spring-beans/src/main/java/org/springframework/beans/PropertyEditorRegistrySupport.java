@@ -258,7 +258,7 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 		this.defaultEditors.put(BigDecimal.class, new CustomNumberEditor(BigDecimal.class, true));
 		this.defaultEditors.put(BigInteger.class, new CustomNumberEditor(BigInteger.class, true));
 
-		// Only register config value editors if explicitly requested.
+		// Only register config value editors if explicitly requested. explicit：明确地
 		if (this.configValueEditorsActive) {
 			StringArrayPropertyEditor sae = new StringArrayPropertyEditor();
 			this.defaultEditors.put(String[].class, sae);

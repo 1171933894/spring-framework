@@ -46,7 +46,7 @@ public interface ConfigurablePropertyAccessor extends PropertyAccessor, Property
 	ConversionService getConversionService();
 
 	/**
-	 * Set whether to extract the old property value when applying a
+	 * Set whether to extract（提取） the old property value when applying a
 	 * property editor to a new value for a property.
 	 */
 	void setExtractOldValueForEditor(boolean extractOldValueForEditor);

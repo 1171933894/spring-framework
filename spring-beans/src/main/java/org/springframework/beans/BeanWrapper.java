@@ -53,7 +53,7 @@ public interface BeanWrapper extends ConfigurablePropertyAccessor {
 	 * <p>Default is unlimited on a plain BeanWrapper.
 	 * @since 4.1
 	 */
-	void setAutoGrowCollectionLimit(int autoGrowCollectionLimit);
+	void setAutoGrowCollectionLimit(int autoGrowCollectionLimit);// grow：增长
 
 	/**
 	 * Return the limit for array and collection auto-growing.
@@ -64,6 +64,7 @@ public interface BeanWrapper extends ConfigurablePropertyAccessor {
 	/**
 	 * Return the bean instance wrapped by this object.
 	 */
+	// 获取没有进行赋值的初始化对象
 	Object getWrappedInstance();
 
 	/**

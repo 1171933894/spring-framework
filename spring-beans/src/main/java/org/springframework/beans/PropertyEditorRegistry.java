@@ -34,6 +34,7 @@ import org.springframework.lang.Nullable;
  * @see BeanWrapper
  * @see org.springframework.validation.DataBinder
  */
+// 用来注册以及发现CustomEditor，也就是自定义的属性编辑器
 public interface PropertyEditorRegistry {
 
 	/**
