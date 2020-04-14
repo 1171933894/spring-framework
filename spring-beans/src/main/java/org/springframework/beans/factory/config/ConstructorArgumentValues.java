@@ -430,7 +430,7 @@ public class ConstructorArgumentValues {
 
 
 	/**
-	 * Holder for a constructor argument value, with an optional type
+	 * Holder for a constructor argument value, with an optional（可选的）type
 	 * attribute indicating（指示） the target type of the actual constructor argument.
 	 */
 	public static class ValueHolder implements BeanMetadataElement {
