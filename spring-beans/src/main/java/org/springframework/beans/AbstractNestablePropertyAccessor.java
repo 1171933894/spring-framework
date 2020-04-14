@@ -118,6 +118,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * @param object object wrapped by this accessor
 	 */
 	protected AbstractNestablePropertyAccessor(Object object) {
+		// 标识可以使用默认的属性编辑器
 		registerDefaultEditors();
 		setWrappedInstance(object);
 	}
@@ -191,11 +192,13 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * @param rootObject the root object at the top of the path
 	 */
 	public void setWrappedInstance(Object object, @Nullable String nestedPath, @Nullable Object rootObject) {
+		// bean设置为BeanWrapperImpl的内部变量
 		this.wrappedObject = ObjectUtils.unwrapOptional(object);
 		Assert.notNull(this.wrappedObject, "Target object must not be null");
 		this.nestedPath = (nestedPath != null ? nestedPath : "");
 		this.rootObject = (!this.nestedPath.isEmpty() ? rootObject : this.wrappedObject);
 		this.nestedPropertyAccessors = null;
+		// 新建类型转换器的委托类，这里BeanWrapperImpl的实例为propertyEditorRegistry,bean为targetObject
 		this.typeConverterDelegate = new TypeConverterDelegate(this, this.wrappedObject);
 	}
 
@@ -236,12 +239,14 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	public void setPropertyValue(String propertyName, @Nullable Object value) throws BeansException {
 		AbstractNestablePropertyAccessor nestedPa;
 		try {
+			// 根据属性名获取BeanWrapImpl对象，支持多重属性的递归分析处理
 			nestedPa = getPropertyAccessorForPropertyPath(propertyName);
 		}
 		catch (NotReadablePropertyException ex) {
 			throw new NotWritablePropertyException(getRootClass(), this.nestedPath + propertyName,
 					"Nested property in path '" + propertyName + "' does not exist", ex);
 		}
+		// 经过上面的递归后，获取到最终需要操作的属性的对象，下面将根据该属性对象，获取最终要操作的内嵌对象的属性，生成PropertyTokenHolder，内省设置属性值
 		PropertyTokenHolder tokens = getPropertyNameTokens(getFinalPath(nestedPa, propertyName));
 		nestedPa.setPropertyValue(tokens, new PropertyValue(propertyName, value));
 	}
