@@ -42,7 +42,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Encapsulates a Java {@link java.lang.reflect.Type}, providing access to
+ * Encapsulates（封装）a Java {@link java.lang.reflect.Type}, providing access to
  * {@link #getSuperType() supertypes}, {@link #getInterfaces() interfaces}, and
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
  * {@link #resolve() resolve} to a {@link java.lang.Class}.
@@ -80,7 +80,7 @@ import org.springframework.util.StringUtils;
  * @see ResolvableTypeProvider
  */
 @SuppressWarnings("serial")
-public class ResolvableType implements Serializable {
+public class ResolvableType implements Serializable {// resolvable：可解决的
 
 	/**
 	 * {@code ResolvableType} returned when no value is available. {@code NONE} is used
@@ -979,7 +979,7 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Class},
-	 * using the full generic type information for assignability checks.
+	 * using the full generic type information for assignability（可分配性）checks.
 	 * For example: {@code ResolvableType.forClass(MyArrayList.class)}.
 	 * @param clazz the class to introspect ({@code null} is semantically
 	 * equivalent to {@code Object.class} for typical use cases here}
