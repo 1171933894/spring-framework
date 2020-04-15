@@ -41,17 +41,20 @@ public interface Advised extends TargetClassAware {
 	 * Return whether the Advised configuration is frozen,
 	 * in which case no advice changes can be made.
 	 */
+	// 通知配置是否冻结，冻结后通知不能做改变
 	boolean isFrozen();
 
 	/**
 	 * Are we proxying the full target class instead of specified interfaces?
 	 */
+	// 是否代理目标类
 	boolean isProxyTargetClass();
 
 	/**
 	 * Return the interfaces proxied by the AOP proxy.
 	 * <p>Will not include the target class, which may also be proxied.
 	 */
+	// 返回aop的代理接口，不包括目标类
 	Class<?>[] getProxiedInterfaces();
 
 	/**
@@ -80,6 +83,8 @@ public interface Advised extends TargetClassAware {
 	 * advised object invokes a method on {@code this}, no advice will be applied.
 	 * <p>Default is {@code false}, for optimal performance.
 	 */
+	// 通过aop框架，作为用AopContext可检索的ThreadLocal向外暴露
+	// 当一个advised object需要调用另外一个advised object时有用。
 	void setExposeProxy(boolean exposeProxy);
 
 	/**
@@ -100,6 +105,7 @@ public interface Advised extends TargetClassAware {
 	 * when building the actual advisor chain for proxy invocations.
 	 * @see org.springframework.aop.ClassFilter
 	 */
+	// 设置代理配置为提前过滤，因此它包括适当的advisors(通过匹配代理目标类)
 	void setPreFiltered(boolean preFiltered);
 
 	/**
