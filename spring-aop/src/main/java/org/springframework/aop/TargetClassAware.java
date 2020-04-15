@@ -19,7 +19,7 @@ package org.springframework.aop;
 import org.springframework.lang.Nullable;
 
 /**
- * Minimal interface for exposing the target class behind a proxy.
+ * Minimal interface for exposing the target class behind（背后）a proxy.
  *
  * <p>Implemented by AOP proxy objects and proxy factories
  * (via {@link org.springframework.aop.framework.Advised})
@@ -29,6 +29,7 @@ import org.springframework.lang.Nullable;
  * @since 2.0.3
  * @see org.springframework.aop.support.AopUtils#getTargetClass(Object)
  */
+// 该接口是暴露代理的目标类的最小实现，该接口只有一个方法
 public interface TargetClassAware {
 
 	/**
