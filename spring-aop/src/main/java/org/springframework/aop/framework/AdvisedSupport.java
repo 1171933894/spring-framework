@@ -126,9 +126,11 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * @see org.springframework.aop.target.SingletonTargetSource
 	 */
 	public void setTarget(Object target) {
+		// 将根据给得的object创建 SingletonTargetSource
 		setTargetSource(new SingletonTargetSource(target));
 	}
 
+	// 直接设置TargetSource相应的接口实现，若为空，返回EMPTY_TARGET_SOURCE
 	@Override
 	public void setTargetSource(@Nullable TargetSource targetSource) {
 		this.targetSource = (targetSource != null ? targetSource : EMPTY_TARGET_SOURCE);
@@ -152,6 +154,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * @see #setTargetSource
 	 * @see #setTarget
 	 */
+	// 该代理目标类能够转为targetClass，该方法是前面两个方法的替代：当我们想要一个没有可达TargetSource的代理类
 	public void setTargetClass(@Nullable Class<?> targetClass) {
 		this.targetSource = EmptyTargetSource.forClass(targetClass);
 	}
@@ -211,6 +214,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 		}
 		if (!this.interfaces.contains(intf)) {
 			this.interfaces.add(intf);
+			// 当代理接口有更改，也同时清空methodCache
 			adviceChanged();
 		}
 	}

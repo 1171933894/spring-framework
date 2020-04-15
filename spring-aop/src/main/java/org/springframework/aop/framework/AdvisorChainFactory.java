@@ -22,7 +22,7 @@ import java.util.List;
 import org.springframework.lang.Nullable;
 
 /**
- * Factory interface for advisor chains.
+ * Factory interface for advisor（顾问）chains.
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
