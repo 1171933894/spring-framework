@@ -34,7 +34,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 2.0
  */
-public class BeanComponentDefinition extends BeanDefinitionHolder implements ComponentDefinition {
+public class BeanComponentDefinition extends BeanDefinitionHolder implements ComponentDefinition {// component：零件
 
 	private BeanDefinition[] innerBeanDefinitions;
 
