@@ -34,10 +34,10 @@ package org.springframework.core;
  * @author Juergen Hoeller
  * @since 4.3
  */
-public interface DecoratingProxy {
+public interface DecoratingProxy {// decorate：装饰
 
 	/**
-	 * Return the (ultimate) decorated class behind this proxy.
+	 * Return the (ultimate[最终]) decorated class behind this proxy.
 	 * <p>In case of an AOP proxy, this will be the ultimate target class,
 	 * not just the immediate target (in case of multiple nested proxies).
 	 * @return the decorated class (never {@code null})

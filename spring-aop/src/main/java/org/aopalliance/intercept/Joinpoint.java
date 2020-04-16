@@ -20,7 +20,7 @@ import java.lang.reflect.AccessibleObject;
 
 /**
  * This interface represents a generic runtime joinpoint (in the AOP
- * terminology).
+ * terminology（术语）).
  *
  * <p>A runtime joinpoint is an <i>event</i> that occurs on a static
  * joinpoint (i.e. a location in a the program). For instance, an
@@ -41,7 +41,7 @@ public interface Joinpoint {
 
 	/**
 	 * Proceed to the next interceptor in the chain.
-	 * <p>The implementation and the semantics of this method depends
+	 * <p>The implementation and the semantics（语义学）of this method depends
 	 * on the actual joinpoint type (see the children interfaces).
 	 * @return see the children interfaces' proceed definition
 	 * @throws Throwable if the joinpoint throws an exception

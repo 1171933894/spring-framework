@@ -115,8 +115,8 @@ public abstract class AopProxyUtils {
 	 * @see Advised
 	 * @see DecoratingProxy
 	 */
-	static Class<?>[] completeProxiedInterfaces(AdvisedSupport advised, boolean decoratingProxy) {
-		Class<?>[] specifiedInterfaces = advised.getProxiedInterfaces();
+	static Class<?>[] completeProxiedInterfaces(AdvisedSupport advised, boolean decoratingProxy) {// complete：完成
+		Class<?>[] specifiedInterfaces = advised.getProxiedInterfaces();// specified：指定的
 		if (specifiedInterfaces.length == 0) {
 			// No user-specified interfaces: check whether target class is an interface.
 			Class<?> targetClass = advised.getTargetClass();
@@ -212,7 +212,7 @@ public abstract class AopProxyUtils {
 
 
 	/**
-	 * Adapt the given arguments to the target signature in the given method,
+	 * Adapt（适应）the given arguments to the target signature in the given method,
 	 * if necessary: in particular, if a given vararg argument array does not
 	 * match the array type of the declared vararg parameter in the method.
 	 * @param method the target method
@@ -224,6 +224,7 @@ public abstract class AopProxyUtils {
 		if (ObjectUtils.isEmpty(arguments)) {
 			return new Object[0];
 		}
+		// isVarArgs：如果该方法声明为采用可变数量的参数，则返回true; 否则返回false。
 		if (method.isVarArgs()) {
 			Class<?>[] paramTypes = method.getParameterTypes();
 			if (paramTypes.length == arguments.length) {

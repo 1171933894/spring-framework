@@ -162,11 +162,19 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 
 		try {
 			// equals 方法的处理
+			/**
+			 * 第一个if是判断如果被代理的目标对象要执行的方法是equal则执行JdkDynamicAopProxy
+			 * （即代理对象的equal）方法，然后就返回了，也就说spring不对equal方法进行AOP拦截。
+			 */
 			if (!this.equalsDefined && AopUtils.isEqualsMethod(method)) {
 				// The target does not implement the equals(Object) method itself.
 				return equals(args[0]);
 			}
 			// hash 方法的处理
+			/**
+			 * 第二个if是判断如果被代理的目标对象要执行的方法是hashcode则执行JdkDynamicAopProxy
+			 * （即代理对象的hashcode）方法，随即也返回，同理，spring也不对hashcode进行AOP拦截。
+			 */
 			else if (!this.hashCodeDefined && AopUtils.isHashCodeMethod(method)) {
 				// The target does not implement the hashCode() method itself.
 				return hashCode();
@@ -175,6 +183,9 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 				// There is only getDecoratedClass() declared -> dispatch to proxy config.
 				return AopProxyUtils.ultimateTargetClass(this.advised);
 			}
+			/**
+			 * 第三个if是判断如果被代理的对象本身就是实现了Advised接口，也不做处理，直接执行，（spring的意思是不是我不做切面的切面呢？）。
+			 */
 			else if (!this.advised.opaque && method.getDeclaringClass().isInterface() &&
 					method.getDeclaringClass().isAssignableFrom(Advised.class)) {
 				// Service invocations on ProxyConfig with the proxy config...
@@ -210,7 +221,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 				retVal = AopUtils.invokeJoinpointUsingReflection(target, method, argsToUse);
 			}
 			else {
-				// 将拦截器封装在 ReflectiveMethodinvocation，
+				// 将拦截器封装在 ReflectiveMethodInvocation，
 				// 以便于使用 proceed 进行链接表用拦截器
 				// We need to create a method invocation...
 				MethodInvocation invocation =
