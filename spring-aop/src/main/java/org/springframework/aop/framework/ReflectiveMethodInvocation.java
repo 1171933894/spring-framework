@@ -110,11 +110,11 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			@Nullable Class<?> targetClass, List<Object> interceptorsAndDynamicMethodMatchers) {
 
 		this.proxy = proxy;
-		this.target = target;
+		this.target = target;// 待拦截的对象
 		this.targetClass = targetClass;
-		this.method = BridgeMethodResolver.findBridgedMethod(method);
+		this.method = BridgeMethodResolver.findBridgedMethod(method);// 待拦截的方法
 		this.arguments = AopProxyUtils.adaptArgumentsIfNecessary(method, arguments);
-		this.interceptorsAndDynamicMethodMatchers = interceptorsAndDynamicMethodMatchers;
+		this.interceptorsAndDynamicMethodMatchers = interceptorsAndDynamicMethodMatchers;// 拦截器列表
 	}
 
 
@@ -166,7 +166,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 
 		// 获取下一个要执行的拦截器
 		Object interceptorOrInterceptionAdvice =
-				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
+				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);// currentInterceptorIndex初始值为-1
 		if (interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher) {
 			// Evaluate dynamic method matcher here: static part will already have
 			// been evaluated and found to match.
