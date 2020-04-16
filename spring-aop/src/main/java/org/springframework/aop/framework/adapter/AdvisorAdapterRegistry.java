@@ -46,7 +46,7 @@ public interface AdvisorAdapterRegistry {
 	Advisor wrap(Object advice) throws UnknownAdviceTypeException;
 
 	/**
-	 * Return an array of AOP Alliance MethodInterceptors to allow use of the
+	 * Return an array of AOP Alliance（联盟）MethodInterceptors to allow use of the
 	 * given Advisor in an interception-based framework.
 	 * <p>Don't worry about the pointcut associated with the {@link Advisor}, if it is
 	 * a {@link org.springframework.aop.PointcutAdvisor}: just return an interceptor.

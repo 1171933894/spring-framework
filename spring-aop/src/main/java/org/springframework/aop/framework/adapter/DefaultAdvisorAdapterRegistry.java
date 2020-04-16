@@ -66,7 +66,7 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Se
 		Advice advice = (Advice) adviceObject;
 		if (advice instanceof MethodInterceptor) {
 			// So well-known it doesn't even need an adapter.
-			// 如果是 Methodinterceptor 类型则使用 DefaultPointcutAdvisor 封装
+			// 如果是 MethodInterceptor 类型则使用 DefaultPointcutAdvisor 封装
 			return new DefaultPointcutAdvisor(advice);
 		}
 		// 如果存在 Advisor 的适配器那么也同样需要进行封装
