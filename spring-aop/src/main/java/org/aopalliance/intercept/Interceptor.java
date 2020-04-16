@@ -22,7 +22,7 @@ import org.aopalliance.aop.Advice;
  * This interface represents a generic interceptor.
  *
  * <p>A generic interceptor can intercept runtime events that occur
- * within a base program. Those events are materialized by (reified
+ * within a base program. Those events are materialized（物化）by (reified
  * in) joinpoints. Runtime joinpoints can be invocations, field
  * access, exceptions...
  *
