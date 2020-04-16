@@ -473,7 +473,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				proxyFactory.setProxyTargetClass(true);
 			}
 			else {
-				evaluateProxyInterfaces(beanClass, proxyFactory);
+				evaluateProxyInterfaces(beanClass, proxyFactory);// evaluate：评估
 			}
 		}
 

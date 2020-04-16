@@ -43,7 +43,7 @@ public abstract class AutoProxyUtils {
 	 * @see #shouldProxyTargetClass
 	 */
 	public static final String PRESERVE_TARGET_CLASS_ATTRIBUTE =
-			Conventions.getQualifiedAttributeName(AutoProxyUtils.class, "preserveTargetClass");
+			Conventions.getQualifiedAttributeName(AutoProxyUtils.class, "preserveTargetClass");// preserve：保留
 
 	/**
 	 * Bean definition attribute that indicates the original target class of an
