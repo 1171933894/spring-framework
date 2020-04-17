@@ -28,11 +28,13 @@ import org.springframework.aop.MethodMatcher;
  */
 public abstract class StaticMethodMatcher implements MethodMatcher {
 
+	// 永远返回false表示只会去静态匹配
 	@Override
 	public final boolean isRuntime() {
 		return false;
 	}
 
+	// 三参数matches抛出异常，使其不被调用
 	@Override
 	public final boolean matches(Method method, Class<?> targetClass, Object... args) {
 		// should never be invoked because isRuntime() returns false

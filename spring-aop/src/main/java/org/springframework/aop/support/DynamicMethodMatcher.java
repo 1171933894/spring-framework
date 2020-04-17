@@ -28,15 +28,17 @@ import org.springframework.aop.MethodMatcher;
  */
 public abstract class DynamicMethodMatcher implements MethodMatcher {
 
+	// 永远返回true
 	@Override
 	public final boolean isRuntime() {
 		return true;
 	}
 
 	/**
-	 * Can override to add preconditions for dynamic matching. This implementation
+	 * Can override to add preconditions（前提条件）for dynamic matching. This implementation
 	 * always returns true.
 	 */
+	// 永远返回true，去匹配动态匹配的方法即可
 	@Override
 	public boolean matches(Method method, Class<?> targetClass) {
 		return true;
