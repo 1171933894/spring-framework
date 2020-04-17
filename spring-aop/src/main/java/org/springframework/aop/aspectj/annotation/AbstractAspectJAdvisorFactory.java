@@ -85,7 +85,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	}
 
 	/**
-	 * We need to detect this as "code-style" AspectJ aspects should not be
+	 * We need to detect（检测）this as "code-style" AspectJ aspects should not be
 	 * interpreted by Spring AOP.
 	 */
 	private boolean compiledByAjc(Class<?> clazz) {
