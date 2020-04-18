@@ -47,6 +47,12 @@ import org.springframework.util.StringUtils;
  * @since 1.1
  * @see JdkRegexpMethodPointcut
  */
+
+/**
+ * 用AspectJExpressionPointcut实现的切点比JdkRegexpMethodPointcut实现切点的好处就是，
+ * 在设置切点的时候可以用切点语言来更加精确的表示拦截哪个方法。（可以精确到返回参数，参数类型
+ * ，方法名,当然，也可以模糊匹配）
+ */
 @SuppressWarnings("serial")
 public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPointcut
 		implements Serializable {

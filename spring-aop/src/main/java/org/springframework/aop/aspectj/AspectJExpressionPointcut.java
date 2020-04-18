@@ -82,12 +82,13 @@ import org.springframework.util.StringUtils;
  * @since 2.0
  */
 @SuppressWarnings("serial")
-// 它既是个Pointcut，它也是个ClassFilter
+// 即是ClassFilter，也是MethodMatcher
 public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		implements ClassFilter, IntroductionAwareMethodMatcher, BeanFactoryAware {
 
 	private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<>();
 
+	// Spring支持的AspectJ的切点语言表达式一共有10中（加上后面的自己的Bean方式一共11种）
 	static {
 		SUPPORTED_PRIMITIVES.add(PointcutPrimitive.EXECUTION);
 		SUPPORTED_PRIMITIVES.add(PointcutPrimitive.ARGS);
@@ -111,12 +112,14 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	private Class<?>[] pointcutParameterTypes = new Class<?>[0];
 
+	// 它持有BeanFactory 的引用，但是是可以为null的，也就是说它脱离容器也能够正常work
 	@Nullable
 	private BeanFactory beanFactory;
 
 	@Nullable
 	private transient ClassLoader pointcutClassLoader;
 
+	// PointcutExpression是org.aspectj.weaver.tools.PointcutExpression是AspectJ的类
 	@Nullable
 	private transient PointcutExpression pointcutExpression;
 
@@ -236,8 +239,9 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	}
 
 	/**
-	 * Initialize the underlying AspectJ pointcut parser.
+	 * Initialize the underlying（潜在的）AspectJ pointcut parser.
 	 */
+	// 初始化一个Pointcut的解析器。我们发现最后一行，新注册了一个BeanPointcutDesignatorHandler  它是准们处理Spring自己支持的bean() 的切点表达式的
 	private PointcutParser initializePointcutParser(@Nullable ClassLoader classLoader) {
 		PointcutParser parser = PointcutParser
 				.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(
@@ -253,6 +257,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	 * We also allow {@code and} between two pointcut sub-expressions.
 	 * <p>This method converts back to {@code &&} for the AspectJ pointcut parser.
 	 */
+	// 由此可见，我们不仅仅可以写&&、||、!这种。也支持and、or、not
 	private String replaceBooleanOperators(String pcExpr) {
 		String result = StringUtils.replace(pcExpr, " and ", " && ");
 		result = StringUtils.replace(result, " or ", " || ");
@@ -268,6 +273,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		return obtainPointcutExpression();
 	}
 
+	// 这是ClassFilter匹配类。借助的PointcutExpression#couldMatchJoinPointsInType 去匹配
 	@Override
 	public boolean matches(Class<?> targetClass) {
 		PointcutExpression pointcutExpression = obtainPointcutExpression();
@@ -290,6 +296,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		return false;
 	}
 
+	// MethodMatcher 匹配方法，借助的PointcutExpression和ShadowMatch去匹配的
 	@Override
 	public boolean matches(Method method, Class<?> targetClass, boolean hasIntroductions) {
 		obtainPointcutExpression();

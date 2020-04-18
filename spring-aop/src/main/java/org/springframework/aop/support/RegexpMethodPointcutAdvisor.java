@@ -44,6 +44,8 @@ import org.springframework.util.ObjectUtils;
  */
 @SuppressWarnings("serial")
 // 可以方便的让我们同时指定一个JdkRegexpMethodPointcut和其需要对应的Advice
+// RegexpMethodPointcutAdvisor没有提供不匹配的正则表达式注入方法，即没有
+// excludedPatterns注入，如果需要该功能请还是使用JdkRegexpMethodPointcut
 public class RegexpMethodPointcutAdvisor extends AbstractGenericPointcutAdvisor {
 
 	@Nullable
