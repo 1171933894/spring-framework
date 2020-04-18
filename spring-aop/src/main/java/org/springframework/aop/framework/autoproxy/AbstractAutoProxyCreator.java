@@ -482,6 +482,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// 设置要代理的类
 		proxyFactory.setTargetSource(targetSource);
 		// 定制代理
+		/**
+		 * Spring 中还为子类提供了定制的函数 customizeProxyFactory，子类可以在此函
+		 * 数中进行对 ProxyFactory 的进一步封装
+		 */
 		customizeProxyFactory(proxyFactory);
 		// 用来控制代理工厂被配置之后，是否还允许修改通知
 		// 缺省值为false（即在代理被配置之后，允许修改代理的配置）

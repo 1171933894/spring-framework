@@ -188,12 +188,14 @@ class CglibAopProxy implements AopProxy, Serializable {
 					enhancer.setUseCache(false);
 				}
 			}
+			// 设置目标对象
 			enhancer.setSuperclass(proxySuperClass);
+			// 设置要实现的接口
 			enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
 			enhancer.setStrategy(new ClassLoaderAwareUndeclaredThrowableStrategy(classLoader));
 
-			// 设置拦截器
+			// 设置拦截器（返回所有回调类）
 			Callback[] callbacks = getCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];
 			for (int x = 0; x < types.length; x++) {
@@ -205,6 +207,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 			enhancer.setCallbackTypes(types);
 
 			// Generate the proxy class and create a proxy instance.
+			// 生成代理Class并创建代理实例
 			return createProxyClassAndInstance(enhancer, callbacks);
 		}
 		catch (CodeGenerationException | IllegalArgumentException ex) {
@@ -651,8 +654,12 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 
 	/**
-	 * General purpose AOP callback. Used when the target is dynamic or when the
+	 * General purpose（目的）AOP callback. Used when the target is dynamic or when the
 	 * proxy is not frozen.
+	 *
+	 * DynamicAdvisedInterceptor的intercept方法同JdkDynamicAopProxy的invoke方法几乎相同，
+	 * 最后执行链式调用的CglibMethodInvocation也是ReflectiveMethodInvocation的子类。只是对
+	 * 一些特殊情况选择用其他的Callback来辅助实现
 	 */
 	private static class DynamicAdvisedInterceptor implements MethodInterceptor, Serializable {
 

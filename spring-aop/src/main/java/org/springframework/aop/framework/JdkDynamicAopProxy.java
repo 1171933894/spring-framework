@@ -240,7 +240,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 				// Special case: it returned "this" and the return type of the method
 				// is type-compatible. Note that we can't help if the target sets
 				// a reference to itself in another returned object.
-				retVal = proxy;
+				retVal = proxy;// Spring对于方法返回this的流式调用也做出了兼容，将返回的this替换为代理对象
 			}
 			else if (retVal == null && returnType != Void.TYPE && returnType.isPrimitive()) {
 				throw new AopInvocationException(
