@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
  * Subinterface of {@link org.springframework.aop.aspectj.AspectInstanceFactory}
  * that returns {@link AspectMetadata} associated with AspectJ-annotated classes.
  *
- * <p>Ideally, AspectInstanceFactory would include this method itself, but because
+ * <p>Ideally（在理想的情况下）, AspectInstanceFactory would include this method itself, but because
  * AspectMetadata uses Java-5-only {@link org.aspectj.lang.reflect.AjType},
  * we need to split out this subinterface.
  *
@@ -41,7 +41,7 @@ public interface MetadataAwareAspectInstanceFactory extends AspectInstanceFactor
 	AspectMetadata getAspectMetadata();
 
 	/**
-	 * Return the best possible creation mutex for this factory.
+	 * Return the best possible creation mutex（互斥锁）for this factory.
 	 * @return the mutex object (may be {@code null} for no mutex to use)
 	 * @since 4.3
 	 */

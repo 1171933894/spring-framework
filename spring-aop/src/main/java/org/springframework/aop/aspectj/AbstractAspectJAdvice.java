@@ -60,6 +60,7 @@ import org.springframework.util.StringUtils;
  * @since 2.0
  */
 @SuppressWarnings("serial")
+// 用途：AOP基类，用来包装AspectJ切面或AspectJ注解的通知方法
 public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedenceInformation, Serializable {
 
 	/**
@@ -99,7 +100,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 
 	protected transient Method aspectJAdviceMethod;
 
-	private final AspectJExpressionPointcut pointcut;
+	private final AspectJExpressionPointcut pointcut;// 切点
 
 	private final AspectInstanceFactory aspectInstanceFactory;
 
@@ -108,12 +109,12 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	 * (used when determining advice precedence so that we can determine
 	 * whether two pieces of advice come from the same aspect).
 	 */
-	private String aspectName = "";
+	private String aspectName = "";// 切面名称
 
 	/**
 	 * The order of declaration of this advice within the aspect.
 	 */
-	private int declarationOrder;
+	private int declarationOrder;// 切面顺序
 
 	/**
 	 * This will be non-null if the creator of this advice object knows the argument names
@@ -661,7 +662,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	}
 
 	/**
-	 * Get the current join point match at the join point we are being dispatched on.
+	 * Get the current join point match at the join point we are being dispatched（派出）on.
 	 */
 	@Nullable
 	protected JoinPointMatch getJoinPointMatch() {
