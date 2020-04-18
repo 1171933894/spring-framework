@@ -43,7 +43,7 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 	 * @since 4.3.1
 	 */
 	public static final String ASPECTJ_WEAVING_ENABLER_BEAN_NAME =
-			"org.springframework.context.config.internalAspectJWeavingEnabler";
+			"org.springframework.context.config.internalAspectJWeavingEnabler";// AspectJWeavingEnabler的别名
 
 	private static final String ASPECTJ_WEAVING_ENABLER_CLASS_NAME =
 			"org.springframework.context.weaving.AspectJWeavingEnabler";
@@ -69,6 +69,7 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 		return ConfigurableApplicationContext.LOAD_TIME_WEAVER_BEAN_NAME;
 	}
 
+	// 核心逻辑是从 parse 函数开始的，而经过父类的封装，LoadTimeWeaverBeanDefinitionParser类的核心实现被转移到了 doParse 函数中
 	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -86,6 +87,15 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 		}
 	}
 
+	// 是否开启 AspectJ <br/>
+	/**
+	 * 之前虽然反复提到了在配置文件中加入了＜context:load-time-weaver／＞便相当于加入了
+	 * AspectJ 开关 但是，并不是配置了这个标签就意味着开启了 AspectJ 功能，这个标签中还有一
+	 * aspectj-weaving ，这个属性有3个备选值， on、off、autodetect，默认为autodetect ，也
+	 * 就是说，如果我们只是使用了＜context:load-time-weaver／＞ ，那么 Spring 会帮助我们检测是否可
+	 * 以使用 AspectJ 功能，而检测的依据便是 META-INF/aop.xml 是否存在，看看在 Spring
+	 * 的实现方式
+	 */
 	protected boolean isAspectJWeavingEnabled(String value, ParserContext parserContext) {
 		if ("on".equals(value)) {
 			return true;
@@ -95,6 +105,7 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 		}
 		else {
 			// Determine default...
+			// 自动检测
 			ClassLoader cl = parserContext.getReaderContext().getBeanClassLoader();
 			return (cl != null && cl.getResource(AspectJWeavingEnabler.ASPECTJ_AOP_XML_RESOURCE) != null);
 		}
