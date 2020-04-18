@@ -94,6 +94,7 @@ public class AspectJWeavingEnabler
 				throw new IllegalStateException("No LoadTimeWeaver available");
 			}
 		}
+		// 使用 DefaultContextLoadTimeWeaver 类型的 bean 中的 loadTimeWeaver 属性注册转换器
 		weaverToUse.addTransformer(
 				new AspectJClassBypassingClassFileTransformer(new ClassPreProcessorAgentAdapter()));
 	}
@@ -104,6 +105,7 @@ public class AspectJWeavingEnabler
 	 * classes in order to avoid potential LinkageErrors.
 	 * @see org.springframework.context.annotation.LoadTimeWeavingConfiguration
 	 */
+	// AspectJClassBypassingClassFileTransformer 的作用仅仅是告 AspectJ org aspectj 开头的或者 org/aspect 开头的类不进行处理
 	private static class AspectJClassBypassingClassFileTransformer implements ClassFileTransformer {
 
 		private final ClassFileTransformer delegate;
@@ -119,6 +121,7 @@ public class AspectJWeavingEnabler
 			if (className.startsWith("org.aspectj") || className.startsWith("org/aspectj")) {
 				return classfileBuffer;
 			}
+			// 委托给 AspectJ 代理继续处理
 			return this.delegate.transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
 		}
 	}
