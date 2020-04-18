@@ -26,7 +26,7 @@ import org.springframework.util.Assert;
 /**
  * Convenient class for building up pointcuts.
  *
- * <p>All methods return {@code ComposablePointcut}, so we can use concise idioms
+ * <p>All methods return {@code ComposablePointcut}, so we can use concise（简洁的）idioms
  * like in the following example.
  *
  * <pre class="code">Pointcut pc = new ComposablePointcut()
@@ -45,6 +45,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	/** use serialVersionUID from Spring 1.2 for interoperability. */
 	private static final long serialVersionUID = -2743223737633663832L;
 
+	// 它持有ClassFilter 和 MethodMatcher ，最终通过它去组合匹配
 	private ClassFilter classFilter;
 
 	private MethodMatcher methodMatcher;
@@ -54,6 +55,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * Create a default ComposablePointcut, with {@code ClassFilter.TRUE}
 	 * and {@code MethodMatcher.TRUE}.
 	 */
+	// 匹配所有类所有方法的复合切点
 	public ComposablePointcut() {
 		this.classFilter = ClassFilter.TRUE;
 		this.methodMatcher = MethodMatcher.TRUE;
@@ -63,6 +65,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * Create a ComposablePointcut based on the given Pointcut.
 	 * @param pointcut the original Pointcut
 	 */
+	// 匹配特定切点的复合切点（相当于把这个节点包装了一下而已）
 	public ComposablePointcut(Pointcut pointcut) {
 		Assert.notNull(pointcut, "Pointcut must not be null");
 		this.classFilter = pointcut.getClassFilter();
@@ -74,6 +77,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * with {@code MethodMatcher.TRUE}.
 	 * @param classFilter the ClassFilter to use
 	 */
+	// 匹配特定类**所有方法**的复合切点
 	public ComposablePointcut(ClassFilter classFilter) {
 		Assert.notNull(classFilter, "ClassFilter must not be null");
 		this.classFilter = classFilter;
@@ -85,6 +89,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * with {@code ClassFilter.TRUE}.
 	 * @param methodMatcher the MethodMatcher to use
 	 */
+	// 匹配**所有类**特定方法的复合切点
 	public ComposablePointcut(MethodMatcher methodMatcher) {
 		Assert.notNull(methodMatcher, "MethodMatcher must not be null");
 		this.classFilter = ClassFilter.TRUE;
@@ -96,6 +101,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * @param classFilter the ClassFilter to use
 	 * @param methodMatcher the MethodMatcher to use
 	 */
+	// 匹配特定类特定方法的复合切点（这个是最为强大的）
 	public ComposablePointcut(ClassFilter classFilter, MethodMatcher methodMatcher) {
 		Assert.notNull(classFilter, "ClassFilter must not be null");
 		Assert.notNull(methodMatcher, "MethodMatcher must not be null");
@@ -109,6 +115,7 @@ public class ComposablePointcut implements Pointcut, Serializable {
 	 * @param other the ClassFilter to apply a union with
 	 * @return this composable pointcut (for call chaining)
 	 */
+	// 匹配特定类特定方法的复合切点（这个是最为强大的）
 	public ComposablePointcut union(ClassFilter other) {
 		this.classFilter = ClassFilters.union(this.classFilter, other);
 		return this;

@@ -28,7 +28,7 @@ import org.springframework.util.ObjectUtils;
 
 /**
  * Pointcut and method matcher for use in simple <b>cflow</b>-style pointcut.
- * Note that evaluating such pointcuts is 10-15 times slower than evaluating
+ * Note that evaluating（评估）such pointcuts is 10-15 times slower than evaluating
  * normal pointcuts, but they are useful in some cases.
  *
  * @author Rod Johnson
@@ -37,6 +37,8 @@ import org.springframework.util.ObjectUtils;
  * @author Sam Brannen
  */
 @SuppressWarnings("serial")
+// 只有这个方法在一个特定方法中被调用的时候执行通知（即存在流程上行的依赖关系）,使用
+// 流程切入点在jdk4中比其他切入点要慢5倍，在1.3上则要慢10倍，追求高性能的要慎重使用
 public class ControlFlowPointcut implements Pointcut, ClassFilter, MethodMatcher, Serializable {
 
 	private final Class<?> clazz;
@@ -48,7 +50,7 @@ public class ControlFlowPointcut implements Pointcut, ClassFilter, MethodMatcher
 
 
 	/**
-	 * Construct a new pointcut that matches all control flows below that class.
+	 * Construct a new pointcut that matches all control flows below（下面）that class.
 	 * @param clazz the clazz
 	 */
 	public ControlFlowPointcut(Class<?> clazz) {
