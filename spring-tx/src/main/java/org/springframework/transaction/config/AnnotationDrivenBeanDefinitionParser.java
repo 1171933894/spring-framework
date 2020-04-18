@@ -60,18 +60,19 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 1、注册TransactionalEventListenerFactory
 		registerTransactionalEventListenerFactory(parserContext);
 		String mode = element.getAttribute("mode");
-		// 如 我们需要使 AspectJ 的方式进行事务切入（ Spring 中的事务是以 AOP 础的 ）
+		// 2、解析标签的mode属性，如 我们需要使 AspectJ 的方式进行事务切入（ Spring 中的事务是以 AOP 础的 ）
 		if ("aspectj".equals(mode)) {
-			// mode="aspectj"
+			// mode="aspectj" aspectj模式
 			registerTransactionAspect(element, parserContext);
 			if (ClassUtils.isPresent("javax.transaction.Transactional", getClass().getClassLoader())) {
 				registerJtaTransactionAspect(element, parserContext);
 			}
 		}
 		else {
-			// mode="proxy"
+			// mode="proxy" proxy模式
 			AopAutoProxyConfigurer.configureAutoProxyCreator(element, parserContext);
 		}
 		return null;
@@ -115,8 +116,9 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 
 	/**
-	 * Inner class to just introduce an AOP framework dependency when actually in proxy mode.
+	 * Inner class to just introduce（介绍）an AOP framework dependency when actually in proxy mode.
 	 */
+	// 在代理模式下引入AOP框架依赖关系的内部类
 	private static class AopAutoProxyConfigurer {
 
 		public static void configureAutoProxyCreator(Element element, ParserContext parserContext) {
