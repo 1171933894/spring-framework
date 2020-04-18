@@ -36,6 +36,7 @@ import org.springframework.util.PatternMatchUtils;
  * @see #isMatch
  */
 @SuppressWarnings("serial")
+// 只需要方法名字匹配，无需理会方法的签名和返回类型
 public class NameMatchMethodPointcut extends StaticMethodMatcherPointcut implements Serializable {
 
 	private List<String> mappedNames = new ArrayList<>();
