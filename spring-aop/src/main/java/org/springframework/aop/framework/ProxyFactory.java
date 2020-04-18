@@ -93,6 +93,7 @@ public class ProxyFactory extends ProxyCreatorSupport {
 	 * (if necessary for proxy creation).
 	 * @return the proxy object
 	 */
+	// 直接通过getProxy方法获取代理对象
 	public Object getProxy() {
 		return createAopProxy().getProxy();
 	}

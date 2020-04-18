@@ -58,6 +58,7 @@ import org.springframework.util.CollectionUtils;
  * @author Juergen Hoeller
  * @see org.springframework.aop.framework.AopProxy
  */
+// 在Spring AOP中，Advisor(切面)就是将Advice(增强)和Pointcut(切入点)连接起来的东西。此类主要支持切面相关的操作。
 public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/** use serialVersionUID from Spring 2.0 for interoperability. */
@@ -125,6 +126,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * @see #setTargetSource
 	 * @see org.springframework.aop.target.SingletonTargetSource
 	 */
+	// 将target对象封装成TargetSource对象，而调用的setTargetSource是AdvisedSupport的方法
 	public void setTarget(Object target) {
 		// 将根据给得的object创建 SingletonTargetSource
 		setTargetSource(new SingletonTargetSource(target));
@@ -195,6 +197,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Set the interfaces to be proxied.
 	 */
+	// 赋值的也是AdvisedSupport中的interfaces属性，但是是先清空再赋值
 	public void setInterfaces(Class<?>... interfaces) {
 		Assert.notNull(interfaces, "Interfaces must not be null");
 		this.interfaces.clear();
@@ -389,6 +392,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	}
 
 
+	// 直接调用AdvisedSupport，将Advice封装成Advisor然后添加到advisors集合中
 	@Override
 	public void addAdvice(Advice advice) throws AopConfigException {
 		int pos = this.advisors.size();
@@ -401,6 +405,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	@Override
 	public void addAdvice(int pos, Advice advice) throws AopConfigException {
 		Assert.notNull(advice, "Advice must not be null");
+		// 引用增强单独处理
 		if (advice instanceof IntroductionInfo) {
 			// We don't need an IntroductionAdvisor for this kind of introduction:
 			// It's fully self-describing.

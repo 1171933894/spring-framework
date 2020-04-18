@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
  * @since 2.0.3
  * @see #createAopProxy()
  */
+// 代理创建的辅助类，主要方法就是创建代理对象。
 @SuppressWarnings("serial")
 public class ProxyCreatorSupport extends AdvisedSupport {
 

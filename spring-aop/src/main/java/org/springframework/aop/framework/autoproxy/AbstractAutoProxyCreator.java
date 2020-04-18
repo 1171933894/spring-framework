@@ -467,7 +467,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// 获取当前类的相关属性
 		proxyFactory.copyFrom(this);
 		// 决定关于给定的 bean 是否应该使用targetClass而不是它的接口代理，
-		// 检查proxyTargeClass设置以及preserveTargetClass属性
+		// 检查proxyTargeClass设置以及preserveTargetClass属性AdvisedSupport
 		if (!proxyFactory.isProxyTargetClass()) {
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);

@@ -28,7 +28,7 @@ package org.springframework.aop;
  * @author Rod Johnson
  * @since 1.1.1
  */
-public interface IntroductionInfo {
+public interface IntroductionInfo {// introduct：介绍
 
 	/**
 	 * Return the additional interfaces introduced by this Advisor or Advice.
