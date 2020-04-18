@@ -55,7 +55,7 @@ public interface Advisor {
 	Advice getAdvice();
 
 	/**
-	 * Return whether this advice is associated with a particular instance
+	 * Return whether this advice is associated with a particular（特定的）instance
 	 * (for example, creating a mixin) or shared with all instances of
 	 * the advised class obtained from the same Spring bean factory.
 	 * <p><b>Note that this method is not currently used by the framework.</b>

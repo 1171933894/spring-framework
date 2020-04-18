@@ -24,8 +24,8 @@ import java.util.regex.PatternSyntaxException;
  * Regular expression pointcut based on the {@code java.util.regex} package.
  * Supports the following JavaBean properties:
  * <ul>
- * <li>pattern: regular expression for the fully-qualified method names to match
- * <li>patterns: alternative property taking a String array of patterns. The result will
+ * <li>pattern: regular（常规的）expression for the fully-qualified method names to match
+ * <li>patterns: alternative（替代）property taking a String array of patterns. The result will
  * be the union of these patterns.
  * </ul>
  *
@@ -43,6 +43,7 @@ public class JdkRegexpMethodPointcut extends AbstractRegexpMethodPointcut {
 	/**
 	 * Compiled form of the patterns.
 	 */
+	// 相当于把正则字符串，Pattern.compile()成正则对象
 	private Pattern[] compiledPatterns = new Pattern[0];
 
 	/**

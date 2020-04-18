@@ -43,6 +43,7 @@ import org.springframework.util.ObjectUtils;
  * @see JdkRegexpMethodPointcut
  */
 @SuppressWarnings("serial")
+// 可以方便的让我们同时指定一个JdkRegexpMethodPointcut和其需要对应的Advice
 public class RegexpMethodPointcutAdvisor extends AbstractGenericPointcutAdvisor {
 
 	@Nullable
