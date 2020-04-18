@@ -605,6 +605,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 			return BEAN_DESIGNATOR_NAME;
 		}
 
+		// ContextBasedMatcher由Spring自己实现，对容器内Bean的匹配
 		@Override
 		public ContextBasedMatcher parse(String expression) {
 			return new BeanContextMatcher(expression);
