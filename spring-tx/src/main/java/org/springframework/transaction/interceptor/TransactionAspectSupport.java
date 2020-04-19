@@ -585,6 +585,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @param txInfo information about the current transaction
 	 * @param ex throwable encountered
 	 */
+	// 处理异常以完成事物,基于配置该事物可能回滚也可能提交
 	protected void completeTransactionAfterThrowing(@Nullable TransactionInfo txInfo, Throwable ex) {
 		// 当抛出异常时首先判断当前是否存在事务，这是基础依据
 		if (txInfo != null && txInfo.getTransactionStatus() != null) {
@@ -593,6 +594,17 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 						"] after exception: " + ex);
 			}
 			// 这里判断是否回滚默认的依据是抛出的异常是否是RuntimeException或者是Error的类型
+			// 1.回滚
+			/**
+			 * txInfo.transactionAttribute.rollbackOn(ex)判断回滚的条件:
+			 *
+			 * 1. 如果自定了RollbackRuleAttribute列表,如果当前异常匹配到了RollbackRuleAttribute其中的条目,则回滚
+			 *    例如:可以通过rollbackFor指定触发回滚的异常@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+			 *
+			 * 2. 否则如果异常是RuntimeException或者Error的类型,则回滚
+			 *
+			 * 3. 其他的异常是不会回滚的,这里要注意一下...
+			 */
 			if (txInfo.transactionAttribute != null && txInfo.transactionAttribute.rollbackOn(ex)) {
 				try {
 					// 根据TransactionStatus信息进行回滚处理
@@ -608,6 +620,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 					throw ex2;
 				}
 			}
+			// 2.如果未能满足回滚条件,则有可能会提交事物,也有可能会回滚事物
 			else {
 				// We don't roll back on this exception.
 				// Will still roll back if TransactionStatus.isRollbackOnly() is true.

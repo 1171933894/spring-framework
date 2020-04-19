@@ -550,12 +550,17 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	// 将事务信息记录在当前线程中
 	protected void prepareSynchronization(DefaultTransactionStatus status, TransactionDefinition definition) {
 		if (status.isNewSynchronization()) {
+			// 设置事物激活状态
 			TransactionSynchronizationManager.setActualTransactionActive(status.hasTransaction());
+			// 设置事物隔离级别
 			TransactionSynchronizationManager.setCurrentTransactionIsolationLevel(
 					definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT ?
 							definition.getIsolationLevel() : null);
+			// 设置事物只读属性
 			TransactionSynchronizationManager.setCurrentTransactionReadOnly(definition.isReadOnly());
+			// 设置事物名称
 			TransactionSynchronizationManager.setCurrentTransactionName(definition.getName());
+			// 激活当前线程的事务同步。事务管理器在事务开始时调用
 			TransactionSynchronizationManager.initSynchronization();
 		}
 	}
@@ -709,12 +714,14 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 */
 	@Override
 	public final void commit(TransactionStatus status) throws TransactionException {
+		// 如果当前事物已经被标记为完成,抛出异常
 		if (status.isCompleted()) {
 			throw new IllegalTransactionStateException(
 					"Transaction is already completed - do not call commit or rollback more than once per transaction");
 		}
 
 		DefaultTransactionStatus defStatus = (DefaultTransactionStatus) status;
+		// 如果rollbackOnly为true,则回滚
 		if (defStatus.isLocalRollbackOnly()) {
 			if (defStatus.isDebug()) {
 				logger.debug("Transactional code has requested rollback");
@@ -724,6 +731,8 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		}
 
 		// 如果在事务链中已经被标记回滚，那么不会尝试提交事务，直接回滚
+		// shouldCommitOnGlobalRollbackOnly --> 返回是否对标记为仅以全局方式回滚的事务调用
+		// defStatus.isGlobalRollbackOnly() --> 实现了SmartTransactionObject并且事物的rollbackOnly被标记为true
 		if (!shouldCommitOnGlobalRollbackOnly() && defStatus.isGlobalRollbackOnly()) {
 			if (defStatus.isDebug()) {
 				logger.debug("Global transaction is marked as rollback-only but transactional code requested commit");
@@ -825,7 +834,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 */
 	@Override
 	public final void rollback(TransactionStatus status) throws TransactionException {
-		// 如果事务已经完成，那么再次回滚会抛出异常
+		// 如果事务已经完成，那么再次回滚会抛出异常（执行回滚前检查事物状态）
 		if (status.isCompleted()) {
 			throw new IllegalTransactionStateException(
 					"Transaction is already completed - do not call commit or rollback more than once per transaction");
@@ -846,9 +855,10 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			boolean unexpectedRollback = unexpected;
 
 			try {
-				// 激活所有TransactionSynchronization中对应的方法
+				// 1.事务完成之前的触发器调用
 				triggerBeforeCompletion(status);
 
+				// 2.如果有保存点,则调用rollbackToHeldSavepoint回滚到保存点
 				if (status.hasSavepoint()) {
 					if (status.isDebug()) {
 						logger.debug("Rolling back transaction to savepoint");
@@ -856,6 +866,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 					// 如果有保存点，也就是当前事务为单独的线程则会退到保存点
 					status.rollbackToHeldSavepoint();
 				}
+				// 3.如果当前事物是一个新的事物,则调用doRollback执行给定事物的回滚
 				else if (status.isNewTransaction()) {
 					if (status.isDebug()) {
 						logger.debug("Initiating transaction rollback");
@@ -863,6 +874,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 					// 如果当前事务为独立的新事务，则直接回退
 					doRollback(status);
 				}
+				// 4.如果当前事物并非独立事务,则将当前事务的rollbackOnly属性标记为true,等到事物链完成之后,一起执行回滚
 				else {
 					// Participating in larger transaction
 					if (status.hasTransaction()) {

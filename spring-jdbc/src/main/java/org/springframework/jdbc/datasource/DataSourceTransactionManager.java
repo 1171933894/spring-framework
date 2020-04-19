@@ -264,19 +264,25 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		Connection con = null;
 
 		try {
+			// ConnectionHolder简介:包装JDBC连接的资源容器。DataSourceTransactionManager将该类的实例绑定到特定数据源的线程。
+			// 如果txObject没有ConnectionHolder或者connectionHolder并没有加同步锁,则为其设置ConnectionHolder并加同步锁
 			if (!txObject.hasConnectionHolder() ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
+				// 从数据源获取连接
 				Connection newCon = obtainDataSource().getConnection();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
 				}
+				// 设置DataSourceTransactionObject的ConnectionHolder对象
 				txObject.setConnectionHolder(new ConnectionHolder(newCon), true);
 			}
 
+			// 设置同步锁标记
 			txObject.getConnectionHolder().setSynchronizedWithTransaction(true);
+			// 从ConnectionHolder对象中获取连接
 			con = txObject.getConnectionHolder().getConnection();
 
-			// 设置隔离级别
+			// 设置连接的只读属性和数据库事物隔离级别
 			Integer previousIsolationLevel = DataSourceUtils.prepareConnectionForTransaction(con, definition);
 			txObject.setPreviousIsolationLevel(previousIsolationLevel);
 
@@ -292,15 +298,18 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				con.setAutoCommit(false);
 			}
 
+			// 设置当前事物只读,如果定义了只读属性为true
 			prepareTransactionalConnection(con, definition);
 			// 设置判断当前线程是否存在事务的依据
 			txObject.getConnectionHolder().setTransactionActive(true);
 
+			// 设置超时时间(如果超时时间不等于默认超时时间)
 			int timeout = determineTimeout(definition);
 			if (timeout != TransactionDefinition.TIMEOUT_DEFAULT) {
 				txObject.getConnectionHolder().setTimeoutInSeconds(timeout);
 			}
 
+			// 绑定ConnectionHolder到当前线程
 			// Bind the connection holder to the thread.
 			if (txObject.isNewConnectionHolder()) {
 				// 将当前获取到的连接绑定到当前线程
