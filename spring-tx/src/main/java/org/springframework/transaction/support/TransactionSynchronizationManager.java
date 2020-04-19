@@ -74,6 +74,15 @@ import org.springframework.util.Assert;
  * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#getConnection
  */
+
+/**
+ * TransactionSynchronizationManager是事务同步管理器。我们可以自定义实现TransactionSynchronization类，
+ * 来监听Spring的事务操作。可以在事务提交之后，回调TransactionSynchronization类的方法。
+ *
+ * 在Spring中的org.springframework.transaction.support.TransactionSynchronizationManager类中，便是
+ * 使用ThreadLocal来为不同的事务线程提供独立的资源副本，并且同时维护这些事务的配置属性和运行状态。
+ *
+ */
 public abstract class TransactionSynchronizationManager {
 
 	private static final Log logger = LogFactory.getLog(TransactionSynchronizationManager.class);
@@ -183,6 +192,7 @@ public abstract class TransactionSynchronizationManager {
 			map = new HashMap<>();
 			resources.set(map);
 		}
+		// 将 Connection 对象绑定到 resources 上
 		Object oldValue = map.put(actualKey, value);
 		// Transparently suppress a ResourceHolder that was marked as void...
 		if (oldValue instanceof ResourceHolder && ((ResourceHolder) oldValue).isVoid()) {
