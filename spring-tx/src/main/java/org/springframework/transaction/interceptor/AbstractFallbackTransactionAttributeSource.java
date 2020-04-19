@@ -148,9 +148,9 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	 * @see #getTransactionAttribute
 	 */
 	/**
-	 * 如果方法中存在事务属性，则使用方法
-	 * 上的属性，否则使用方法所在的类上的属性，如果方法所在类的属性上还是没有搜寻到对应的
-	 * 务属性，那么再搜寻接口中的方法，再没有的话，最后尝试搜 接口的类上面的声明
+	 * 如果方法中存在事务属性，则使用方法上的属性，否则使用方法所在的类上的属性，
+	 * 如果方法所在类的属性上还是没有搜寻到对应的事务属性，那么再搜寻接口中的方法
+	 * ，再没有的话，最后尝试搜索接口的类上面的声明
 	 */
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {

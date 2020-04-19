@@ -43,6 +43,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.transaction.support.DefaultTransactionDefinition
  * @see org.springframework.transaction.interceptor.TransactionAttribute
  */
+// 提供了Spring事物的传播特性以及事物隔离级别等定义
 public interface TransactionDefinition {
 
 	/**
