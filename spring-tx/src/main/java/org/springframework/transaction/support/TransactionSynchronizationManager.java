@@ -342,7 +342,7 @@ public abstract class TransactionSynchronizationManager {
 	}
 
 	/**
-	 * Deactivate transaction synchronization for the current thread.
+	 * Deactivate（禁用）transaction synchronization for the current thread.
 	 * Called by the transaction manager on transaction cleanup.
 	 * @throws IllegalStateException if synchronization is not active
 	 */
