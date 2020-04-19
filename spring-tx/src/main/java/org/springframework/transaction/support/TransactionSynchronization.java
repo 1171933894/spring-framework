@@ -23,7 +23,7 @@ import java.io.Flushable;
  * Supported by AbstractPlatformTransactionManager.
  *
  * <p>TransactionSynchronization implementations can implement the Ordered interface
- * to influence their execution order. A synchronization that does not implement the
+ * to influence（影响）their execution order. A synchronization that does not implement the
  * Ordered interface is appended to the end of the synchronization chain.
  *
  * <p>System synchronizations performed by Spring itself use specific order values,
@@ -35,6 +35,7 @@ import java.io.Flushable;
  * @see AbstractPlatformTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#CONNECTION_SYNCHRONIZATION_ORDER
  */
+// 这个类是程序员对事务同步的扩展点：用于事务同步回调的接口
 public interface TransactionSynchronization extends Flushable {
 
 	/** Completion status in case of proper commit. */
@@ -43,15 +44,16 @@ public interface TransactionSynchronization extends Flushable {
 	/** Completion status in case of proper rollback. */
 	int STATUS_ROLLED_BACK = 1;
 
-	/** Completion status in case of heuristic mixed completion or system errors. */
+	/** Completion status in case of heuristic（启发式）mixed completion or system errors. */
 	int STATUS_UNKNOWN = 2;
 
 
 	/**
-	 * Suspend this synchronization.
-	 * Supposed to unbind resources from TransactionSynchronizationManager if managing any.
+	 * Suspend（暂停）this synchronization.
+	 * Supposed（应该）to unbind resources from TransactionSynchronizationManager if managing any.
 	 * @see TransactionSynchronizationManager#unbindResource
 	 */
+	// 事务挂起
 	default void suspend() {
 	}
 
@@ -60,6 +62,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * Supposed to rebind resources to TransactionSynchronizationManager if managing any.
 	 * @see TransactionSynchronizationManager#bindResource
 	 */
+	// 事务恢复
 	default void resume() {
 	}
 
@@ -68,6 +71,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * for example, a Hibernate/JPA session.
 	 * @see org.springframework.transaction.TransactionStatus#flush()
 	 */
+	// 将基础会话刷新到数据存储区(如果适用)，比如Hibernate/JPA的Session
 	@Override
 	default void flush() {
 	}
@@ -86,6 +90,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * (note: do not throw TransactionException subclasses here!)
 	 * @see #beforeCompletion
 	 */
+	// 在事务提交前触发，此处若发生异常，会导致回滚
 	default void beforeCommit(boolean readOnly) {
 	}
 
@@ -100,6 +105,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #beforeCommit
 	 * @see #afterCompletion
 	 */
+	// 在beforeCommit之后，commit/rollback之前执行。即使异常，也不会回滚
 	default void beforeCompletion() {
 	}
 
@@ -118,6 +124,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * @throws RuntimeException in case of errors; will be <b>propagated to the caller</b>
 	 * (note: do not throw TransactionException subclasses here!)
 	 */
+	// 事务提交后执行
 	default void afterCommit() {
 	}
 
@@ -139,6 +146,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #STATUS_UNKNOWN
 	 * @see #beforeCompletion
 	 */
+	// 事务提交/回滚执行
 	default void afterCompletion(int status) {
 	}
 

@@ -573,15 +573,15 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	// 将事务信息记录在当前线程中
 	protected void prepareSynchronization(DefaultTransactionStatus status, TransactionDefinition definition) {
 		if (status.isNewSynchronization()) {
-			// 设置事物激活状态
+			// 设置事务激活状态
 			TransactionSynchronizationManager.setActualTransactionActive(status.hasTransaction());
-			// 设置事物隔离级别
+			// 设置事务隔离级别
 			TransactionSynchronizationManager.setCurrentTransactionIsolationLevel(
 					definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT ?
 							definition.getIsolationLevel() : null);
-			// 设置事物只读属性
+			// 设置事务只读属性
 			TransactionSynchronizationManager.setCurrentTransactionReadOnly(definition.isReadOnly());
-			// 设置事物名称
+			// 设置事务名称
 			TransactionSynchronizationManager.setCurrentTransactionName(definition.getName());
 			// 激活当前线程的事务同步。事务管理器在事务开始时调用
 			TransactionSynchronizationManager.initSynchronization();

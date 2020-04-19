@@ -91,18 +91,23 @@ public abstract class TransactionSynchronizationManager {
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<>("Transactional resources");
 
+	// 事务同步器，是Spring交由程序员进行扩展的代码，每个线程可以注册N个事务同步器
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<>("Transaction synchronizations");
 
+	// 事务的名称
 	private static final ThreadLocal<String> currentTransactionName =
 			new NamedThreadLocal<>("Current transaction name");
 
+	// 事务是否是只读
 	private static final ThreadLocal<Boolean> currentTransactionReadOnly =
 			new NamedThreadLocal<>("Current transaction read-only status");
 
+	// 事务的隔离级别
 	private static final ThreadLocal<Integer> currentTransactionIsolationLevel =
 			new NamedThreadLocal<>("Current transaction isolation level");
 
+	// 事务是否开启   actual：真实的
 	private static final ThreadLocal<Boolean> actualTransactionActive =
 			new NamedThreadLocal<>("Actual transaction active");
 
@@ -113,7 +118,7 @@ public abstract class TransactionSynchronizationManager {
 
 	/**
 	 * Return all resources that are bound to the current thread.
-	 * <p>Mainly for debugging purposes. Resource managers should always invoke
+	 * <p>Mainly for debugging purposes（目的）. Resource managers should always invoke
 	 * {@code hasResource} for a specific resource key that they are interested in.
 	 * @return a Map with resource keys (usually the resource factory) and resource
 	 * values (usually the active resource object), or an empty Map if there are
