@@ -139,18 +139,24 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	// 事务管理器bean的名称
 	@Nullable
 	private String transactionManagerBeanName;
 
+	// 事务管理器bean对象本身
 	@Nullable
 	private PlatformTransactionManager transactionManager;
 
+	// 用于获取事务属性的来源对象
 	@Nullable
 	private TransactionAttributeSource transactionAttributeSource;
 
+	// bean容器自身
 	@Nullable
 	private BeanFactory beanFactory;
 
+	// 事务管理器缓存，对于非缺省事务管理器，key是事务管理器bean定义上的@Qualifier.value ，
+	// 对于缺省事务管理器，key是一个对象，由 DEFAULT_TRANSACTION_MANAGER_KEY 定义
 	private final ConcurrentMap<Object, PlatformTransactionManager> transactionManagerCache =
 			new ConcurrentReferenceHashMap<>(4);
 
@@ -284,6 +290,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @return the return value of the method, if any
 	 * @throws Throwable propagated from the target invocation
 	 */
+	// 该方法实现是本类的核心业务: 将目标方法调用包围在事务处理逻辑中
 	@Nullable
 	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
 			final InvocationCallback invocation) throws Throwable {
@@ -393,7 +400,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * Determine the specific transaction manager to use for the given transaction.
 	 */
 	/**
-	 * 于 明式 务的处理与编程式 务的处理，第 点区别在于 性上， 程式的
+	 * 声明式事务的处理与编程式事务的处理，第 点区别在于 性上， 程式的
 	 * 事务处理是不需要有 务属性的，第 别就是在 TransactionManag 上， Cal I back.Preferring
 	 * PlatformTransactionManager PlatfonnTransactionManager 接口， 露出 个方 用于执行
 	 * 务处理中的回调
