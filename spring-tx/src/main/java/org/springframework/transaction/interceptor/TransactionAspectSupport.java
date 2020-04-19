@@ -81,10 +81,11 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 	/**
 	 * Holder to support the {@code currentTransactionStatus()} method,
-	 * and to support communication between different cooperating advices
+	 * and to support communication（沟通）between different cooperating advices
 	 * (e.g. before and after advice) if the aspect involves more than a
 	 * single method (as will be the case for around advice).
 	 */
+	// 一个ThreadLocal 持有器，用于持有事务执行的相关上下文信息 TransactionInfo
 	private static final ThreadLocal<TransactionInfo> transactionInfoHolder =
 			new NamedThreadLocal<>("Current aspect-driven transaction");
 
@@ -105,6 +106,15 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @see TransactionInfo#hasTransaction()
 	 * @see org.springframework.transaction.support.TransactionSynchronizationManager#isSynchronizationActive()
 	 * @see org.springframework.transaction.support.TransactionSynchronizationManager#isActualTransactionActive()
+	 */
+	/**
+	 * 	供子类用于获取当前 TransactionInfo 的方法。通常仅用于子类需要多个方法
+	 *  协调完成事务管理的情形，比如到AspectJ before/after advice 是不同方法
+	 *  但是要管理同一个事务的情景。而对于 around advice，比如符合AOP联盟
+	 *  规范的这种MethodInterceptor，能在整个切面方法整个生命周期过程中持有
+	 *  对 TransactionInfo 的引用，所以不需要该机制。
+	 *  这里需要注意的是，Spring 事务管理是线程绑定的，而非跨线程的。从上面
+	 *  transactionInfoHolder 变量的定义可以看出来。
 	 */
 	@Nullable
 	protected static TransactionInfo currentTransactionInfo() throws NoTransactionException {
