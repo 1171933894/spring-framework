@@ -617,21 +617,36 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 */
 	@Nullable
 	protected final SuspendedResourcesHolder suspend(@Nullable Object transaction) throws TransactionException {
+		// 1.如果存在事务同步回调接口
 		if (TransactionSynchronizationManager.isSynchronizationActive()) {
+			// 1.1 挂起事务同步回调接口
 			List<TransactionSynchronization> suspendedSynchronizations = doSuspendSynchronization();
 			try {
+				// 挂起事务
 				Object suspendedResources = null;
 				if (transaction != null) {
 					suspendedResources = doSuspend(transaction);
 				}
+				// 获取已有事务名称
 				String name = TransactionSynchronizationManager.getCurrentTransactionName();
+				// 清空已有事务名称
 				TransactionSynchronizationManager.setCurrentTransactionName(null);
+				// 获取已有事务的readOnly属性值
 				boolean readOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+				// 将已有事务的readOnly属性值设置为false
 				TransactionSynchronizationManager.setCurrentTransactionReadOnly(false);
+				// 获取已有事务数据库事务隔离级别
 				Integer isolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
+				// 清空已有事务数据库事务隔离级别
 				TransactionSynchronizationManager.setCurrentTransactionIsolationLevel(null);
+				// 获取已有事务激活标识
 				boolean wasActive = TransactionSynchronizationManager.isActualTransactionActive();
+				// 将当前事务激活标识设置为false
 				TransactionSynchronizationManager.setActualTransactionActive(false);
+				// 返回SuspendedResourcesHolder
+				/**
+				 * 将上面获取到的一系列事务属性,重新封装至SuspendedResourcesHolder对象,并返回
+				 */
 				return new SuspendedResourcesHolder(
 						suspendedResources, suspendedSynchronizations, name, readOnly, isolationLevel, wasActive);
 			}
@@ -641,11 +656,15 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				throw ex;
 			}
 		}
+		// 不存在事务同步回调接口,且当前事务不为空
 		else if (transaction != null) {
+			// 事务已经被激活,但是没有事务同步回调,则直接挂起当前事务即可
 			// Transaction active but no synchronization active.
 			Object suspendedResources = doSuspend(transaction);
+			// 返回挂起的事务资源
 			return new SuspendedResourcesHolder(suspendedResources);
 		}
+		// 处理没有事务的情况...
 		else {
 			// Neither transaction nor synchronization active.
 			return null;
@@ -703,11 +722,14 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 * @return the List of suspended TransactionSynchronization objects
 	 */
 	private List<TransactionSynchronization> doSuspendSynchronization() {
+		// 1.获取当前线程的所有事物同步回调
 		List<TransactionSynchronization> suspendedSynchronizations =
 				TransactionSynchronizationManager.getSynchronizations();
+		// 2.循环并挂起所有同步回调接口
 		for (TransactionSynchronization synchronization : suspendedSynchronizations) {
 			synchronization.suspend();
 		}
+		// 3.清除资源
 		TransactionSynchronizationManager.clearSynchronization();
 		return suspendedSynchronizations;
 	}
