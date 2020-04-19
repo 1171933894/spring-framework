@@ -297,9 +297,9 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		// If the transaction attribute is null, the method is non-transactional.
 		TransactionAttributeSource tas = getTransactionAttributeSource();
-		// 获取对应事务属性
+		// 获取对应事务属性（获取目标方法上的事务属性）
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
-		// 获取beanFactory中的transactionManager
+		// 获取beanFactory中的transactionManager（确定要使用的事务管理器）
 		final PlatformTransactionManager tm = determineTransactionManager(txAttr);
 		// 构造方法唯一标识（类.方法）
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
@@ -307,31 +307,34 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		// 声明式事务处理
 		if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
-			// 创建TransactionInfo
+			// 创建TransactionInfo（准备事务）
 			TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);
 
 			Object retVal;
 			try {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
-				// 执行被增强方法
+				// 执行被增强方法（调用目标方法）
 				retVal = invocation.proceedWithInvocation();
 			}
 			catch (Throwable ex) {
 				// target invocation exception
-				// 异常回滚
+				// 异常时事务机制的处理  ：
+				// 1. 该异常需要回滚事务，则回滚事务
+				// 2. 该异常无需回滚事务，则提交事务
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
 			finally {
-				// 清除信息
+				// 无论正常还是异常都会发生的事务机制的清场工作，比如当前方法的执行需要一个全新的事务
+				// ，所以该方法执行事前会挂起之前可能存在的事务,现在方法执行完了，需要恢复之前的事务
 				cleanupTransactionInfo(txInfo);
 			}
-			// 提交事务
+			// 提交事务（目标方法正常执行时提交事务）
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}
-
+		// 该 else 分支针对 tm 类型是 CallbackPreferringPlatformTransactionManager 的情况
 		else {// 编程式事务处理
 			final ThrowableHolder throwableHolder = new ThrowableHolder();
 
@@ -412,6 +415,10 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			return getTransactionManager();
 		}
 
+		// 结合考虑事务属性中的 qualifier 确定要使用的事务管理器,可能使用 :
+		// 1. qualifier 指定的事务管理器
+		// 2. 使用 this.transactionManagerBeanName 指定的事务管理器
+		// 3. 使用 容器中唯一存在的类型为 PlatformTransactionManager 的 bean 作为缺省事务管理器使用和缓存
 		String qualifier = txAttr.getQualifier();
 		if (StringUtils.hasText(qualifier)) {
 			return determineQualifiedTransactionManager(this.beanFactory, qualifier);
@@ -420,6 +427,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			return determineQualifiedTransactionManager(this.beanFactory, this.transactionManagerBeanName);
 		}
 		else {
+			// 获取缺省事务管理器以及相应的缓存机制
 			PlatformTransactionManager defaultTransactionManager = getTransactionManager();
 			if (defaultTransactionManager == null) {
 				defaultTransactionManager = this.transactionManagerCache.get(DEFAULT_TRANSACTION_MANAGER_KEY);
