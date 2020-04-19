@@ -36,6 +36,11 @@ import java.io.Flushable;
  * @see org.springframework.jdbc.datasource.DataSourceUtils#CONNECTION_SYNCHRONIZATION_ORDER
  */
 // 这个类是程序员对事务同步的扩展点：用于事务同步回调的接口
+
+/**
+ * TransactionSynchronization接口定义了一系列的回调方法，对应一个事务执行的不同阶段：挂起、恢复、flush、提交（前、后）、完成（事务成功或失败）等。
+ * 当事务运行到对应阶段时，事务管理器会从TransactionSynchronizationManager维护的synchronizations中拿出所有的回调器，逐个回调其中的对应方法
+  */
 public interface TransactionSynchronization extends Flushable {
 
 	/** Completion status in case of proper commit. */
@@ -147,6 +152,9 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #beforeCompletion
 	 */
 	// 事务提交/回滚执行
+	/**
+	 * TransactionSynchronization中没有afterRollback()。如果需要在事务回滚后做某些处理，需要在afterCompletion(int)方法中判断入参的值，然后再做处理
+	 */
 	default void afterCompletion(int status) {
 	}
 

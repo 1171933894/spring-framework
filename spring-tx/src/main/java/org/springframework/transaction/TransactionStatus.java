@@ -21,12 +21,12 @@ import java.io.Flushable;
 /**
  * Representation of the status of a transaction.
  *
- * <p>Transactional code can use this to retrieve status information,
+ * <p>Transactional code can use this to retrieve（检索）status information,
  * and to programmatically request a rollback (instead of throwing
- * an exception that causes an implicit rollback).
+ * an exception that causes an implicit（隐式的）rollback).
  *
  * <p>Includes the {@link SavepointManager} interface to provide access
- * to savepoint management facilities. Note that savepoint management
+ * to savepoint management facilities（设施）. Note that savepoint management
  * is only available if supported by the underlying transaction manager.
  *
  * @author Juergen Hoeller
@@ -36,6 +36,7 @@ import java.io.Flushable;
  * @see org.springframework.transaction.support.TransactionCallback#doInTransaction
  * @see org.springframework.transaction.interceptor.TransactionInterceptor#currentTransactionStatus()
  */
+// TransactionStatus表示一个具体的事务状态（这里应用到了Java的一个多继承，接口允许多继承）
 public interface TransactionStatus extends SavepointManager, Flushable {
 
 	/**
@@ -43,10 +44,11 @@ public interface TransactionStatus extends SavepointManager, Flushable {
 	 * in an existing transaction, or potentially not running in an actual
 	 * transaction in the first place.
 	 */
+	// 是否是一个新的事务
 	boolean isNewTransaction();
 
 	/**
-	 * Return whether this transaction internally carries a savepoint,
+	 * Return whether this transaction internally carries（携带）a savepoint,
 	 * that is, has been created as nested transaction based on a savepoint.
 	 * <p>This method is mainly here for diagnostic purposes, alongside
 	 * {@link #isNewTransaction()}. For programmatic handling of custom
@@ -56,6 +58,7 @@ public interface TransactionStatus extends SavepointManager, Flushable {
 	 * @see #rollbackToSavepoint(Object)
 	 * @see #releaseSavepoint(Object)
 	 */
+	// 是否有保存点
 	boolean hasSavepoint();
 
 	/**
@@ -75,6 +78,7 @@ public interface TransactionStatus extends SavepointManager, Flushable {
 	 * Return whether the transaction has been marked as rollback-only
 	 * (either by the application or by the transaction infrastructure).
 	 */
+	// 是否已被标记为回滚
 	boolean isRollbackOnly();
 
 	/**

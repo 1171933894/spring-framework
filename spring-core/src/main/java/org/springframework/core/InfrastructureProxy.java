@@ -36,7 +36,7 @@ package org.springframework.core;
 public interface InfrastructureProxy {
 
 	/**
-	 * Return the underlying resource (never {@code null}).
+	 * Return the underlying（潜在的）resource (never {@code null}).
 	 */
 	Object getWrappedObject();
 

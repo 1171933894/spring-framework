@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
 
 /**
  * Default implementation of the {@link org.springframework.transaction.TransactionStatus}
- * interface, used by {@link AbstractPlatformTransactionManager}. Based on the concept
+ * interface, used by {@link AbstractPlatformTransactionManager}. Based on the concept（概念）
  * of an underlying "transaction object".
  *
  * <p>Holds all status information that {@link AbstractPlatformTransactionManager}
