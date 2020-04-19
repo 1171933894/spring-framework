@@ -417,33 +417,41 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			TransactionDefinition definition, Object transaction, boolean debugEnabled)
 			throws TransactionException {
 
+		// 1.PROPAGATION_NEVER --> 以非事物方式执行，如果当前存在事物，则抛出异常。
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) {
 			throw new IllegalTransactionStateException(
 					"Existing transaction found for transaction marked with propagation 'never'");
 		}
 
+		// 2.以非事物方式执行，如果当前存在事物，则挂起当前事物。
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NOT_SUPPORTED) {
 			if (debugEnabled) {
 				logger.debug("Suspending current transaction");
 			}
+			// 重点:挂起已有事务
 			Object suspendedResources = suspend(transaction);
 			boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
+			// 创建新事务,注意:transaction参数为null,所以这里创建的不是一个真正的事务
 			return prepareTransactionStatus(
 					definition, null, false, newSynchronization, debugEnabled, suspendedResources);
 		}
 
+		// 3.新建事务，如果当前已经存在事务，则挂起当前事务。
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW) {
 			if (debugEnabled) {
 				logger.debug("Suspending current transaction, creating new transaction with name [" +
 						definition.getName() + "]");
 			}
-			// 新事务的建立
+			// 挂起已有事务
 			SuspendedResourcesHolder suspendedResources = suspend(transaction);
 			try {
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
+				// 创建事务
 				DefaultTransactionStatus status = newTransactionStatus(
 						definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
+				// 开启事务
 				doBegin(transaction, definition);
+				// 初始化事务同步属性
 				prepareSynchronization(status, definition);
 				return status;
 			}
@@ -453,8 +461,9 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			}
 		}
 
-		// 嵌入式事务的处理
+		// 4.如果当前存在事务，则在嵌套事务内执行；如果当前没有事务，则与PROPAGATION_REQUIRED传播特性相同
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
+			// 如果不允许嵌套事务,则抛出异常
 			if (!isNestedTransactionAllowed()) {
 				throw new NestedTransactionNotSupportedException(
 						"Transaction manager does not allow nested transactions by default - " +
@@ -463,6 +472,13 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			if (debugEnabled) {
 				logger.debug("Creating nested transaction with name [" + definition.getName() + "]");
 			}
+			/**
+			 * 下面对JtaTransactionManager和AbstractPlatformTransactionManager分别进行处理
+			 */
+
+			// useSavepointForNestedTransaction(),是否为嵌套事务使用保存点
+			// 1.对于JtaTransactionManager-->返回false
+			// 2.对于AbstractPlatformTransactionManager-->返回true
 			if (useSavepointForNestedTransaction()) {
 				// Create savepoint within existing Spring-managed transaction,
 				// through the SavepointManager API implemented by TransactionStatus.
@@ -491,7 +507,12 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		if (debugEnabled) {
 			logger.debug("Participating in existing transaction");
 		}
+		// 新事物参与已有事务时,是否验证已有事务.此属性值默认为false;
+		// 如开启将验证新事务和已有事务的隔离级别和事务只读属性是否相同
 		if (isValidateExistingTransaction()) {
+			// 验证事务隔离级别
+			// 如果当前事务的隔离级别不为默认隔离级别,则比较当前事务隔离级别与已有事务隔离级别,
+			// 如不同,则抛出事务隔离级别不兼容异常
 			if (definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT) {
 				Integer currentIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
 				if (currentIsolationLevel == null || currentIsolationLevel != definition.getIsolationLevel()) {
@@ -503,6 +524,8 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 									"(unknown)"));
 				}
 			}
+			// 验证事务只读属性
+			// 如果当前事务可写,但是已有的事务是只读,则抛出异常
 			if (!definition.isReadOnly()) {
 				if (TransactionSynchronizationManager.isCurrentTransactionReadOnly()) {
 					throw new IllegalTransactionStateException("Participating transaction with definition [" +
