@@ -87,6 +87,7 @@ public abstract class TransactionSynchronizationManager {
 
 	private static final Log logger = LogFactory.getLog(TransactionSynchronizationManager.class);
 
+	// 线程上下文中保存着【线程池对象：ConnectionHolder】的Map对象。线程可以通过该属性获取到同一个Connection对象。
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<>("Transactional resources");
 
@@ -137,7 +138,7 @@ public abstract class TransactionSynchronizationManager {
 	}
 
 	/**
-	 * Retrieve a resource for the given key that is bound to the current thread.
+	 * Retrieve（检索）a resource for the given key that is bound to the current thread.
 	 * @param key the key to check (usually the resource factory)
 	 * @return a value bound to the current thread (usually the active
 	 * resource object), or {@code null} if none
