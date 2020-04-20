@@ -50,6 +50,7 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.jta.JtaTransactionManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
+// 看名字就能知道这个类是对DataSource的一个封装，这个类提供了一系列操作数据库连接的工具方法。这个类在Spring事务中非常重要，最主要的作用就是提供了能够从当前线程获取开启事务时绑定的连接
 public abstract class DataSourceUtils {
 
 	/**
@@ -74,6 +75,7 @@ public abstract class DataSourceUtils {
 	 * if the attempt to get a Connection failed
 	 * @see #releaseConnection
 	 */
+	// 其中Spring Jdbc里的JdbcTemplate类就是采用DataSourceUtils.getConnection()方法获取连接的
 	public static Connection getConnection(DataSource dataSource) throws CannotGetJdbcConnectionException {
 		try {
 			return doGetConnection(dataSource);
@@ -342,8 +344,7 @@ public abstract class DataSourceUtils {
 			return;
 		}
 		if (dataSource != null) {
-			// 当前线程存在事务的情况下说明存在共用数据库连接直接使用 ConnectionHolder 中的
-			// released 方法进行连接数减一而不是真正的释放连接
+			// 当前线程存在事务的情况下说明存在共用数据库连接直接使用 ConnectionHolder 中的 released 方法进行连接数减一而不是真正的释放连接
 			ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
 			if (conHolder != null && connectionEquals(conHolder, con)) {
 				// It's the transactional Connection: Don't close it.

@@ -31,7 +31,7 @@ import org.springframework.util.Assert;
  * JDBC {@link javax.sql.DataSource} implementation that delegates all calls
  * to a given target {@link javax.sql.DataSource}.
  *
- * <p>This class is meant to be subclassed, with subclasses overriding only
+ * <p>This class is meant（意思是）to be subclassed, with subclasses overriding only
  * those methods (such as {@link #getConnection()}) that should not simply
  * delegate to the target DataSource.
  *
