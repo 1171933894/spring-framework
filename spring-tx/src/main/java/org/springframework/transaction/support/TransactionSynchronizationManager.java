@@ -277,6 +277,7 @@ public abstract class TransactionSynchronizationManager {
 	 * Can be called before register to avoid unnecessary instance creation.
 	 * @see #registerSynchronization
 	 */
+	// 前者代表事务同步是否激活，如果激活了才可以注册TransactionSynchronization接口事件
 	public static boolean isSynchronizationActive() {
 		return (synchronizations.get() != null);
 	}
@@ -470,6 +471,7 @@ public abstract class TransactionSynchronizationManager {
 	 * on PROPAGATION_REQUIRED, PROPAGATION_REQUIRES_NEW, etc).
 	 * @see #isSynchronizationActive()
 	 */
+	// 后者代表当前线程是否存在真实的事务（有前面事务分析知道，Spring开启一个空事务时，isSynchronizationActive() = true，而isActualTransactionActive = false，因为不存在真实的事务）
 	public static boolean isActualTransactionActive() {
 		return (actualTransactionActive.get() != null);
 	}

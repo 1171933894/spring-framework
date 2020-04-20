@@ -103,6 +103,7 @@ public abstract class DataSourceUtils {
 	public static Connection doGetConnection(DataSource dataSource) throws SQLException {
 		Assert.notNull(dataSource, "No DataSource specified");
 
+		// 从当前线程获取绑定的ConnectionHolder
 		ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
 		if (conHolder != null && (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) {
 			conHolder.requested();
@@ -115,6 +116,7 @@ public abstract class DataSourceUtils {
 		// Else we either got no holder or an empty thread-bound holder here.
 
 		logger.debug("Fetching JDBC Connection from DataSource");
+		// 直接从给定的数据源获取连接
 		Connection con = fetchConnection(dataSource);
 
 		// 当前线程支持同步
@@ -262,6 +264,7 @@ public abstract class DataSourceUtils {
 	 * (may be {@code null})
 	 * @return whether the Connection is transactional
 	 */
+	// 此方法用来判断给定的连接是不是由Spring事务管理器绑定在当前线程，包括真实事务以及空事务
 	public static boolean isConnectionTransactional(Connection con, @Nullable DataSource dataSource) {
 		if (dataSource == null) {
 			return false;

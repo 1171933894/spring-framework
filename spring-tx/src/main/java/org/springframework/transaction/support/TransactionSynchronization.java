@@ -35,7 +35,7 @@ import java.io.Flushable;
  * @see AbstractPlatformTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#CONNECTION_SYNCHRONIZATION_ORDER
  */
-// 这个类是程序员对事务同步的扩展点：用于事务同步回调的接口
+// 这个类是程序员对事务同步的扩展点：用于事务同步回调的接口（在事务的suspend、resume、rollback、commit方法中会触发这个接口提供的钩子）
 
 /**
  * TransactionSynchronization接口定义了一系列的回调方法，对应一个事务执行的不同阶段：挂起、恢复、flush、提交（前、后）、完成（事务成功或失败）等。
@@ -59,6 +59,11 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see TransactionSynchronizationManager#unbindResource
 	 */
 	// 事务挂起
+	/**
+	 * 此钩子在事务中的suspend方法触发。
+	 * 这个钩子意味者如果自己在事务运行期间在当前线程绑定过资源，可能需要移除掉。
+	 * 想象下事务里挂起的时候，会移除掉开启事务时绑定的connectionHolder.
+	 */
 	default void suspend() {
 	}
 
@@ -67,7 +72,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * Supposed to rebind resources to TransactionSynchronizationManager if managing any.
 	 * @see TransactionSynchronizationManager#bindResource
 	 */
-	// 事务恢复
+	// 事务恢复（与suspend相反，在事务中的resume方法触发）
 	default void resume() {
 	}
 
@@ -96,6 +101,12 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #beforeCompletion
 	 */
 	// 在事务提交前触发，此处若发生异常，会导致回滚
+	/**
+	 * 此钩子在事务提交前执行
+	 * 在调用commit方法时触发，之后再走commit逻辑。我们知道事务实际的结果还是需要根据
+	 * commit方法来决定，因为即使调用了commit方法也仍然可能会执行回滚。
+	 * 如果按照正常流程走提交的话，我们通过这个钩子方法由机会在事务真正提交前还能对数据库做一些操作。
+	 */
 	default void beforeCommit(boolean readOnly) {
 	}
 
@@ -111,6 +122,10 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #afterCompletion
 	 */
 	// 在beforeCommit之后，commit/rollback之前执行。即使异常，也不会回滚
+	/**
+	 * 此钩子在事务完成前执行(发生在beforeCommit之后)
+	 * 调用commit或者rollback都能触发，此钩子在真正提交或者真正回滚前执行。
+	 */
 	default void beforeCompletion() {
 	}
 
@@ -129,7 +144,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * @throws RuntimeException in case of errors; will be <b>propagated to the caller</b>
 	 * (note: do not throw TransactionException subclasses here!)
 	 */
-	// 事务提交后执行
+	// 事务提交后执行（事务真正提交后执行，这个钩子执行意味着事务真正提交了。）
 	default void afterCommit() {
 	}
 
@@ -151,7 +166,7 @@ public interface TransactionSynchronization extends Flushable {
 	 * @see #STATUS_UNKNOWN
 	 * @see #beforeCompletion
 	 */
-	// 事务提交/回滚执行
+	// 事务提交/回滚执行（可能是真正提交了，也有可能是回滚）
 	/**
 	 * TransactionSynchronization中没有afterRollback()。如果需要在事务回滚后做某些处理，需要在afterCompletion(int)方法中判断入参的值，然后再做处理
 	 */
