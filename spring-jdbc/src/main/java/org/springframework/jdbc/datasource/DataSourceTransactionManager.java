@@ -326,6 +326,11 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		}
 	}
 
+	/**
+	 * 如何理解事务的挂起：<br/>
+	 * 对于DataSourceTransactionManager来说，事务的挂起，就是把当前线程关联的ConnectionHolder解除绑定、
+	 * 同理事务的恢复就是把上述ConnectionHolder再重新绑定到当前线程，继续执行该事务
+	 */
 	@Override
 	protected Object doSuspend(Object transaction) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
@@ -440,8 +445,11 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 
 
 	/**
-	 * DataSource transaction object, representing a ConnectionHolder.
+	 * DataSource transaction object, representing（代表）a ConnectionHolder.
 	 * Used as transaction object by DataSourceTransactionManager.
+	 */
+	/**
+	 * 我们使用了dataSource来获取连接，要想实现事务功能，必然需要使用Connection，所以它中肯定有一个Connection来执行事务的操作。DataSourceTransactionObject中有一个ConnectionHolder，它封装了一个Connection。
 	 */
 	private static class DataSourceTransactionObject extends JdbcTransactionObjectSupport {
 

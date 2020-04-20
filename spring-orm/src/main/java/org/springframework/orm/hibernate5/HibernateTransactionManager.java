@@ -807,6 +807,9 @@ public class HibernateTransactionManager extends AbstractPlatformTransactionMana
 	 * Hibernate transaction object, representing a SessionHolder.
 	 * Used as transaction object by HibernateTransactionManager.
 	 */
+	/**
+	 * HibernateTransactionObject中含有一个SessionHolder，和上面的ConnectionHolder一样，它封装了一个Session,有了Session，我们就可以通过Session来产生一个Hibernate的Transaction，从而实现事务操作。
+	 */
 	private class HibernateTransactionObject extends JdbcTransactionObjectSupport {
 
 		@Nullable
