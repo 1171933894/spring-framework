@@ -535,6 +535,11 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @param status the TransactionStatus for the current transaction
 	 * @return the prepared TransactionInfo object
 	 */
+	/**
+	 * 当已经建立事务连接并完成了事务信息的提取后，我们需要将所有的事务信息统一记录在
+	 * Transactionlnfo 型的实例中，这个实例包含了目标方法开始前的所有状态信息，一旦事务执
+	 * 行失败，Spring 会通过 TransactionInfo 类型的实例中的信息来进行回滚等后续工
+	 */
 	protected TransactionInfo prepareTransactionInfo(@Nullable PlatformTransactionManager tm,
 			@Nullable TransactionAttribute txAttr, String joinpointIdentification,
 			@Nullable TransactionStatus status) {
