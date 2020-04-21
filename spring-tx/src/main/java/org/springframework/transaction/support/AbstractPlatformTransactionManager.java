@@ -343,7 +343,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		}
 
 		// 2.判断当前线程是否存在事务，判读依据为当前线程记录的连接不为空且连接中（connectionHolder）中的transactionActive属性不为空
-		if (isExistingTransaction(transaction)) {
+		if (isExistingTransaction(transaction)) {// 嵌套事务的处理
 			// Existing transaction found -> check propagation behavior to find out how to behave.
 			// 如果当前已经存在启动的事物,则根据本次要新建的事物传播特性进行评估,以决定对新事物的后续处理
 			return handleExistingTransaction(definition, transaction, debugEnabled);

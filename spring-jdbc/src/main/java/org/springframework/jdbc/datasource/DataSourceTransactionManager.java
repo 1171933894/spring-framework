@@ -236,11 +236,12 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	@Override
 	protected Object doGetTransaction() {
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
-		// 是否允许使用保存点
+		// 是否允许使用保存点（是否开启允许保存点取决于是否设置了允许嵌入式事务）
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
 		// 从当前线程中获取ConnectionHolder对象
 		ConnectionHolder conHolder =
 				(ConnectionHolder) TransactionSynchronizationManager.getResource(obtainDataSource());
+		// false表示非新创建连接
 		txObject.setConnectionHolder(conHolder, false);
 		return txObject;
 	}
@@ -256,7 +257,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 */
 	/**
 	 * 构造transaction，包括设置ConnectionHolder、隔离界别、timeout
-	 * 如果是新连接，绑定到当前线程
+	 * 重要：如果是新连接，绑定到当前线程
 	 */
 	@Override
 	protected void doBegin(Object transaction, TransactionDefinition definition) {
