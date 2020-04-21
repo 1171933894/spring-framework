@@ -50,7 +50,7 @@ import org.springframework.util.Assert;
 public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyCreator {
 
 	@Nullable
-	private BeanFactoryAdvisorRetrievalHelper advisorRetrievalHelper;
+	private BeanFactoryAdvisorRetrievalHelper advisorRetrievalHelper;// retrieval：取回
 
 
 	@Override

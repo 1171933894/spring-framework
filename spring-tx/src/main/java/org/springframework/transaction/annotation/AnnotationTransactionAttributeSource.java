@@ -53,7 +53,7 @@ import org.springframework.util.ClassUtils;
  * @see org.springframework.transaction.interceptor.TransactionProxyFactoryBean#setTransactionAttributeSource
  */
 @SuppressWarnings("serial")
-public class AnnotationTransactionAttributeSource extends AbstractFallbackTransactionAttributeSource
+public class AnnotationTransactionAttributeSource extends AbstractFallbackTransactionAttributeSource// fallback：倒退
 		implements Serializable {
 
 	private static final boolean jta12Present;
