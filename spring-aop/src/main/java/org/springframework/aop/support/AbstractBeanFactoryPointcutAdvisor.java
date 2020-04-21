@@ -101,6 +101,7 @@ public abstract class AbstractBeanFactoryPointcutAdvisor extends AbstractPointcu
 		}
 	}
 
+	// advice也是通过getBean来获取
 	@Override
 	public Advice getAdvice() {
 		Advice advice = this.advice;

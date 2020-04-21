@@ -32,6 +32,9 @@ import org.springframework.lang.Nullable;
  * @see TransactionAttributeSourceAdvisor
  */
 @SuppressWarnings("serial")
+/**
+ * 在AOP的BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans中获取了所有类型为Advisor的bean，包括BeanFactoryTransactionAttributeSourceAdvisor这个类，并随着其他的Advisor一起在后续的步骤中被织入代理
+ */
 public class BeanFactoryTransactionAttributeSourceAdvisor extends AbstractBeanFactoryPointcutAdvisor {
 
 	@Nullable
