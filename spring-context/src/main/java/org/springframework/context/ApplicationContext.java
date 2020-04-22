@@ -55,6 +55,10 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.BeanFactory
  * @see org.springframework.core.io.ResourceLoader
  */
+
+/**
+ * BeanFactory和ApplicationContext初始化区别：BeanFactory在初始化容器时并没有实例化Bean，而是在第一次访问到目标Bean时才实例化该Bean；而ApplicationContext会在初始化上下文时实例化所有的单例的Bean。
+ */
 public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
 		MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
 
