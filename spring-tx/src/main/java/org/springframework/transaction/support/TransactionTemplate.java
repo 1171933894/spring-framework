@@ -62,6 +62,7 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.PlatformTransactionManager
  */
 @SuppressWarnings("serial")
+// ransactionTemplate的编程式事务管理是使用模板方法设计模式对原始事务管理方式的封装
 public class TransactionTemplate extends DefaultTransactionDefinition
 		implements TransactionOperations, InitializingBean {
 
@@ -125,6 +126,9 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	}
 
 
+	/**
+	 * 控制事务管理主要依赖于这个方法
+	 */
 	@Override
 	@Nullable
 	public <T> T execute(TransactionCallback<T> action) throws TransactionException {
@@ -155,7 +159,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	}
 
 	/**
-	 * Perform a rollback, handling rollback exceptions properly.
+	 * Perform a rollback, handling rollback exceptions properly（适当）.
 	 * @param status object representing the transaction
 	 * @param ex the thrown application exception or error
 	 * @throws TransactionException in case of a rollback error

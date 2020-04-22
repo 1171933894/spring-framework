@@ -40,7 +40,7 @@ public interface TransactionCallback<T> {
 	/**
 	 * Gets called by {@link TransactionTemplate#execute} within a transactional context.
 	 * Does not need to care about transactions itself, although it can retrieve and
-	 * influence the status of the current transaction via the given status object,
+	 * influence（影响）the status of the current transaction via the given status object,
 	 * e.g. setting rollback-only.
 	 * <p>Allows for returning a result object created within the transaction, i.e. a
 	 * domain object or a collection of domain objects. A RuntimeException thrown by the
