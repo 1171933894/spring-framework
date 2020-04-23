@@ -59,7 +59,7 @@ import org.springframework.lang.Nullable;
 /**
  * BeanFactory和ApplicationContext初始化区别：BeanFactory在初始化容器时并没有实例化Bean，而是在第一次访问到目标Bean时才实例化该Bean；而ApplicationContext会在初始化上下文时实例化所有的单例的Bean。
  */
-public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
+public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,// HierarchicalBeanFactory 提供父容器的访问功能.至于父容器的设置,需要找ConfigurableBeanFactory的setParentBeanFactory(接口把设置跟获取给拆开了!)
 		MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
 
 	/**
@@ -97,7 +97,7 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 
 	/**
 	 * Expose AutowireCapableBeanFactory functionality for this context.
-	 * <p>This is not typically used by application code, except for the purpose of
+	 * <p>This is not typically used by application code, except for the purpose（目的）of
 	 * initializing bean instances that live outside of the application context,
 	 * applying the Spring bean lifecycle (fully or partly) to them.
 	 * <p>Alternatively, the internal BeanFactory exposed by the
@@ -116,6 +116,6 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 	 * @see ConfigurableApplicationContext#refresh()
 	 * @see ConfigurableApplicationContext#getBeanFactory()
 	 */
-	AutowireCapableBeanFactory getAutowireCapableBeanFactory() throws IllegalStateException;
+	AutowireCapableBeanFactory getAutowireCapableBeanFactory() throws IllegalStateException;// capable：有能力
 
 }

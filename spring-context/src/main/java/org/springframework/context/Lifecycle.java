@@ -47,6 +47,12 @@ package org.springframework.context;
  * @see org.springframework.jms.listener.AbstractMessageListenerContainer
  * @see org.springframework.scheduling.quartz.SchedulerFactoryBean
  */
+
+/**
+ * 主要提供了start() & stop()两个方法，主要用于控制异步处理过程，在具体使用时该接口需要同时被
+ * ApplicationContext和具体的Bean实现，ApplicationContext会将start/stop信息传递给该容
+ * 器中所有实现了该接口的Bean，达到控制和任务调度等目的
+ */
 public interface Lifecycle {
 
 	/**

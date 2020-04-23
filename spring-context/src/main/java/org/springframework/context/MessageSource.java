@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.context.support.ResourceBundleMessageSource
  * @see org.springframework.context.support.ReloadableResourceBundleMessageSource
  */
+// 为应用提供i18N国际化消息访问的功能
 public interface MessageSource {
 
 	/**
@@ -54,6 +55,7 @@ public interface MessageSource {
 	 * @see #getMessage(MessageSourceResolvable, Locale)
 	 * @see java.text.MessageFormat
 	 */
+	// 用来从MessageSource获取消息的基本方法。如果在指定的locale中没有找到消息，则使用默认的消息。args中的参数将使用标准类库中的MessageFormat来作消息中替换值
 	@Nullable
 	String getMessage(String code, @Nullable Object[] args, @Nullable String defaultMessage, Locale locale);
 
@@ -71,6 +73,7 @@ public interface MessageSource {
 	 * @see #getMessage(MessageSourceResolvable, Locale)
 	 * @see java.text.MessageFormat
 	 */
+	// 本质上和上一个方法相同，其区别在：没有指定默认值，如果没找到消息，会抛出一个NoSuchMessageException异常
 	String getMessage(String code, @Nullable Object[] args, Locale locale) throws NoSuchMessageException;
 
 	/**
@@ -91,6 +94,7 @@ public interface MessageSource {
 	 * @see MessageSourceResolvable#getDefaultMessage()
 	 * @see java.text.MessageFormat
 	 */
+	// 上面方法中所使用的属性都封装到一个MessageSourceResolvable实现中，而本方法可以指定MessageSourceResolvable实现
 	String getMessage(MessageSourceResolvable resolvable, Locale locale) throws NoSuchMessageException;
 
 }

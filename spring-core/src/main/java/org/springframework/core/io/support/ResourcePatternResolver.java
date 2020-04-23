@@ -51,6 +51,7 @@ import org.springframework.core.io.ResourceLoader;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+// 加载资源，可以通过带前缀的Ant风格的资源文件路径装载Spring的配置文件
 public interface ResourcePatternResolver extends ResourceLoader {
 
 	/**

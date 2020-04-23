@@ -38,11 +38,21 @@ package org.springframework.core.env;
  * @see ConfigurableEnvironment
  * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment()
  */
+
+/**
+ * 实现了此接口的类有应该有一个Environment类型的域，并且可以通过getEnvironment方法取得。 Spring中所有的
+ * 应用上下文类都实现了此接口。这个接口的主要作用是用于类型检查的。例如框架中有些与用户定义的BeanFactory交
+ * 互的方法，这些方法有些就需要使用用户定义的BeanFactory的环境变量。这个时候就要看其是否是EnvironmentCapable
+ * 接口的子类了。 Spring中所有的应用上下文都实现了EnvironmentCapable接口。但是ConfigurableApplicationContext
+ * 接口重新定义了getEnvironment方法，并将其返回值限定为ConfigurableEnvironment，这样的后果就是，使用
+ * ConfigurableApplicationContext接口会覆盖Environment接口。
+ */
 public interface EnvironmentCapable {
 
 	/**
 	 * Return the {@link Environment} associated with this component.
 	 */
+	// 返回与此组件关联的Environment（可以为null或默认环境）
 	Environment getEnvironment();
 
 }

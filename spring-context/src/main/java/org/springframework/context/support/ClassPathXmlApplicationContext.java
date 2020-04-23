@@ -49,6 +49,7 @@ import org.springframework.util.Assert;
  * @see #getResourceByPath
  * @see GenericApplicationContext
  */
+// 如果配置文件放在在类路径下，则优先考虑使用ClassPathXmlApplication实现类
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 
 	@Nullable

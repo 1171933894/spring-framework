@@ -28,7 +28,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * SPI interface to be implemented by most if not all application contexts.
- * Provides facilities to configure an application context in addition
+ * Provides facilities（设施）to configure an application context in addition（除了）
  * to the application context client methods in the
  * {@link org.springframework.context.ApplicationContext} interface.
  *
@@ -39,6 +39,10 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 03.11.2003
+ */
+
+/**
+ * ConfigurableApplicationContext扩展于ApplicationContext，主要新增了两个方法 refresh()和close(),让Application具有启动、刷新、关闭应用上下文的能力
  */
 public interface ConfigurableApplicationContext extends ApplicationContext, Lifecycle, Closeable {
 
@@ -61,7 +65,7 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 
 	/**
 	 * Name of the LoadTimeWeaver bean in the factory. If such a bean is supplied,
-	 * the context will use a temporary ClassLoader for type matching, in order
+	 * the context will use a temporary（临时）ClassLoader for type matching, in order
 	 * to allow the LoadTimeWeaver to process all actual bean classes.
 	 * @since 2.5
 	 * @see org.springframework.instrument.classloading.LoadTimeWeaver

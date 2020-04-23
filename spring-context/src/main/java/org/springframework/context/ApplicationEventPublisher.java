@@ -17,7 +17,7 @@
 package org.springframework.context;
 
 /**
- * Interface that encapsulates event publication functionality.
+ * Interface that encapsulates event publication（出版）functionality.
  *
  * <p>Serves as a super-interface for {@link ApplicationContext}.
  *
@@ -47,6 +47,7 @@ public interface ApplicationEventPublisher {
 	 * @see org.springframework.context.event.ContextRefreshedEvent
 	 * @see org.springframework.context.event.ContextClosedEvent
 	 */
+	// 通知该应用中注册的匹配的事件监听器，事件有可能是框架事件也有可能是特定的应用程序事件
 	default void publishEvent(ApplicationEvent event) {
 		publishEvent((Object) event);
 	}
@@ -66,6 +67,7 @@ public interface ApplicationEventPublisher {
 	 * @see #publishEvent(ApplicationEvent)
 	 * @see PayloadApplicationEvent
 	 */
+	// 向监听器通知事件
 	void publishEvent(Object event);
 
 }

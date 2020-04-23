@@ -31,12 +31,18 @@ import org.springframework.lang.Nullable;
  * @since 07.07.2003
  * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#setParentBeanFactory
  */
-// 继承 BeanFactory，也就是在 BeanFactory 定义的功能的基础上增加了对 parentFactory 支持
+
+/**
+ * 继承 BeanFactory，也就是在 BeanFactory 定义的功能的基础上增加了对 parentFactory 支持
+ * 这个工厂接口非常简单，实现了Bean工厂的分层。这个工厂接口也是继承自BeanFacotory，也是一个二
+ * 级接口，相对于父接口，它只扩展了一个重要的功能——工厂分层。
+ */
 public interface HierarchicalBeanFactory extends BeanFactory {// Hierarchical：分层的
 
 	/**
-	 * Return the parent bean factory, or {@code null} if there is none.
+	 * Return the parent bean factory, or {@code null} if there is none.ApplicationListener
 	 */
+	// 第一个方法返回本Bean工厂的父工厂。这个方法实现了工厂的分层
 	@Nullable
 	BeanFactory getParentBeanFactory();
 
@@ -49,6 +55,7 @@ public interface HierarchicalBeanFactory extends BeanFactory {// Hierarchical：
 	 * @return whether a bean with the given name is defined in the local factory
 	 * @see BeanFactory#containsBean
 	 */
+	// 第二个方法判断本地工厂是否包含这个Bean（忽略其他所有父工厂）。这也是分层思想的体现。
 	boolean containsLocalBean(String name);
 
 }

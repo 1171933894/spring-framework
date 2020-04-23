@@ -33,7 +33,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  */
-public interface ApplicationEventMulticaster {
+public interface ApplicationEventMulticaster {// publisher：发行人
 
 	/**
 	 * Add a listener to be notified of all events.
@@ -67,7 +67,7 @@ public interface ApplicationEventMulticaster {
 	void removeAllListeners();
 
 	/**
-	 * Multicast the given application event to appropriate listeners.
+	 * Multicast the given application event to appropriate（适当的）listeners.
 	 * <p>Consider using {@link #multicastEvent(ApplicationEvent, ResolvableType)}
 	 * if possible as it provides a better support for generics-based events.
 	 * @param event the event to multicast
