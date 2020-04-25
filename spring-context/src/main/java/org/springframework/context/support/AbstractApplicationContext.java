@@ -307,7 +307,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Return the {@code Environment} for this application context in configurable
-	 * form, allowing for further customization.
+	 * form（形成）, allowing for further（进一步）customization.
 	 * <p>If none specified, a default environment will be initialized via
 	 * {@link #createEnvironment()}.
 	 */

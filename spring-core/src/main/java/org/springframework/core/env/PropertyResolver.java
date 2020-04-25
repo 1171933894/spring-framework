@@ -27,10 +27,14 @@ import org.springframework.lang.Nullable;
  * @see Environment
  * @see PropertySourcesPropertyResolver
  */
+
+/**
+ * PropertyResolver接口定义了按属性名获取对应属性配置的接口以及解析字符串中的属性表达式的接口，如${foo}/abc,foo对应的属性值为123，解析后为123/abc
+ */
 public interface PropertyResolver {
 
 	/**
-	 * Return whether the given property key is available for resolution,
+	 * Return whether the given property key is available（可用的）for resolution,
 	 * i.e. if the value for the given key is not {@code null}.
 	 */
 	boolean containsProperty(String key);
@@ -91,7 +95,7 @@ public interface PropertyResolver {
 	<T> T getRequiredProperty(String key, Class<T> targetType) throws IllegalStateException;
 
 	/**
-	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
+	 * Resolve ${...} placeholders（占位符）in the given text, replacing them with corresponding
 	 * property values as resolved by {@link #getProperty}. Unresolvable placeholders with
 	 * no default value are ignored and passed through unchanged.
 	 * @param text the String to resolve

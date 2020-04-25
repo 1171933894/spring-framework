@@ -21,13 +21,14 @@ import org.springframework.lang.Nullable;
 
 /**
  * Configuration interface to be implemented by most if not all {@link PropertyResolver}
- * types. Provides facilities for accessing and customizing the
+ * types. Provides facilities（设备）for accessing and customizing the
  * {@link org.springframework.core.convert.ConversionService ConversionService}
  * used when converting property values from one type to another.
  *
  * @author Chris Beams
  * @since 3.1
  */
+// ConfigurablePropertyResolver接口继承自PropertyResolver，增加实现PropertyResolver所需的辅助接口
 public interface ConfigurablePropertyResolver extends PropertyResolver {
 
 	/**
@@ -48,7 +49,7 @@ public interface ConfigurablePropertyResolver extends PropertyResolver {
 	 * Set the {@link ConfigurableConversionService} to be used when performing type
 	 * conversions on properties.
 	 * <p><strong>Note:</strong> as an alternative to fully replacing the
-	 * {@code ConversionService}, consider adding or removing individual
+	 * {@code ConversionService}, consider adding or removing individual（个人）
 	 * {@code Converter} instances by drilling into {@link #getConversionService()}
 	 * and calling methods such as {@code #addConverter}.
 	 * @see PropertyResolver#getProperty(String, Class)
@@ -80,7 +81,7 @@ public interface ConfigurablePropertyResolver extends PropertyResolver {
 	 * resolution, i.e. that an exception will be thrown. A {@code true} value indicates
 	 * that unresolvable nested placeholders should be passed through in their unresolved
 	 * ${...} form.
-	 * <p>Implementations of {@link #getProperty(String)} and its variants must inspect
+	 * <p>Implementations of {@link #getProperty(String)} and its variants（变体）must inspect（检查）
 	 * the value set here to determine correct behavior when property values contain
 	 * unresolvable placeholders.
 	 * @since 3.2

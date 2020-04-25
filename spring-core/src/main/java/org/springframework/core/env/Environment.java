@@ -68,12 +68,13 @@ package org.springframework.core.env;
  * @see org.springframework.context.ConfigurableApplicationContext#setEnvironment
  * @see org.springframework.context.support.AbstractApplicationContext#createEnvironment
  */
+// Environment接口继承自PropertyResolver，增加了获取Profiles相关接口
 public interface Environment extends PropertyResolver {
 
 	/**
-	 * Return the set of profiles explicitly made active for this environment. Profiles
+	 * Return the set of profiles explicitly（明确地）made active for this environment. Profiles
 	 * are used for creating logical groupings of bean definitions to be registered
-	 * conditionally, for example based on deployment environment. Profiles can be
+	 * conditionally（有条件的）, for example based on deployment environment. Profiles can be
 	 * activated by setting {@linkplain AbstractEnvironment#ACTIVE_PROFILES_PROPERTY_NAME
 	 * "spring.profiles.active"} as a system property or by calling
 	 * {@link ConfigurableEnvironment#setActiveProfiles(String...)}.
@@ -115,6 +116,6 @@ public interface Environment extends PropertyResolver {
 	 * Return whether the {@linkplain #getActiveProfiles() active profiles}
 	 * match the given {@link Profiles} predicate.
 	 */
-	boolean acceptsProfiles(Profiles profiles);
+	boolean acceptsProfiles(Profiles profiles);// accepts：接受
 
 }

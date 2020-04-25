@@ -32,7 +32,7 @@ import org.springframework.lang.Nullable;
 public interface PropertySources extends Iterable<PropertySource<?>> {
 
 	/**
-	 * Return a sequential {@link Stream} containing the property sources.
+	 * Return a sequential（顺序的）{@link Stream} containing the property sources.
 	 * @since 5.1
 	 */
 	default Stream<PropertySource<?>> stream() {

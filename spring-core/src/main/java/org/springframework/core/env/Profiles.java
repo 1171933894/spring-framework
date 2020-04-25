@@ -19,7 +19,7 @@ package org.springframework.core.env;
 import java.util.function.Predicate;
 
 /**
- * Profile predicate that may be {@linkplain Environment#acceptsProfiles(Profiles)
+ * Profile predicate（确定）that may be {@linkplain Environment#acceptsProfiles(Profiles)
  * accepted} by an {@link Environment}.
  *
  * <p>May be implemented directly or, more usually, created using the
