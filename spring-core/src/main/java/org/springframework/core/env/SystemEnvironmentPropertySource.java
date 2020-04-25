@@ -85,7 +85,7 @@ public class SystemEnvironmentPropertySource extends MapPropertySource {
 
 	/**
 	 * This implementation returns {@code true} if a property with the given name or
-	 * any underscore/uppercase variant thereof exists in this property source.
+	 * any underscore/uppercase（下划线/大写） variant thereof exists in this property source.
 	 */
 	@Override
 	@Nullable

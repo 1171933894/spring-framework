@@ -188,7 +188,7 @@ public class MutablePropertySources implements PropertySources {
 	}
 
 	/**
-	 * Add the given property source at a particular index in the list.
+	 * Add the given property source at a particular（特定）index in the list.
 	 */
 	private void addAtIndex(int index, PropertySource<?> propertySource) {
 		removeIfPresent(propertySource);

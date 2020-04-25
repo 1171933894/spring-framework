@@ -78,13 +78,13 @@ public abstract class PropertySource<T> {
 
 	/**
 	 * Create a new {@code PropertySource} with the given name and with a new
-	 * {@code Object} instance as the underlying source.
+	 * {@code Object} instance as the underlying（底层的）source.
 	 * <p>Often useful in testing scenarios when creating anonymous implementations
 	 * that never query an actual source but rather return hard-coded values.
 	 */
 	@SuppressWarnings("unchecked")
 	public PropertySource(String name) {
-		this(name, (T) new Object());
+		this(name, (T) new Object());// 这种写法查询会报错
 	}
 
 
@@ -193,7 +193,7 @@ public abstract class PropertySource<T> {
 	 * {@code PropertySource} to be used as a placeholder in cases where an actual
 	 * property source cannot be eagerly initialized at application context
 	 * creation time.  For example, a {@code ServletContext}-based property source
-	 * must wait until the {@code ServletContext} object is available to its enclosing
+	 * must wait until the {@code ServletContext} object is available to its enclosing（封闭）
 	 * {@code ApplicationContext}.  In such cases, a stub should be used to hold the
 	 * intended default position/order of the property source, then be replaced
 	 * during context refresh.
@@ -201,7 +201,7 @@ public abstract class PropertySource<T> {
 	 * @see org.springframework.web.context.support.StandardServletEnvironment
 	 * @see org.springframework.web.context.support.ServletContextPropertySource
 	 */
-	public static class StubPropertySource extends PropertySource<Object> {
+	public static class StubPropertySource extends PropertySource<Object> {// stub：存根
 
 		public StubPropertySource(String name) {
 			super(name, new Object());
@@ -219,7 +219,7 @@ public abstract class PropertySource<T> {
 
 
 	/**
-	 * A {@code PropertySource} implementation intended for collection comparison
+	 * A {@code PropertySource} implementation intended（意向的）for collection comparison
 	 * purposes.
 	 *
 	 * @see PropertySource#named(String)
