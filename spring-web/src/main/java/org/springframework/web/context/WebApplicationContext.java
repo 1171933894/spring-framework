@@ -42,6 +42,17 @@ import org.springframework.lang.Nullable;
  * @since January 19, 2001
  * @see ServletContextAware#setServletContext
  */
+
+/**
+ * WebApplicationContext是专门为Web应用准备的，它允许从相对于Web根目录的路径中装载配置文件完成初始化工作。
+ * 从WebApplicationContext中可以获得ServletContext的引用，整个Web应用上下文对象将作为属性放置到ServletContext
+ * 中，以便Web应用环境可以访问Spring应用上下文。Spring专门为此提供一个工具类WebApplicationContextUtils，
+ * 通过该类的getWebApplicationContext(ServletContext sc)方法，即可以从ServletContext中获取WebApplicationContext实例
+ *
+ * Spring分别提供了用于启动WebApplicationContext的Servlet和Web容器监听器：
+ * 1、org.springframework.web.context.ContextLoaderServlet
+ * 2、org.springframework.web.context.ContextLoaderListener
+ */
 public interface WebApplicationContext extends ApplicationContext {
 
 	/**
@@ -51,6 +62,13 @@ public interface WebApplicationContext extends ApplicationContext {
 	 * lookup of the root WebApplicationContext.
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getWebApplicationContext
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getRequiredWebApplicationContext
+	 */
+	/**
+	 * 由于Web应用比一般的应用拥有更多的特性，因此WebApplicationContext扩展了ApplicationContext。WebApplicationContext
+	 * 定义了一个常量ROOT_WEB_APPLICATION_ CONTEXT_ATTRIBUTE，在上下文启动时，WebApplicationContext实例即以此为键放置在
+	 * ServletContext的属性列表中，因此我们可以直接通过以下语句从Web容器中获取WebApplicationContext：
+	 * WebApplicationContext wac = (WebApplicationContext)servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+	 * 这样Spring的Web应用上下文和Web容器的上下文就可以实现互访，二者实现了融合。
 	 */
 	String ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE = WebApplicationContext.class.getName() + ".ROOT";
 

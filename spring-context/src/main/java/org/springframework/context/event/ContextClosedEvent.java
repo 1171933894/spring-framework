@@ -25,6 +25,10 @@ import org.springframework.context.ApplicationContext;
  * @since 12.08.2003
  * @see ContextRefreshedEvent
  */
+
+/**
+ * 当使用 ConfigurableApplicationContext 接口中的 close() 方法关闭 ApplicationContext 时，该事件被发布。一个已关闭的上下文到达生命周期末端；它不能被刷新或重启。
+ */
 @SuppressWarnings("serial")
 public class ContextClosedEvent extends ApplicationContextEvent {
 

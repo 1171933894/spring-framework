@@ -26,6 +26,11 @@ import org.springframework.context.ApplicationContext;
  * @see ContextClosedEvent
  */
 @SuppressWarnings("serial")
+/**
+ * ApplicationContext 被初始化或刷新时，该事件被发布。这也可以在 ConfigurableApplicationContext
+ * 接口中使用 refresh() 方法来发生。此处的初始化是指：所有的Bean被成功装载，后处理Bean被检测并激活，所
+ * 有Singleton Bean 被预实例化，ApplicationContext容器已就绪可用。
+ */
 public class ContextRefreshedEvent extends ApplicationContextEvent {
 
 	/**

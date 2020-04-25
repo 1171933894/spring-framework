@@ -26,6 +26,10 @@ import org.springframework.context.ApplicationContext;
  * @since 2.5
  * @see ContextStartedEvent
  */
+
+/**
+ * 当使用 ConfigurableApplicationContext 接口中的 stop() 停止 ApplicationContext 时，发布这个事件。你可以在接收到这个事件后做必要的清理的工作。
+ */
 @SuppressWarnings("serial")
 public class ContextStoppedEvent extends ApplicationContextEvent {
 
