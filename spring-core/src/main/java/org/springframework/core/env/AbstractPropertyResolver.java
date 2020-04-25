@@ -38,6 +38,14 @@ import org.springframework.util.SystemPropertyUtils;
  * @author Juergen Hoeller
  * @since 3.1
  */
+
+/**
+ * AbstractPropertyResolver是ConfigurablePropertyResolver接口的抽象实现类，提供了大部分接口方法的默认实现，
+ * 将核心的getProperty(String key, Class<T> targetType)方法留给子类实现，resolvePlaceholders(String text)
+ * 方法则由PropertyPlaceholderHelper提供默认实现。PropertySourcesPropertyResolver是该类的默认实现类，从全
+ * 局变量PropertySources对象获取属性名key对应的属性值，查找时会遍历PropertySources中包含的多个PropertySource，
+ * 直到找到对应的属性值
+ */
 public abstract class AbstractPropertyResolver implements ConfigurablePropertyResolver {
 
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -256,7 +264,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 			// Avoid initialization of shared DefaultConversionService if
 			// no standard type conversion is needed in the first place...
 			if (ClassUtils.isAssignableValue(targetType, value)) {
-				return (T) value;
+				return (T) value;// 如果有继承关系，那么可以直接强制转换
 			}
 			conversionServiceToUse = DefaultConversionService.getSharedInstance();
 		}
@@ -265,7 +273,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 
 
 	/**
-	 * Retrieve the specified property as a raw String,
+	 * Retrieve the specified property as a raw（原）String,
 	 * i.e. without resolution of nested placeholders.
 	 * @param key the property name to resolve
 	 * @return the property value or {@code null} if none found

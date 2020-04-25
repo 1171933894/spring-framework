@@ -69,6 +69,7 @@ import java.util.Map;
  * @see StandardEnvironment
  * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment
  */
+// ConfigurableEnvironment继承自Environment和ConfigurablePropertyResolver两个接口，并增加了Profiles维护，获取系统属性，系统环境变量的实用接口
 public interface ConfigurableEnvironment extends Environment, ConfigurablePropertyResolver {
 
 	/**

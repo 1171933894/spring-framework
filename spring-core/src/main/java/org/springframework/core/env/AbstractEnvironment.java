@@ -34,12 +34,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Abstract base class for {@link Environment} implementations. Supports the notion of
+ * Abstract base class for {@link Environment} implementations. Supports the notion（概念）of
  * reserved default profile names and enables specifying active and default profiles
  * through the {@link #ACTIVE_PROFILES_PROPERTY_NAME} and
  * {@link #DEFAULT_PROFILES_PROPERTY_NAME} properties.
  *
- * <p>Concrete subclasses differ primarily on which {@link PropertySource} objects they
+ * <p>Concrete（具体）subclasses differ primarily on which {@link PropertySource} objects they
  * add by default. {@code AbstractEnvironment} adds none. Subclasses should contribute
  * property sources through the protected {@link #customizePropertySources(MutablePropertySources)}
  * hook, while clients should customize using {@link ConfigurableEnvironment#getPropertySources()}
@@ -52,10 +52,15 @@ import org.springframework.util.StringUtils;
  * @see ConfigurableEnvironment
  * @see StandardEnvironment
  */
+
+/**
+ * AbstractEnvironment为ConfigurableEnvironment接口的抽象实现类，提供了该接口的所有方法的默认实现，其中ConfigurablePropertyResolver的接口PropertySourcesPropertyResolver
+ * 实例实现，将核心的MutablePropertySources全局变量包含的多个PropertySources的初始化交给子类实现，即protected方法customizePropertySources(MutablePropertySources propertySources)。
+ */
 public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 	/**
-	 * System property that instructs Spring to ignore system environment variables,
+	 * System property that instructs（指示）Spring to ignore system environment variables,
 	 * i.e. to never attempt to retrieve such a variable via {@link System#getenv()}.
 	 * <p>The default is "false", falling back to system environment variable checks if a
 	 * Spring environment property (e.g. a placeholder in a configuration String) isn't
@@ -70,7 +75,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * Name of property to set to specify active profiles: {@value}. Value may be comma
 	 * delimited.
 	 * <p>Note that certain shell environments such as Bash disallow the use of the period
-	 * character in variable names. Assuming that Spring's {@link SystemEnvironmentPropertySource}
+	 * character in variable names. Assuming（假设）that Spring's {@link SystemEnvironmentPropertySource}
 	 * is in use, this property may be specified as an environment variable as
 	 * {@code SPRING_PROFILES_ACTIVE}.
 	 * @see ConfigurableEnvironment#setActiveProfiles
@@ -89,7 +94,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	public static final String DEFAULT_PROFILES_PROPERTY_NAME = "spring.profiles.default";
 
 	/**
-	 * Name of reserved default profile name: {@value}. If no default profile names are
+	 * Name of reserved（保留的）default profile name: {@value}. If no default profile names are
 	 * explicitly and no active profile names are explicitly set, this profile will
 	 * automatically be activated by default.
 	 * @see #getReservedDefaultProfiles
