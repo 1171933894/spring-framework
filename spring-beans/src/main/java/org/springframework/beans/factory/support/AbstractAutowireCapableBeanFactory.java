@@ -435,6 +435,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		/**
+		 * 加了@EnableTransactionManagement注解，引入了 TransactionManagementConfigurationSelector，而这个Selector中有段代码
+		 * 返回了 AutoProxyRegistrar.class 和 ProxyTransactionManagementConfiguration.class，在spring初始化过程中会调用到
+		 * org.springframework.context.annotation.AutoProxyRegistrar#registerBeanDefinitions ，从而调用到
+		 * org.springframework.aop.config.AopConfigUtils#registerOrEscalateApcAsRequired，有一段这样的代码
+		 * 后续又会调用到 org.springframework.beans.factory.support.AbstractBeanFactory#getMergedLocalBeanDefinition ，在这个方法中获取到了
+		 * AnnotationAwareAspectJAutoProxyCreator 的 BeanDefinition，后续会添加到 BeanPostProcessors 中去
+		 *
+		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
@@ -618,7 +627,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			// 对bean进行填充，将各个属性值注入，其中，可能存在依赖于其他bean的属性，则会递归开始依赖bean
 			populateBean(beanName, mbd, instanceWrapper);
-			// 调用初始化方法，比如init-method
+			// 调用初始化方法，比如init-method（执行后置处理器，aop就是在这里完成的处理）
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {

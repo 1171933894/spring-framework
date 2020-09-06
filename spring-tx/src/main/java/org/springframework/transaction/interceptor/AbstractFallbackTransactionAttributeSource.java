@@ -155,14 +155,17 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
 		// Don't allow no-public methods as required.
+		// important: 这里判断了只允许public修饰的方法，这就是为什么 @Transactional默认只对可见性为public的方法起作用
 		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
 			return null;
 		}
 
-		// The method may be on an interface, but we need attributes from the target class.
+		// The method may be on an interface	, but we need attributes from the target class.
 		// If the target class is null, the method will be unchanged.
 		// method代表接口中的方法，specificMethod代表实现类中的方法
 		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
+
+		// 1.这里先从方法上面找@Transactional，所以方法上面加了注解的优先级会高于类上面加了注解的，因为找到了就返回
 
 		// First try is the method in the target class.
 		// 查看方法中是否存在事务声明
@@ -170,6 +173,8 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 		if (txAttr != null) {
 			return txAttr;
 		}
+
+		// 2.这里是从类上面找@Transactional，如果类（StudentServiceImpl）上找不到，会从接口（StudentService）上找，找到就返回
 
 		// Second try is the transaction attribute on the target class.
 		// 查看方法所在类中是否存在事务声明
