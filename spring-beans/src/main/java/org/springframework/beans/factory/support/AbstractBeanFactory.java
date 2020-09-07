@@ -240,7 +240,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
-		// 或许很多人不理解转换对应 beanNarne 是什么意思，传入的参数 name 不就是 beanName
+		// 或许很多人不理解转换对应 beanName 是什么意思，传入的参数 name 不就是 beanName
 		// 吗？其实不是，这里传入的参数可能是别名，也可能是 FactoryBean，所以需要进行一系列的
 		// 解析，这些解析内容包括如下内容：
 		// 1、这些解析内容包括如下内容 FactoryBean 的修饰符，也就是如果name＝"&aa"，那么会首先去除＆而使 name = aa。
