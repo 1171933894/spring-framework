@@ -530,7 +530,7 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		try {
-			// 创建用于承载属性的AbstractBeanDefinition类型的GenericBeanDefinition
+			// 创建用于承载属性的AbstractBeanDefinition类型的GenericBeanDefinition，然后用该实例去解析属性
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
 
 			// 硬编码解析默认bean的各种属性
