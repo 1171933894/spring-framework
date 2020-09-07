@@ -130,14 +130,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
+		// 判断根标签是否是beans
 		if (this.delegate.isDefaultNamespace(root)) {
 			// 处理profile属性
 			/**
-			 * </beans>
 			 * 	<beans profile ＝ "dev">
 			 * 	    ...
 			 * 	</beans>
-			 * </beans>
 			 */
 			// 集成到 Web 环境中时，在 web.xml 下代码：
 			/**
@@ -201,11 +200,11 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
-						// 对bean的处理
+						// 对bean的处理（默认标签解析）
 						parseDefaultElement(ele, delegate);
 					}
 					else {
-						// 对bean的处理
+						// 对bean的处理（自定义标签解析）
 						delegate.parseCustomElement(ele);
 					}
 				}

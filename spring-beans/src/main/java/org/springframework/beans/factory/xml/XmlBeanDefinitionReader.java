@@ -342,7 +342,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		}
 		if (!currentResources.add(encodedResource)) {
 			throw new BeanDefinitionStoreException(
-					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
+					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");// detected：检测到
 		}
 		try {
 			// 2、获取输入流 Resource 中获取对应的 InputStream 并构造 InputSource
@@ -455,6 +455,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see DocumentLoader#loadDocument
 	 */
 	protected Document doLoadDocument(InputSource inputSource, Resource resource) throws Exception {
+		/**
+		 * 1、通过getValidationModeForResource获取对XML的验证模式
+		 * 2、加载XML文件，并得到对应的Document
+		 * 3、返回Document，用来注册Bean信息
+		 */
 		return this.documentLoader.loadDocument(inputSource, getEntityResolver(), this.errorHandler,
 				getValidationModeForResource(resource), isNamespaceAware());
 	}
@@ -537,7 +542,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		// 使用DefaultBeanDefinitionDocumentReader实例化BeanDefinitionDocumentReader
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		// 在实例化BeanDefinitionReader时候会将BeanDefinitionRegistry，默认使用继承自DefaultListableBeanFacotory的子类
-		// 记录统计前BeanDefinition的加载个数
+		// countBefore：记录统计前BeanDefinition的加载个数
 		int countBefore = getRegistry().getBeanDefinitionCount();
 		// 加载及注册bean
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
