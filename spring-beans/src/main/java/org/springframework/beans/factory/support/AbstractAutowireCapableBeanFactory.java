@@ -525,11 +525,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// 给BeanPostProcessors一个机会来返回代理来替代真正的实例
 			/**
 			 * 【短路判断】当经过前置处理后返回的结果如果不为空，那么会直接略过后续 bean 的创建而直接返回结
-			 * 果。这一特性虽然很容易被忽略，但是却起 至关重要的作用，我们熟知的 AOP 功能就是基于这里的判断的
+			 * 果。这一特性虽然很容易被忽略，但是却起着至关重要的作用，我们熟知的 AOP 功能就是基于这里的判断的
 			 */
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
-				return bean;
+				return bean;// 短路判断
 			}
 		}
 		catch (Throwable ex) {
@@ -1145,11 +1145,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// 如果尚未被解析
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
 			// Make sure bean class is actually resolved at this point.
-			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
+			if (!mbd.isSynthetic()/*false表示用户定义*/ && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
+					/**
+					 * InstantiationAwareBeanPostProcessor 类型的后处理器进行 postProcessBeforelnstantiation 方法
+					 */
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
+						/**
+						 * BeanPostProcessor 类型 postProcessAfterInitialization 的调用
+						 */
 						bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
 					}
 				}
