@@ -1521,6 +1521,7 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinition parseCustomElement(Element ele) {
+		// containingBd为父类bean，对顶层元素的解析应设置为null
 		return parseCustomElement(ele, null);
 	}
 

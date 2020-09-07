@@ -231,6 +231,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			processBeanDefinition(ele, delegate);
 		}
 		// 对 beans 标签的处理
+		/**
+		 * 对于嵌入式beans标签来讲，并没有太多可讲，与单独的配置文件并没有太大的差别，无非是递归调用beans的解析过程
+		 */
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
 			doRegisterBeanDefinitions(ele);
@@ -246,7 +249,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		String location = ele.getAttribute(RESOURCE_ATTRIBUTE);
 		// 如若不存在resource属性则不作任何处理
 		if (!StringUtils.hasText(location)) {
-			getReaderContext().error("Resource location must not be empty", ele);
+			getReaderContext().error("Resource location must not be empty", ele);// 不会抛出异常
 			return;
 		}
 
