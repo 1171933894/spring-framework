@@ -96,7 +96,7 @@ public interface Resource extends InputStreamSource {
 	 * and must be read and closed to avoid resource leaks.
 	 * <p>Will be {@code false} for typical resource descriptors.
 	 */
-	// 返回此资源是否表示具有开放流的句柄。如果是真的，无法读取InputStream的多次，并必须予以封闭，以防止资源泄漏
+	// 返回此资源是否表示具有开放流的句柄。如果是真的，无法读取InputStream多次，并必须予以封闭，以防止资源泄漏
 	default boolean isOpen() {
 		return false;
 	}
