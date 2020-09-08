@@ -130,7 +130,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
 	/** Whether to automatically try to resolve circular references between beans. */
-	private boolean allowCircularReferences = true;
+	private boolean allowCircularReferences = true;// 是否允许循环依赖
 
 	/**
 	 * Whether to resort to injecting a raw bean instance in case of circular reference,
@@ -606,7 +606,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
 		// 是否需要提早曝光：单例&允许循环依赖&当前bean正在创建中，检测循环依赖
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
-				isSingletonCurrentlyInCreation(beanName));
+				isSingletonCurrentlyInCreation(beanName));// exposure：曝光
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Eagerly caching bean '" + beanName +
@@ -615,9 +615,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// 为避免后期循环依赖，可以在bean初始化完成前将创建实例的ObjectFactory加入工厂
 			/**
 			 * getEarlyBeanReference方法：
-			 * 对 bean 再一次依赖引用，主要应用 SmartInstantiationAware BeanPost Processor，
-			 * 其中我们熟知的 AOP 就是在这里将 advice 动态织人 bean 中， 若没有则直接返回
-			 * bean ，不做任何处理
+			 * 对 bean 再一次依赖引用，主要应用 SmartInstantiationAwareBeanPostProcessor，
+			 * 其中我们熟知的 AOP 就是在这里将 advice 动态织入 bean 中，若没有则直接返回 bean ，不做任何处理
 			 */
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
