@@ -36,6 +36,9 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 2.0
  */
+/**
+ * 所有解析器，都是对BeanDefinitionParser接口的实现，入口函数都是parse
+ */
 class AspectJAutoProxyBeanDefinitionParser implements BeanDefinitionParser {
 
 	@Override

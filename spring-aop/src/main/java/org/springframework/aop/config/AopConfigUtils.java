@@ -110,7 +110,7 @@ public abstract class AopConfigUtils {
 			 * <aop:config proxy-target-class=” true ” > . . </aop-config>
 			 *
 			 * 当需要使用 CGLIB 代理和 AspectJ 自动代理支持，可以按照以下方式设置 ＜aop:aspectj-auto-proxy> 的 proxy-target-class 属性：
-			 * <aop:aspectJ-autoproxy proxy-target-class= ” true ” />
+			 * <aop:aspectJ-autoproxy proxy-target-class= ”true” />
 			 */
 			definition.getPropertyValues().add("proxyTargetClass", Boolean.TRUE);
 		}
