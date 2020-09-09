@@ -90,6 +90,11 @@ public class LoadTimeWeaverAwareProcessor implements BeanPostProcessor, BeanFact
 	}
 
 
+	/**
+	 * LoadTimeWeaverAwareProcessor中的postProcessBeforelnitialization 函数中，因为最开
+	 * 始的 if 判断注定这个后处理器只对 LoadTimeWeaverAware 型的 bean 起作用，而纵观所有的
+	 * bean，实现 LoadTimeWeaver 接口的类只有 AspectJWeavingEnabler
+	 */
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if (bean instanceof LoadTimeWeaverAware) {
@@ -100,6 +105,7 @@ public class LoadTimeWeaverAwareProcessor implements BeanPostProcessor, BeanFact
 				ltw = this.beanFactory.getBean(
 						ConfigurableApplicationContext.LOAD_TIME_WEAVER_BEAN_NAME, LoadTimeWeaver.class);
 			}
+			// 设置AspectJWeavingEnabler的loadTimeWeaver属性为DefaultContextLoadTimeWeaver
 			((LoadTimeWeaverAware) bean).setLoadTimeWeaver(ltw);
 		}
 		return bean;

@@ -86,7 +86,7 @@ public class AspectJWeavingEnabler
 	public static void enableAspectJWeaving(
 			@Nullable LoadTimeWeaver weaverToUse, @Nullable ClassLoader beanClassLoader) {
 
-		if (weaverToUse == null) {
+		if (weaverToUse == null) {// 此时已经被初始化为DefaultContextLoadTimeWeaver
 			if (InstrumentationLoadTimeWeaver.isInstrumentationAvailable()) {
 				weaverToUse = new InstrumentationLoadTimeWeaver(beanClassLoader);
 			}
