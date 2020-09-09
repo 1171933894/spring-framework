@@ -597,6 +597,9 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	// Methods dealing with prepared statements
 	//-------------------------------------------------------------------------
 
+	/**
+	 * execute 作为数据库操作入口， 将大多数数据库操作相同的步骤统一封装，而将个性化的操作使用参数 PreparedStatementCallback 进行回调
+	 */
 	@Override
 	@Nullable
 	public <T> T execute(PreparedStatementCreator psc, PreparedStatementCallback<T> action)
@@ -1095,7 +1098,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 			cs = csc.createCallableStatement(con);
 			applyStatementSettings(cs);
 			T result = action.doInCallableStatement(cs);
-			handleWarnings(cs);
+			handleWarnings(cs);// 警告处理
 			return result;
 		}
 		catch (SQLException ex) {
@@ -1117,7 +1120,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 				((ParameterDisposer) csc).cleanupParameters();
 			}
 			JdbcUtils.closeStatement(cs);
-			DataSourceUtils.releaseConnection(con, getDataSource());
+			DataSourceUtils.releaseConnection(con, getDataSource());// 资源释放
 		}
 	}
 

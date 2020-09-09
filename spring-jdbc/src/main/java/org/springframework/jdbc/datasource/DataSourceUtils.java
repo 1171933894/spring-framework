@@ -100,6 +100,9 @@ public abstract class DataSourceUtils {
 	 * @throws SQLException if thrown by JDBC methods
 	 * @see #doReleaseConnection
 	 */
+	/**
+	 * 在数据库连接方面， Spring 要考虑的是关于事务方面的处理。基于事务处理的特殊性，Spring 要保证线程中的数据库操作都是使用同一事务
+	 */
 	public static Connection doGetConnection(DataSource dataSource) throws SQLException {
 		Assert.notNull(dataSource, "No DataSource specified");
 
