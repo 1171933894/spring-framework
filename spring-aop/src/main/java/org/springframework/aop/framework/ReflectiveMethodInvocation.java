@@ -89,7 +89,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	 * Index from 0 of the current interceptor we're invoking.
 	 * -1 until we invoke: then the current interceptor.
 	 */
-	private int currentInterceptorIndex = -1;
+	private int currentInterceptorIndex = -1;// 调用的计数器
 
 
 	/**
@@ -154,7 +154,9 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 		this.arguments = arguments;
 	}
 
-
+	/**
+	 * 在这个方法中并没有我们之前设想的维护各种增强的顺序，而是将此工作委托给了各个增强器，使各个增强器在内部进行逻辑实现
+	 */
 	@Override
 	@Nullable
 	public Object proceed() throws Throwable {

@@ -465,7 +465,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		ProxyFactory proxyFactory = new ProxyFactory();
-		// 获取当前类的相关属性
+		// 1、获取当前类的相关属性
 		proxyFactory.copyFrom(this);
 		// 决定关于给定的 bean 是否应该使用targetClass而不是它的接口代理，
 		// 检查proxyTargeClass设置以及preserveTargetClass属性AdvisedSupport
@@ -474,18 +474,19 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				proxyFactory.setProxyTargetClass(true);
 			}
 			else {
+				// 2、添加代理接口
 				evaluateProxyInterfaces(beanClass, proxyFactory);// evaluate：评估
 			}
 		}
 
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
+		// 3、封装 advisors 并加入到 ProxyFactory 中
 		proxyFactory.addAdvisors(advisors);
-		// 设置要代理的类
+		// 4、设置要代理的类
 		proxyFactory.setTargetSource(targetSource);
 		// 定制代理
 		/**
-		 * Spring 中还为子类提供了定制的函数 customizeProxyFactory，子类可以在此函
-		 * 数中进行对 ProxyFactory 的进一步封装
+		 * 5、Spring 中还为子类提供了定制的函数 customizeProxyFactory，子类可以在此函数中进行对 ProxyFactory 的进一步封装
 		 */
 		customizeProxyFactory(proxyFactory);
 		// 用来控制代理工厂被配置之后，是否还允许修改通知
@@ -495,6 +496,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			proxyFactory.setPreFiltered(true);
 		}
 
+		// 6、进行获取代理操作
 		return proxyFactory.getProxy(getProxyClassLoader());
 	}
 
