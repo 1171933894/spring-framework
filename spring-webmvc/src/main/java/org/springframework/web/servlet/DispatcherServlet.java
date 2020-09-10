@@ -525,10 +525,37 @@ public class DispatcherServlet extends FrameworkServlet {
 		 * 来找到handler
 		 */
 		initHandlerMappings(context);
+		// 初始化HandlerAdapters
 		initHandlerAdapters(context);
+		// 初始化HandlerExceptionResolvers
+		/**
+		 * 基于 HandlerExceptionResolver 接口的异常处理，使用这种方式只需要实现 resolveException
+		 * 方法，该方法返回 ModelAndView ，在方法内部对异常的类型进行判断，然后尝试生成对应的ModelAndView，
+		 * 如果该方法返回了 null ，则 Spring 会继续寻找其他的实现了HandlerExceptionResolver 接口的 bean 。
+		 * 换句话说， Spring 会搜索所有注册在其环境中的实现了HandlerExceptionResolver 接口的 bean ，
+		 * 逐个执行， 直到返回了 ModelAndView
+		 */
 		initHandlerExceptionResolvers(context);
+		// 初始化RequestToViewNameTranslator
+		/**
+		 * 当 Controller 处理器方法没有返回 View 对象或逻辑视图名称，并且在该方法中没有直接往
+		 *  response 的输出流里面写数据的时候，spring 就会采用约定好的方式提供一个逻辑视图名
+		 */
+		// Spring中默认为DefaultRequestToViewNameTranslator
 		initRequestToViewNameTranslator(context);
+		// 初始化ViewResolvers
+		/**
+		 * eg:
+		 * <bean class="org.Spring.framework web.servlet.view.InternalResourceViewResolver">
+		 * 	<property name=”prefix” value=”/WEB-INF/views/”/>
+		 * 	<property name=”suffix" value=”.jsp”/>
+		 * </bean>
+		 */
 		initViewResolvers(context);
+		// 初始化FlashMapManager
+		/**
+		 * 在使用重定向的时候非常必要，例如 Post/Redirect/Get 模式。Flash attibutes 在重定向之前暂存（就像存在 session 中）以便重定向之后还能使用，并立即删除
+		 */
 		initFlashMapManager(context);
 	}
 
@@ -625,6 +652,11 @@ public class DispatcherServlet extends FrameworkServlet {
 		/**
 		 * 1.1、默认情况下，SpringMVC将加载当前系统中所有实现了HandlerMapper接口的bean。如果只期望SpringMVC加载指定
 		 * 的handlermapping时，可以修改web.xml中的DispacherServlet的初始参数，将detectAllHandlerMappings设置为false
+		 *
+		 * <init-param>
+		 * 	<param-name>detectAllHandlerMappings</param-name>
+		 * 	<param-value>false</param-value>
+		 * </init-param>
 		 */
 		if (this.detectAllHandlerMappings) {
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
@@ -649,7 +681,11 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 
-		// 2、
+		/**
+		 * 2、如果没有定义 handlerMapping 的话，则 SpringMVC 将按照 org.Springframework.
+		 * web.servlet.DispatcherServlet 在目录下的DispatcherServlet.properties 中所定义的 org.Springframework
+		 * web.servlet.HandlerMapping 的内容来确认的 handlerMapping （用户没有自定义 Strategies 情况下）
+		 */
 
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
@@ -689,6 +725,8 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Ignore, we'll add a default HandlerAdapter later.
 			}
 		}
+
+		// 如果无法找到对应的 bean ，那么系统会尝试加载默认的适配器
 
 		// Ensure we have at least some HandlerAdapters, by registering
 		// default HandlerAdapters if no other adapters are found.
