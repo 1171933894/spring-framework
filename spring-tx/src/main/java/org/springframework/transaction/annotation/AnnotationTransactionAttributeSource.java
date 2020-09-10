@@ -68,7 +68,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 
 	private final boolean publicMethodsOnly;
 
-	private final Set<TransactionAnnotationParser> annotationParsers;
+	private final Set<TransactionAnnotationParser> annotationParsers;// 其实际值是：SpringTransactionAnnotationParser
 
 
 	/**

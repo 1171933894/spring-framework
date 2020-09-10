@@ -330,7 +330,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 */
 	@Override
 	public final TransactionStatus getTransaction(@Nullable TransactionDefinition definition) throws TransactionException {
-		// 1.获取当前事物对象(如果当前已经存在了事物)
+		// 1.获取当前事务对象(如果当前已经存在了事务)
 		Object transaction = doGetTransaction();
 
 		// Cache debug flag to avoid repeated checks.
@@ -345,13 +345,13 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		// 2.判断当前线程是否存在事务，判读依据为当前线程记录的连接不为空且连接中（connectionHolder）中的transactionActive属性不为空
 		if (isExistingTransaction(transaction)) {// 嵌套事务的处理
 			// Existing transaction found -> check propagation behavior to find out how to behave.
-			// 如果当前已经存在启动的事物,则根据本次要新建的事物传播特性进行评估,以决定对新事物的后续处理
+			// 如果当前已经存在启动的事务,则根据本次要新建的事务传播特性进行评估,以决定对新事物的后续处理
 			return handleExistingTransaction(definition, transaction, debugEnabled);
 		}
 
-		// 3.如果当前不存在事务
+		// 3.如果当前不存在事务（没有事务走下面逻辑）
 
-		// 3.1 如果事物定义的超时时间,小于默认的超时时间,抛出异常,TransactionDefinition.TIMEOUT_DEFAULT --> -1
+		// 3.1 如果事务定义的超时时间,小于默认的超时时间,抛出异常,TransactionDefinition.TIMEOUT_DEFAULT --> -1
 		// Check definition settings for new transaction.
 		if (definition.getTimeout() < TransactionDefinition.TIMEOUT_DEFAULT) {
 			throw new InvalidTimeoutException("Invalid transaction timeout", definition.getTimeout());
@@ -359,7 +359,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
 		// 3.2 如果当前线程不存在事务，但是propagationBehavior却被声明为PROPAGATION_MANDATORY抛出异常
 		// No existing transaction found -> check propagation behavior to find out how to proceed.
-		// PROPAGATION_MANDATORY --> 使用当前事物，如果当前没有事物，则抛出异常
+		// PROPAGATION_MANDATORY --> 使用当前事务，如果当前没有事务，则抛出异常
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_MANDATORY) {
 			throw new IllegalTransactionStateException(
 					"No existing transaction found for transaction marked with propagation 'mandatory'");
@@ -382,8 +382,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				DefaultTransactionStatus status = newTransactionStatus(
 						definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 				/**
-				 * 构造transaction，包括设置ConnectionHolder、隔离级别、timtout
-				 * 如果是新连接，绑定到当前线程
+				 * 构造transaction，包括设置ConnectionHolder、隔离级别、timtout，如果是新连接，绑定到当前线程
 				 */
 				doBegin(transaction, definition);
 				// 新同步事务的设置，针对于当前线程的设置

@@ -147,7 +147,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 				interceptorDef.setSource(eleSource);
 				// 设置Role属性，ROLE_INFRASTRUCTURE表示Spring的内部bean
 				interceptorDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-				// 注册事物管理器
+				// 注册事务管理器
 				registerTransactionManager(element, interceptorDef);
 				// 将AnnotationTransactionAttributeSource注入到TransactionInterceptor的transactionAttributeSource属性中
 				interceptorDef.getPropertyValues().add("transactionAttributeSource", new RuntimeBeanReference(sourceName));
@@ -167,7 +167,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 				if (element.hasAttribute("order")) {
 					advisorDef.getPropertyValues().add("order", element.getAttribute("order"));
 				}
-				// // 将TransactionAttributeSourceAdvisor以txAdvisorBeanName为名称注册到IOC容器中
+				// 将TransactionAttributeSourceAdvisor以txAdvisorBeanName为名称注册到IOC容器中
 				parserContext.getRegistry().registerBeanDefinition(txAdvisorBeanName, advisorDef);
 
 				/**
