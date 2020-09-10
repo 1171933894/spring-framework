@@ -895,6 +895,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
+	 * 对于不同的方法，Spring 并没有做特殊处理，而是统一将程序再一次地引导至 processRequest(request, response）中
+	 */
+
+	/**
 	 * Delegate GET requests to processRequest/doService.
 	 * <p>Will also be invoked by HttpServlet's default implementation of {@code doHead},
 	 * with a {@code NoBodyResponse} that just captures the content length.
@@ -998,6 +1002,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// 记录当前时间，用于计算 web 请求的处理时间
 		long startTime = System.currentTimeMillis();
 		Throwable failureCause = null;
 
