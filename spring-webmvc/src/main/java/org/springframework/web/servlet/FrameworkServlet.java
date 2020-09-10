@@ -1006,6 +1006,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 		Throwable failureCause = null;
 
+		/**
+		 * 1、为了保证当前线程的 LocaleContext 和 RequestAttributes 在当前请求后还能恢复，提取当前线程的两个属性
+		 */
+
 		LocaleContext previousLocaleContext = LocaleContextHolder.getLocaleContext();
 		LocaleContext localeContext = buildLocaleContext(request);
 
@@ -1015,9 +1019,11 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());
 
+		// 2、根据当前 request 创建对应的 LocaleContext 和 RequestAttributes ，并绑定到当前线程
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {
+			// 3、委托 doService 方法进一步处理
 			doService(request, response);
 		}
 		catch (ServletException | IOException ex) {
@@ -1030,11 +1036,13 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 
 		finally {
+			// 5、请求处理结束后恢复线程到原始状态
 			resetContextHolders(request, previousLocaleContext, previousAttributes);
 			if (requestAttributes != null) {
 				requestAttributes.requestCompleted();
 			}
 			logResult(request, response, failureCause, asyncManager);
+			// 6、请求处理结束后无论成功与否发布事件通知
 			publishRequestHandledEvent(request, response, startTime, failureCause);
 		}
 	}
