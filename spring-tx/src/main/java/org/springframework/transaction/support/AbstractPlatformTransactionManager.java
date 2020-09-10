@@ -795,14 +795,22 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 * @param status object representing the transaction
 	 * @throws TransactionException in case of commit failure
 	 */
+	/**
+	 * 在提交过程中并不是直接提交的，而是考录了很多的方面，符合提交的条件如下：
+	 * 1）当事务状态中有保存点信息的话便不会去提交事务
+	 * 2）当事务非新事务的时候也不会执行提交操作
+	 */
 	private void processCommit(DefaultTransactionStatus status) throws TransactionException {
 		try {
 			boolean beforeCompletionInvoked = false;
 
 			try {
 				boolean unexpectedRollback = false;
+				// 预留
 				prepareForCommit(status);
+				// 添加的TransactionSynchronization中对应方法的调用
 				triggerBeforeCommit(status);
+				// 添加的TransactionSynchronization中对应方法的调用
 				triggerBeforeCompletion(status);
 				beforeCompletionInvoked = true;
 
@@ -811,6 +819,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 						logger.debug("Releasing transaction savepoint");
 					}
 					unexpectedRollback = status.isGlobalRollbackOnly();
+					// 如果存在保存点则清除保存点信息
 					status.releaseHeldSavepoint();
 				}
 				else if (status.isNewTransaction()) {
@@ -818,6 +827,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 						logger.debug("Initiating transaction commit");
 					}
 					unexpectedRollback = status.isGlobalRollbackOnly();
+					// 如果是独立的事务则直接提交
 					doCommit(status);
 				}
 				else if (isFailEarlyOnGlobalRollbackOnly()) {
@@ -919,6 +929,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 					doRollback(status);
 				}
 				// 4.如果当前事物并非独立事务,则将当前事务的rollbackOnly属性标记为true,等到事物链完成之后,一起执行回滚
+				// 注意：当前事务信息中表明是存在事务的，又不属于以上两种情况，多数用于JTA，只做回滚标识，等到提交的时候统一不提交
 				else {
 					// Participating in larger transaction
 					if (status.hasTransaction()) {
@@ -1084,18 +1095,23 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 * @see #doCleanupAfterCompletion
 	 */
 	private void cleanupAfterCompletion(DefaultTransactionStatus status) {
+		// 1、设置完成状态（设置状态是对事务信息做完成标识以避免重复调用）
 		status.setCompleted();
+		// 2、如果当前事务是新的同步状态，需要将绑定到当前线程的事务信息消除
 		if (status.isNewSynchronization()) {
 			TransactionSynchronizationManager.clear();
 		}
+		// 3、如果是新事务需要做些清除资源的工作
 		if (status.isNewTransaction()) {
 			doCleanupAfterCompletion(status.getTransaction());
 		}
+		// 4、如果在事务执行前有事务挂起，那么当前事务执行结束后需要将挂起事务恢复
 		if (status.getSuspendedResources() != null) {
 			if (status.isDebug()) {
 				logger.debug("Resuming suspended transaction after completion of inner transaction");
 			}
 			Object transaction = (status.hasTransaction() ? status.getTransaction() : null);
+			// 结束之前事务的挂起状态
 			resume(transaction, (SuspendedResourcesHolder) status.getSuspendedResources());
 		}
 	}
