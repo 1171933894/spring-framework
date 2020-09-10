@@ -500,9 +500,30 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
 	protected void initStrategies(ApplicationContext context) {
+		// 初始化MultipartResolver
+		/**
+		 * MultipartResolver主要用来处理文件上传
+		 */
 		initMultipartResolver(context);
+		// 初始化LocaleResolver
+		/**
+		 * Spring中国际化配置一共有3中方法：
+		 * 1）基于URL参数的配置
+		 * 2）基于session的配置
+		 * 3）基于Cookie的配置
+		 */
 		initLocaleResolver(context);
+		// 初始化ThemeResolver
+		/**
+		 * ThemeResolver主要用来处理不同主题
+		 */
 		initThemeResolver(context);
+		// 初始化HandlerMappings
+		/**
+		 * 当客户端发出Request时DispatcherServlet会将Request提交给
+		 * HandlerMapping，然后HandlerMapping根据ApplicationContext
+		 * 来找到handler
+		 */
 		initHandlerMappings(context);
 		initHandlerAdapters(context);
 		initHandlerExceptionResolvers(context);
@@ -515,6 +536,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the MultipartResolver used by this class.
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * no multipart handling is provided.
+	 */
+	/**
+	 * 因为之前的步骤已经完成了Spring中配置文件的解析，所以在这里只要配置文件注册过都可以。
 	 */
 	private void initMultipartResolver(ApplicationContext context) {
 		try {
@@ -590,9 +614,18 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>If no HandlerMapping beans are defined in the BeanFactory for this namespace,
 	 * we default to BeanNameUrlHandlerMapping.
 	 */
+	/**
+	 * 一个DispatcherServlet可以对应一系列HandlerMappings，对其进行优先级排序，然后优先使用优先级高的handler
+	 */
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
 
+		// 1、从Spring中加载handlerMapping
+
+		/**
+		 * 1.1、默认情况下，SpringMVC将加载当前系统中所有实现了HandlerMapper接口的bean。如果只期望SpringMVC加载指定
+		 * 的handlermapping时，可以修改web.xml中的DispacherServlet的初始参数，将detectAllHandlerMappings设置为false
+		 */
 		if (this.detectAllHandlerMappings) {
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
 			Map<String, HandlerMapping> matchingBeans =
@@ -604,6 +637,9 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		else {
+			/**
+			 * 1.2、SpringMVC将查找名为“handlerMapping”的bean，并作为当前系统中唯一的handlerMapping。
+			 */
 			try {
 				HandlerMapping hm = context.getBean(HANDLER_MAPPING_BEAN_NAME, HandlerMapping.class);
 				this.handlerMappings = Collections.singletonList(hm);
@@ -612,6 +648,8 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Ignore, we'll add a default HandlerMapping later.
 			}
 		}
+
+		// 2、
 
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.

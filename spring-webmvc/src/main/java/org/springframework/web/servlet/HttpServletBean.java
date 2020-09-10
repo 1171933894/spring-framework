@@ -218,6 +218,10 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		 * we can't accept default values
 		 * @throws ServletException if any required properties are missing
 		 */
+		/**
+		 * 1）封装属性主要是对初始化的参数进行封装，也就是servlet中配置的<init-param>中配置的封装。
+		 * 2）同时，用户可以通过对requiredProperties参数的初始化来强制验证某些属性的必要性。
+		 */
 		public ServletConfigPropertyValues(ServletConfig config, Set<String> requiredProperties)
 				throws ServletException {
 

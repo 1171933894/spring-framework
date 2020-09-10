@@ -65,7 +65,7 @@ public interface WebApplicationContext extends ApplicationContext {
 	 */
 	/**
 	 * 由于Web应用比一般的应用拥有更多的特性，因此WebApplicationContext扩展了ApplicationContext。WebApplicationContext
-	 * 定义了一个常量ROOT_WEB_APPLICATION_ CONTEXT_ATTRIBUTE，在上下文启动时，WebApplicationContext实例即以此为键放置在
+	 * 定义了一个常量ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE，在上下文启动时，WebApplicationContext实例即以此为键放置在
 	 * ServletContext的属性列表中，因此我们可以直接通过以下语句从Web容器中获取WebApplicationContext：
 	 * WebApplicationContext wac = (WebApplicationContext)servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 	 * 这样Spring的Web应用上下文和Web容器的上下文就可以实现互访，二者实现了融合。

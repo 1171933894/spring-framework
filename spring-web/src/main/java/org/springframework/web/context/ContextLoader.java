@@ -258,6 +258,7 @@ public class ContextLoader {
 	 * @see #CONTEXT_CLASS_PARAM
 	 * @see #CONFIG_LOCATION_PARAM
 	 */
+	// WebApplicationContext继承自ApplicationContext，在ApplicationContext的基础上又追加了一些特定于Web的操作及属性
 	public WebApplicationContext initWebApplicationContext(ServletContext servletContext) {
 		// web.xml 中存在多次 ContextLoader 定义
 		if (servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE) != null) {
@@ -335,6 +336,13 @@ public class ContextLoader {
 	 * @param sc current servlet context
 	 * @return the root WebApplicationContext
 	 * @see ConfigurableWebApplicationContext
+	 */
+	/**
+	 * 在初始化的过程中，程序首先会读取ContextLoader类的同目录下的属性文件ContextLoader.properties，
+	 * 并根据其中的配置提取将要实现WebApplicationContext接口的实现类，并根据这个实现类通过反射进行实例的创建。
+	 *
+	 * ContextLoader.properties<br/>
+	 * org.springframework.web.context.WebApplicationContext=org.springframework.web.context.support.XmlWebApplicationContext
 	 */
 	protected WebApplicationContext createWebApplicationContext(ServletContext sc) {
 		Class<?> contextClass = determineContextClass(sc);
