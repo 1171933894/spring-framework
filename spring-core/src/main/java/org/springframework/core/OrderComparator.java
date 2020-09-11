@@ -71,6 +71,9 @@ public class OrderComparator implements Comparator<Object> {
 	private int doCompare(@Nullable Object o1, @Nullable Object o2, @Nullable OrderSourceProvider sourceProvider) {
 		boolean p1 = (o1 instanceof PriorityOrdered);
 		boolean p2 = (o2 instanceof PriorityOrdered);
+
+		// PriorityOrdered接口比Ordered接口优先级高
+
 		if (p1 && !p2) {
 			return -1;
 		}
