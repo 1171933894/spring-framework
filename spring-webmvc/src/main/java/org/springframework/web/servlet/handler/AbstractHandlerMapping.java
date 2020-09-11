@@ -415,6 +415,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			handler = obtainApplicationContext().getBean(handlerName);
 		}
 
+		// getHandlerExecutionChain主要目的是将配置中的对应拦截器加入到执行链中，以保证这些拦截器有效
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
 
 		if (logger.isTraceEnabled()) {
