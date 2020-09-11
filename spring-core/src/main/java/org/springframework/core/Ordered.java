@@ -40,6 +40,7 @@ package org.springframework.core;
  * @see org.springframework.core.annotation.Order
  * @see org.springframework.core.annotation.AnnotationAwareOrderComparator
  */
+// spring的order中，越小的值，优先级越高，越大的值优先级越低。
 public interface Ordered {
 
 	/**

@@ -319,7 +319,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// 寻找依赖
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
-				// 若存在依赖则需要递归实例化依赖的bean
+				// 若存在依赖则需要递归实例化依赖的bean（如果这个bean有其他的依赖则保证先初始化所有的依赖）
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
 						if (isDependent(beanName, dep)) {

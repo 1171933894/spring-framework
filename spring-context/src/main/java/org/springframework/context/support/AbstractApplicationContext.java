@@ -557,7 +557,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
-				// 初始化剩下的单实例（非惰性的）
+				// 初始化剩下的单实例（非惰性的）（在这里进行autowired的逻辑的处理）
 				finishBeanFactoryInitialization(beanFactory);
 
 				// 完成刷新过程，通知生命周期处理器lifecycleProcessor刷新过程，同时发出ContextRefreshEvent通知别人

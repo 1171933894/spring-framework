@@ -123,6 +123,12 @@ import org.springframework.util.backoff.FixedBackOff;
  * @see SimpleMessageListenerContainer
  * @see org.springframework.jms.listener.endpoint.JmsMessageEndpointManager
  */
+
+/**
+ * SimpleMessageListenerContainer：只处理固定数量的JMS会话，且不支持事务
+ * DefaultMessageListenerContainer：建立在SimpleMessageListenerContainer基础上，支持对事务的处理
+ * ServerSessionMessageListenerContainer：在DefaultMessageListenerContainer还支持动态管理JMS会话
+ */
 public class DefaultMessageListenerContainer extends AbstractPollingMessageListenerContainer {
 
 	/**
@@ -550,6 +556,7 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 	@Override
 	protected void doInitialize() throws JMSException {
 		synchronized (this.lifecycleMonitor) {
+			// 消息监听器允许创建多个Session和MessageConsumer来接收消息。具体个数由concurrentConsumers指定
 			for (int i = 0; i < this.concurrentConsumers; i++) {
 				scheduleNewInvoker();
 			}
@@ -710,6 +717,9 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 	 */
 	private void scheduleNewInvoker() {
 		AsyncMessageListenerInvoker invoker = new AsyncMessageListenerInvoker();
+		/**
+		 * Spring根据concurrentConsumers数量建立了对应数量的线程，而每个线程都作为一个独立的接收者在循环接收消息
+		 */
 		if (rescheduleTaskIfNecessary(invoker)) {
 			// This should always be true, since we're only calling this when active.
 			this.scheduledInvokers.add(invoker);
@@ -1067,17 +1077,21 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 
 		@Override
 		public void run() {
+			// 并发控制
 			synchronized (lifecycleMonitor) {
 				activeInvokerCount++;
 				lifecycleMonitor.notifyAll();
 			}
 			boolean messageReceived = false;
 			try {
+				// 根据每个任务设置的最大处理消息而作不同处理
+				// 小于0默认无限制，一直接收消息
 				if (maxMessagesPerTask < 0) {
 					messageReceived = executeOngoingLoop();
 				}
 				else {
 					int messageCount = 0;
+					// 消息数量控制，一旦超出数量则停止循环
 					while (isRunning() && messageCount < maxMessagesPerTask) {
 						messageReceived = (invokeListener() || messageReceived);
 						messageCount++;
@@ -1085,6 +1099,7 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 				}
 			}
 			catch (Throwable ex) {
+				// 清理操作，包括关闭session等
 				clearResources();
 				if (!this.lastMessageSucceeded) {
 					// We failed more than once in a row or on startup -
@@ -1151,16 +1166,20 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 				synchronized (lifecycleMonitor) {
 					boolean interrupted = false;
 					boolean wasWaiting = false;
+					// 如果当前任务已经处于激活状态但是却给了暂时终止的命令
 					while ((active = isActive()) && !isRunning()) {
 						if (interrupted) {
 							throw new IllegalStateException("Thread was interrupted while waiting for " +
 									"a restart of the listener container, but container is still stopped");
 						}
 						if (!wasWaiting) {
+							// 如果并非出于等待状态则说明是第一次执行，需要将激活任务数量减少
 							decreaseActiveInvokerCount();
 						}
+						// 开始进入等待状态，等待任务的恢复命令
 						wasWaiting = true;
 						try {
+							// 通过wait等待，也就是等待notify或者notifyAll
 							lifecycleMonitor.wait();
 						}
 						catch (InterruptedException ex) {
@@ -1176,6 +1195,7 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 						active = false;
 					}
 				}
+				// 正常处理流程
 				if (active) {
 					messageReceived = (invokeListener() || messageReceived);
 				}
@@ -1186,8 +1206,10 @@ public class DefaultMessageListenerContainer extends AbstractPollingMessageListe
 		private boolean invokeListener() throws JMSException {
 			this.currentReceiveThread = Thread.currentThread();
 			try {
+				// 初始化资源包括首次创建的时候创建session与consumer
 				initResourcesIfNecessary();
 				boolean messageReceived = receiveAndExecute(this, this.session, this.consumer);
+				// 改变标志位，信息成功处理
 				this.lastMessageSucceeded = true;
 				return messageReceived;
 			}
