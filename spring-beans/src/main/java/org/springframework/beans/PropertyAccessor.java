@@ -32,6 +32,15 @@ import org.springframework.lang.Nullable;
  * @see PropertyAccessorFactory#forBeanPropertyAccess
  * @see PropertyAccessorFactory#forDirectFieldAccess
  */
+
+/**
+ * getPropertyValue和setPropertyValue是分别用于获取和设置bean的属性值的，eg：
+ * 		表达式	    		说明
+ * name         		指向属性name，与getName() 或 isName() 和 setName()相对应。
+ * account.name			指向属性account的嵌套属性name，与之对应的是getAccount().setName()和getAccount().getName()
+ * account[2]			指向索引属性account的第三个元素，索引属性可能是一个数组（array），列表（list）或其它天然有序的容器。
+ * account[COMPANYNAME]	指向一个Map实体account中以COMPANYNAME作为键值（key）所对应的值
+ */
 public interface PropertyAccessor {
 
 	/**
