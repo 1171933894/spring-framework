@@ -115,6 +115,14 @@ import org.springframework.util.StringUtils;
  * @see Autowired
  * @see Value
  */
+
+/**
+ * @Autowired 注解的注入
+ *
+ * 1）通过MergedBeanDefinitionPostProcessor.postProcessMergedBeanDefinition在doCreateBean当前bean的时候收集当前的需要@Auwotired的element的元数据信息
+ *
+ * 2）通过InstantiationAwareBeanPostProcessor.postProcessPropertyValues在populateBean的时候,即设置当前bean的属性的时候获取之前的需要注入的elment.然后去BF中获取对应的bean.并set.
+ */
 public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter
 		implements MergedBeanDefinitionPostProcessor, PriorityOrdered, BeanFactoryAware {
 
