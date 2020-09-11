@@ -147,6 +147,7 @@ class ConstructorResolver {
 			}
 			// 如果缓存中存在
 			if (argsToResolve != null) {
+				// 最关键一步，将构造器依赖的bean进行初始化
 				// 解析参数类型， 如给定方法的构造函数 A(int，int) 则通过此方法后就会把配置中的（"1"，"1"）转换为 (1 1)
 				// 缓存中的值可能是原始值也可能是最终值
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, constructorToUse, argsToResolve, true);
