@@ -44,7 +44,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#setCustomTargetSourceCreators
  * @see org.springframework.aop.framework.autoproxy.target.LazyInitTargetSourceCreator
  */
-public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
+public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {// Instantiation：实例化
 
 	/**
 	 * Apply this BeanPostProcessor <i>before the target bean gets instantiated</i>.
@@ -139,6 +139,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see org.springframework.beans.MutablePropertyValues
 	 * @deprecated as of 5.1, in favor of {@link #postProcessProperties(PropertyValues, Object, String)}
 	 */
+	// 设置Bean对象中的某个属性时调用
 	@Deprecated
 	@Nullable
 	default PropertyValues postProcessPropertyValues(

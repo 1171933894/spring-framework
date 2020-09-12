@@ -73,6 +73,14 @@ import org.springframework.util.ReflectionUtils;
  * @see #setInitAnnotationType
  * @see #setDestroyAnnotationType
  */
+
+/**
+ * InitDestroyAnnotationBeanPostProcessor后置处理器是用来处理自定义的初始化方法和销毁方法。Spring中提供了3种自定义初始化和销毁方法：
+ * 	1、通过@Bean指定init-method和destroy-method属性
+ * 	2、Bean实现InitializingBean（定义初始化逻辑），DisposableBean（定义销毁逻辑）;
+ * 	3、@PostConstruct：在bean创建完成并且属性赋值完成；来执行初始化方法@PreDestroy：在容器销毁bean之前通知我们进行清理工作
+ * InitDestroyAnnotationBeanPostProcessor的作用就是让第3种方式生效。先看看如何使用@PostConstruct和@PreDestroy注解。
+ */
 @SuppressWarnings("serial")
 public class InitDestroyAnnotationBeanPostProcessor
 		implements DestructionAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor, PriorityOrdered, Serializable {
@@ -131,8 +139,10 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		// 获取bean的metadata
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			// 执行@PostConstruct指定的init方法
 			metadata.invokeInitMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
