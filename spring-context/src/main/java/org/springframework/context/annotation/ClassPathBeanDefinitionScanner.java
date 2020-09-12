@@ -163,6 +163,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		this.registry = registry;
 
 		if (useDefaultFilters) {
+			// 默认的 注解@Service @Component
 			registerDefaultFilters();
 		}
 		setEnvironment(environment);
