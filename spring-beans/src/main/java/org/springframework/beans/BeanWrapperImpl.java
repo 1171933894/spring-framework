@@ -68,7 +68,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	 */
 	/**
 	 * cachedIntrospectionResults有两个成员变量：
-	 * 
+	 *
 	 * 1）一个是beanInfo，它是被包裹类的BeanInfo。
 	 * 2）另一个是propertyDescriptorCache，它缓存了被包裹类的所有属性的属性描述器PropertyDescriptor。
 	 */

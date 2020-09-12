@@ -377,8 +377,14 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return (candidateConstructors.length > 0 ? candidateConstructors : null);
 	}
 
+	// 这个方法是InstantiationAwareBeanPostProcessor的，它在给属性赋值的时候会被调用
+
+	/**
+	 * AutowiredAnnotationBeanPostProcessor和CommonAnnotationBeanPostProcessor以及org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor
+	 */
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		// InjectionMetadata 里包含private final Collection<InjectedElement> injectedElements;表示所有需要注入处理的属性们
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
 			metadata.inject(bean, beanName, pvs);

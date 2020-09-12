@@ -57,6 +57,6 @@ public @interface Value {
 	/**
 	 * The actual value expression: for example {@code #{systemProperties.myProp}}.
 	 */
-	String value();
+	String value();// 没有默认值，所以是必填的
 
 }
