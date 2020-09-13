@@ -59,6 +59,14 @@ import org.springframework.util.StringUtils;
  * @author Sam Brannen
  * @since 3.2
  */
+
+/**
+ * SpringFactoriesLoader主要作用有：
+ * 1）框架内部使用的通用工厂加载机制
+ * 2）从classpath下多个jar包特定的位置读取文件并初始化类
+ * 3）文件内容必须是kv形式，即properties类型
+ * 4）key是全限定名（抽象类|接口）、value是实现，多个实现用，分隔
+ */
 public final class SpringFactoriesLoader {
 
 	/**

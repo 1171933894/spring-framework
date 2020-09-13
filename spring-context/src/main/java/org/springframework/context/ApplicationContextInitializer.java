@@ -39,6 +39,13 @@ package org.springframework.context;
  * @see org.springframework.web.servlet.FrameworkServlet#setContextInitializerClasses
  * @see org.springframework.web.servlet.FrameworkServlet#applyInitializers
  */
+
+/**
+ * ApplicationContextInitializer作用：
+ * 1）上下文刷新即refresh方法前调用
+ * 2）用来编码设置一些属性变量通常用在web环境中
+ * 3）可以通过order接口进行排序
+ */
 public interface ApplicationContextInitializer<C extends ConfigurableApplicationContext> {
 
 	/**
