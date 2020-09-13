@@ -52,6 +52,18 @@ import java.util.EventListener;
  *     }
  * }
  */
+
+/**
+ * 使用ApplicationListener注意点：
+ *
+ * 1）实现ApplicationListener接口针对单一事件监听
+ *
+ * 2）实现SmartApplicationListener接口针对多种事件监听
+ *
+ * 3）Order值越小先执行
+ *
+ * 4）application.properties中定义的优先于其他方式
+ */
 @FunctionalInterface
 public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
 
