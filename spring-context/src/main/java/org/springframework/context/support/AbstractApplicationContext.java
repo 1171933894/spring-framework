@@ -534,6 +534,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Invoke factory processors registered as beans in the context.
 				// 激活各种BeanFactory处理器
+				/**
+				 * invokeBeanFactoryPostProcessors作用：
+				 * 1）调用BeanDefinitionRegistryPostProcessor实现向容器内添加bean的定义
+				 * 2）调用BeanFactoryPostProcessor实现向容器内bean的定义的添加属性
+				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
@@ -550,10 +555,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Initialize other special beans in specific context subclasses.
 				// 留给子类类初始化其他的Bean
+				/**
+				 * onRefresh作用：初始化web容器
+				 */
 				onRefresh();
 
 				// Check for listener beans and register them.
 				// 在所有注册的bean中查找Listener bean，注册到消息广播器中
+				/**
+				 * registerListeners作用：
+				 * 1）添加容器内事件监听器至事件广播器中
+				 * 2）派发早期事件
+				 */
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -562,6 +575,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// 完成刷新过程，通知生命周期处理器lifecycleProcessor刷新过程，同时发出ContextRefreshEvent通知别人
 				// Last step: publish corresponding event.
+				/**
+				 * finishRefresh方法作用：
+				 * 1）初始化周期处理器
+				 * 2）调用周期处理器onRefresh方法
+				 * 3）发布ContextRefreshedEvent事件
+				 * 4）JMS相关处理
+				 */
 				finishRefresh();
 			}
 
