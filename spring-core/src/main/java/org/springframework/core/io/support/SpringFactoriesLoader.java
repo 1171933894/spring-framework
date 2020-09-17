@@ -73,6 +73,7 @@ public final class SpringFactoriesLoader {
 	 * The location to look for factories.
 	 * <p>Can be present in multiple JAR files.
 	 */
+	// 概类加载文件的路径, 可能存在多个
 	public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
 
 
@@ -125,11 +126,18 @@ public final class SpringFactoriesLoader {
 	 * @throws IllegalArgumentException if an error occurs while loading factory names
 	 * @see #loadFactories
 	 */
+	// 加载所有的META-INF/spring.factories文件, 封装成Map, 并从中获取指定类名的列表
 	public static List<String> loadFactoryNames(Class<?> factoryClass, @Nullable ClassLoader classLoader) {
 		String factoryClassName = factoryClass.getName();
 		return loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());
 	}
 
+	/**
+	 * 加载所有的META-INF/spring.factories文件, 封装成Map, Key为接口的全类名, Value为对应配置值的List集合
+	 *
+	 * SpringFactoriesLoader加载器加载指定ClassLoader下面的所有META-INF/spring.factories文件，并将文件解
+	 * 析内容存于Map<String,List<String>>内。然后，通过loadFactoryNames传递过来的class的名称从Map中获得该类的配置列表
+	 */
 	private static Map<String, List<String>> loadSpringFactories(@Nullable ClassLoader classLoader) {
 		MultiValueMap<String, String> result = cache.get(classLoader);
 		if (result != null) {
