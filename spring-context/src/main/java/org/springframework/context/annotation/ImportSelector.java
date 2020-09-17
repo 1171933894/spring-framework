@@ -51,6 +51,11 @@ public interface ImportSelector {
 	 * Select and return the names of which class(es) should be imported based on
 	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
 	 */
+	/**
+	 * ImportSelector接口只提供了一个参数为AnnotationMetadata的方法，返回的结果为一个字符串数组。
+	 * 其中参数AnnotationMetadata内包含了被@Import注解的类的注解信息。在selectImports方法内可根
+	 * 据具体实现决定返回哪些配置类的全限定名，将结果以字符串数组的形式返回。
+	 */
 	String[] selectImports(AnnotationMetadata importingClassMetadata);
 
 }

@@ -35,6 +35,10 @@ import org.springframework.lang.Nullable;
  * @author Stephane Nicoll
  * @since 4.0
  */
+
+/**
+ * DeferredImportSelector接口与ImportSelector的区别是，前者会在所有的@Configuration类加载完成之后再加载返回的配置类，而ImportSelector是在加载完@Configuration类之前先去加载返回的配置类
+ */
 public interface DeferredImportSelector extends ImportSelector {
 
 	/**
