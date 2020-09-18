@@ -85,6 +85,7 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * @see org.springframework.context.annotation.Profile
 	 * @see AbstractEnvironment#ACTIVE_PROFILES_PROPERTY_NAME
 	 */
+	// 设置激活的组集合
 	void setActiveProfiles(String... profiles);
 
 	/**
@@ -92,6 +93,7 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * @throws IllegalArgumentException if the profile is null, empty or whitespace-only
 	 * @see #setActiveProfiles
 	 */
+	// 向当前激活的组集合中添加一个profile组
 	void addActiveProfile(String profile);
 
 	/**
@@ -100,6 +102,7 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * @throws IllegalArgumentException if any profile is null, empty or whitespace-only
 	 * @see AbstractEnvironment#DEFAULT_PROFILES_PROPERTY_NAME
 	 */
+	// 设置默认激活的组集合。激活的组集合为空时会使用默认的组集合
 	void setDefaultProfiles(String... profiles);
 
 	/**
@@ -117,6 +120,9 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * variables.
 	 * @see AbstractEnvironment#customizePropertySources
 	 */
+	// 获取当前环境对象中的属性源集合, 也就是应用环境变量
+	// 属性源集合其实就是一个容纳PropertySource的容器
+	// 该方法提供了直接配置属性源的入口
 	MutablePropertySources getPropertySources();
 
 	/**
@@ -132,6 +138,7 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * to a property, {@code null} will be returned and an INFO-level log message will be
 	 * issued noting the exception.
 	 */
+	// 获取虚拟机环境变量, 该方法提供了直接配置虚拟机环境变量的入口
 	Map<String, Object> getSystemProperties();
 
 	/**
@@ -147,6 +154,8 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * to a property, {@code null} will be returned and an INFO-level log message will be
 	 * issued noting the exception.
 	 */
+	// 获取操作系统环境变量
+	// 该方法提供了直接配置系统环境变量的入口
 	Map<String, Object> getSystemEnvironment();
 
 	/**
@@ -167,6 +176,7 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * @since 3.1.2
 	 * @see org.springframework.context.support.AbstractApplicationContext#setParent
 	 */
+	// 合并指定环境中的配置到当前环境中
 	void merge(ConfigurableEnvironment parent);
 
 }

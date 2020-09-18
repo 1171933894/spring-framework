@@ -78,6 +78,10 @@ import org.springframework.util.StringUtils;
  * @see CommandLinePropertySource
  * @see JOptCommandLinePropertySource
  */
+
+/**
+ * 在SimpleCommandLinePropertySource中的使用为例，最终封装在PropertySource中的结构为：name为“commandLineArgs”，source为解析出的CommandLineArgs对象。
+ */
 public class SimpleCommandLinePropertySource extends CommandLinePropertySource<CommandLineArgs> {
 
 	/**
@@ -101,22 +105,26 @@ public class SimpleCommandLinePropertySource extends CommandLinePropertySource<C
 	/**
 	 * Get the property names for the option arguments.
 	 */
+	// 获取选项参数数组
 	@Override
 	public String[] getPropertyNames() {
 		return StringUtils.toStringArray(this.source.getOptionNames());
 	}
 
+	// 获取是否包含指定name的参数
 	@Override
 	protected boolean containsOption(String name) {
 		return this.source.containsOption(name);
 	}
 
+	// 获取指定name的选项参数列表
 	@Override
 	@Nullable
 	protected List<String> getOptionValues(String name) {
 		return this.source.getOptionValues(name);
 	}
 
+	// 获取非选项参数列表
 	@Override
 	protected List<String> getNonOptionArgs() {
 		return this.source.getNonOptionArgs();

@@ -35,7 +35,9 @@ import org.springframework.lang.Nullable;
  */
 class CommandLineArgs {
 
+	// 选项参数
 	private final Map<String, List<String>> optionArgs = new HashMap<>();
+	// 非选项参数
 	private final List<String> nonOptionArgs = new ArrayList<>();
 
 	/**
