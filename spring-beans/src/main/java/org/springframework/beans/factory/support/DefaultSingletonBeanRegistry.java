@@ -191,7 +191,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// 检查缓存中是否存在实例
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
-			synchronized (this.singletonObjects) {// 如果为空，则锁定全局变量并进行处理
+			// 如果为空，则锁定全局变量并进行处理
+			synchronized (this.singletonObjects) {
 				// 如果此bean正在加载则不处理
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
