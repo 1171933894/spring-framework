@@ -1556,6 +1556,12 @@ public class BeanDefinitionParserDelegate {
 	 * @return the decorated bean definition
 	 */
 	public BeanDefinitionHolder decorateBeanDefinitionIfRequired(Element ele, BeanDefinitionHolder originalDef) {
+		/**
+		 * 这里将函数中第三个参数设置为空，那么第三参数是做什么用的呢？什么情况下不为空
+		 * 呢？其实这第三参数是父类 bean ，当对某个嵌套配置进行分析 ，这里需要传递父类
+		 * beanDefinition 分析源码得知这里传递的参数其实是为了使用父类的 scope 属性，以备子类若
+		 * 没有设置 scope 默认使用父类的属性，这里分析的是顶层配置，所以传递 null
+		 */
 		return decorateBeanDefinitionIfRequired(ele, originalDef, null);
 	}
 

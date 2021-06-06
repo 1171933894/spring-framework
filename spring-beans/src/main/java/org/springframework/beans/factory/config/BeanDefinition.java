@@ -47,6 +47,9 @@ import org.springframework.lang.Nullable;
  * 属性， BeanDefinition＜bean＞中的属性是一一对应的。RootBeanDefinition 是最常用的实现
  * 类，它对应一般性的＜bean＞元素标签， GenericBeanDefinition 是自2.5版本以后新加入的 bean
  * 文件配置属性定义类，是一站式服务类
+ * 在配置文件中可以定义父＜bean＞和子＜bean＞，父＜bean＞用 RootBeanDefinition 表示，而子
+ * ＜bean＞用 ChildBeanDefiniton 表示，而没有父＜bean＞的子＜bean＞就使用 RootBeanDefinition 表示
+ * AbstractBeanDefinition 对两者共同的类信息进行抽象
  *
  * 解释二：<br/>
  * 配置文件元素标签在容器中内部表示形式，一个BeanDefinition描述了一个bean的实例，包括属性值，构造方法参数值和继承自它的类的更多信息。
