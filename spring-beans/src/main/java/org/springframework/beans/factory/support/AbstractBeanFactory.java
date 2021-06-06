@@ -282,6 +282,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			// 如果beanDefinitionMap中也就是在所有已经加载的类中不包括beanName则尝试从parentBeanFactory中检测
+			/**
+			 * parentBeanFactory !=null && !containsBeanDefinition(beanName),
+			 * parentBeanFactory != null时，parentBeanFactory 如果为空，其他一切都是浮云，
+			 * 这个没什么说的，但是 containsBeanDefinition(beanName）就比较重要了，它是在检测如果当前
+			 * 加载的 XML 置文件中不包含 beanName 所对应的配置，就只能到 parentBeanFactory 去尝试
+			 * 下了，然后再去递归的调用 getBean 方法
+			 */
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -310,8 +317,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
-				// 将存储XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果指定
-				// BeanName是子bean的话同时会合并父类的相关属性
+				// 将存储XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果指定BeanName是子bean的话同时会合并父类的相关属性
+				/**
+				 * 因为从 XML 置文件中读取到的 bean 信息是存储在 GernericBeanDefinition 中的 ，但是所
+				 * 有的 bean 后续处理都是针对于 RootBeanDefinition ，所以这里需要进行一个转换，转换的同时
+				 * 如果父类 bean 不为空的话，则会一并合并父类的属性
+				 */
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
