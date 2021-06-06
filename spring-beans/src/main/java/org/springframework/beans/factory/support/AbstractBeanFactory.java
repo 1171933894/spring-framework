@@ -248,8 +248,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		final String beanName = transformedBeanName(name);// 提取对应的beanName
 		Object bean;
 
-		// 检查缓存中或者实例工厂中是否有对应的实例，
-		// 为什么首先会使用这段代码呢，
+		// 检查缓存中或者实例工厂中是否有对应的实例，为什么首先会使用这段代码呢，
 		// 因为在创建单例bean的时候会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖，
 		// Spring创建bean的原则是不等 bean 创建完成就会将创建 bean 的 ObjectFactory 提早曝光
 		// 也就是将 ObjectFactory 加入到缓存中，一旦下个 bean 创建时候需要依赖上个 bean 则直接使用 ObjectFactory
@@ -1670,7 +1669,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @return the object to expose for the bean
 	 */
 	/**
-	 * 我们得到 bean 的实例后 做的第一步就是调用这个方法来检测一下正确性，其实就是用于检测当前 bean 是否是 Factory Bean
+	 * 我们得到 bean 的实例后 做的第一步就是调用这个方法来检测一下正确性，其实就是用于检测当前 bean 是否是 FactoryBean
 	 * 类型的 bean ，如果是，那么需要调用该 bean 对应的 FactoryBean 实例中的 getObject（）作为返回值。
 	 */
 	protected Object getObjectForBeanInstance(

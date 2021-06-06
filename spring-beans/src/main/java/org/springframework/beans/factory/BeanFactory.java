@@ -122,7 +122,8 @@ public interface BeanFactory {
 	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}
 	 * will return the factory, not the instance returned by the factory.
 	 */
-	// 该常量用来区分是获取FactoryBean还是FactoryBean的createBean创建的实例.如果&开始则获取FactoryBean;否则获取createBean创建的实例。
+	// 该常量用来区分是获取FactoryBean还是FactoryBean的createBean创建的实例.
+	// 如果&开始则获取FactoryBean;否则获取createBean创建的实例。
 	// 备注：此常量课时定义在BeanFactory里面的哟，因为它属于Bean工厂的处理机制
 	String FACTORY_BEAN_PREFIX = "&";
 

@@ -88,8 +88,7 @@ public interface FactoryBean<T> {
 	 * @throws Exception in case of creation errors
 	 * @see FactoryBeanNotInitializedException
 	 */
-	// 返回由FactoryBean创建的bean实例，如果isSingleton()返回true，则
-	// 该实例会放到spring容器中单实例缓存池中
+	// 返回由FactoryBean创建的bean实例，如果isSingleton()返回true，则该实例会放到spring容器中单实例缓存池中
 	@Nullable
 	T getObject() throws Exception;
 
