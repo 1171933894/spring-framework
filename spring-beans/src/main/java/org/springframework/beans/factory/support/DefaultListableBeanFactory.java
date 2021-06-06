@@ -1217,16 +1217,19 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 			Class<?> type = descriptor.getDependencyType();
 			/**
-			 * 用于支持Spring中新增的注解@Value
+			 * 用于支持Spring中新增的注解@Value（如果存在@Value注解，获取注解的value值）
 			 */
 			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
 			if (value != null) {
 				if (value instanceof String) {
+					// 解析@Value注解的值，如果这里使用占位符引用了配置文件，默认使用PropertyPlaceholderConfigurer#PlaceholderResolvingStringValueResolver解析配置
+					// 文件中的值。PropertyPlaceholderConfigurer是一个常用的BeanFactoryPostProcessor，它可以在Spring启动时，将Bean属性配置的占位符解析为配置属性的值
 					String strVal = resolveEmbeddedValue((String) value);
 					BeanDefinition bd = (beanName != null && containsBean(beanName) ?
 							getMergedBeanDefinition(beanName) : null);
 					value = evaluateBeanDefinitionString(strVal, bd);
 				}
+				// 默认使用SimpleTypeConverter将配置值转化为属性要求的类型（例如属性为int类型，则需要将String转换为int类型）
 				TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
 				try {
 					return converter.convertIfNecessary(value, type, descriptor.getTypeDescriptor());
@@ -1239,11 +1242,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 
+			// 解析数组、list、map等类型的依赖，使用对应的TypeConverter处理
 			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
 			if (multipleBeans != null) {
 				return multipleBeans;
 			}
 
+			// 处理@Autowire，找到候选的bean
 			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
 			if (matchingBeans.isEmpty()) {
 				if (isRequired(descriptor)) {
@@ -1255,6 +1260,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			String autowiredBeanName;
 			Object instanceCandidate;
 
+			// 存在多个候选的bean，spring要按优先级决定用哪个，较复杂，不深入。
 			if (matchingBeans.size() > 1) {
 				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
 				if (autowiredBeanName == null) {

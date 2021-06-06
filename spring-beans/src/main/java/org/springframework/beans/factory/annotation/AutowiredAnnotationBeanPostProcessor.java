@@ -384,10 +384,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 */
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		// InjectionMetadata 里包含private final Collection<InjectedElement> injectedElements;表示所有需要注入处理的属性们
+		// InjectionMetadata 里包含private final Collection<InjectedElement> injectedElements;表示所有需要注入处理的属性们（获取Class中关于属性注入相关注解的元数据）
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
-			metadata.inject(bean, beanName, pvs);
+			metadata.inject(bean, beanName, pvs);// 完成属性注入操作
 		}
 		catch (BeanCreationException ex) {
 			throw ex;
@@ -456,6 +456,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 查找field是否有@Autowired，@Value等注解
 				AnnotationAttributes ann = findAutowiredAnnotation(field);
 				if (ann != null) {
 					if (Modifier.isStatic(field.getModifiers())) {
@@ -494,6 +495,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				}
 			});
 
+			// 查找method是否有@Autowired，@Value等注解
 			elements.addAll(0, currElements);
 			targetClass = targetClass.getSuperclass();
 		}
