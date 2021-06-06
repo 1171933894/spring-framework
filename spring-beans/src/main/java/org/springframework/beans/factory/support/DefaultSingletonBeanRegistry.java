@@ -186,6 +186,21 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param allowEarlyReference whether early references should be created or not
 	 * @return the registered singleton object, or {@code null} if none found
 	 */
+	/**
+	 * 这个方法首先尝试从 singletonObjects 里面获取实例，如果获取不到再从 earlySingletonObjects
+	 * 里面获取，如果还获取不到，再尝试从 singletonFactories 里面获取 beanName 对应的
+	 * ObjectFactory，然后调用这个 ObjectFactory#getObject 来创建 bean，并放到 earlySingletonObjects 里面 ，
+	 * 并且从 singletonFacotories 里面 remove 掉这个 ObjectFactorγ ，而对于后续的所
+	 * 有内存操作都只为了循环依赖检测时候使用，也就是在 allowEarlyReference 为阳巳的情况下才会使用
+	 *
+	 * 【注意以下几个Map】
+	 * 1）singletonObjects：用于保存 BeanName 和创建 bean 实例之间的关系， beanName -> beanInstance
+	 * 2）singletonFactories：用于保存 BeanName 和创建 bean 的工厂之间的关系， beanName -> ObjectFactory
+	 * 3）earlySingletonObjects：也是保存 BeanName 和创建 bean 实例之间的关系，与
+	 * 		singletonObjects 的不同之处在于，当一个单例 bean 被放到这里面后，那么当 bean
+	 * 		在创建过程中，就可以通过 getBean 方法获取到了，其目的是用来检测循环引用
+	 * 4）registeredSingletons：用来保存当前所有已注册的 bean
+	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// 检查缓存中是否存在实例
@@ -199,6 +214,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					// 当某些方法需要提前初始化的时候则会调用addSingletonFactory方法将对应的ObjectFactory初始化策略存储在singletonFactories
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
+						// 调用预先定义的getObject方法
 						singletonObject = singletonFactory.getObject();
 						// 记录在缓存中，earlySingletonObjects和singletonFactories互斥
 						this.earlySingletonObjects.put(beanName, singletonObject);

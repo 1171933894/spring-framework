@@ -265,7 +265,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
-			// 返回对应的实例，有时候存在BeanFactory的情况并不是直接返回实例本身而是返回指定方法的实例
+			// 返回对应的实例，有时候存在FactoryBean的情况并不是直接返回实例本身而是返回指定方法的实例
+			/**
+			 * 我们得到 bean 的实例后做的第一步就是调用这个方法来检测下正确性，其实就是用于检测当前 bean 是否是 FactoryBean
+			 * 类型的 bean ，如果是，那么需要调用该 bean 对应的 FactoryBean 实例中的 getObject（）作为返回值
+			 */
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -353,6 +357,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 新建bean的核心方法
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
@@ -1693,6 +1698,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				return beanInstance;
 			}
 			if (!(beanInstance instanceof FactoryBean)) {
+				// 抛出异常 BeanIsNotAFactoryException
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
 		}
@@ -1704,8 +1710,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 如果是 FactoryBean 我们使用它创建实例，但是如果用户想要直接获取工厂实例而不是工厂
 		// getObject 方法对应的实例那么传入的 name 应该加入前缀&
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
+			// 因为上面有校验并抛出异常 BeanIsNotAFactoryException 的逻辑，所以这里可以直接返回了
 			return beanInstance;
 		}
+
+		// --------------以上已经返回了非FactoryBean的单例以&factoryBeanName的单例---------------
+		// --------------以下已经将返回FactoryBean#getBean的单例---------------
 
 		// 加载FactoryBean
 		Object object = null;
@@ -1720,8 +1730,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Caches object obtained from FactoryBean if it is a singleton.
 			// 是否定义beanName
 			if (mbd == null && containsBeanDefinition(beanName)) {
-				// 将存储XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果
-				// 指定的BeanName是子Bean的话同时会合并父亲的相关属性
+				// 将存储XML配置文件的GernericBeanDefinition转换为RootBeanDefinition，如果指定的BeanName是子Bean的话同时会合并父亲的相关属性
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			// 是否是用户定义的而不是应用程序本身定义的

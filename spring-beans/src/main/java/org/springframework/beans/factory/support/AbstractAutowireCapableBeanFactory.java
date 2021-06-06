@@ -529,7 +529,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			 */
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
-				return bean;// 短路判断
+				return bean;// 短路判断（非常规bean的创建）
 			}
 		}
 		catch (Throwable ex) {
@@ -538,7 +538,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
+			Object beanInstance = doCreateBean(beanName, mbdToUse, args);// 常规bean的创建
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
 			}
@@ -575,6 +575,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Instantiate the bean.
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
+			// 如果是单例则需要首先清除缓存
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
@@ -1161,7 +1162,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					}
 				}
 			}
-			mbd.beforeInstantiationResolved = (bean != null);
+			mbd.beforeInstantiationResolved = (bean != null);// 设置完成标识
 		}
 		return bean;
 	}
@@ -1202,6 +1203,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @see #instantiateUsingFactoryMethod
 	 * @see #autowireConstructor
 	 * @see #instantiateBean
+	 */
+	/**
+	 * 该方法实例化的逻辑为
+	 * 1）如果在 RootBeanDefinition 中存在 factoryMethodName 属性，或者说在配置文件中配置
+	 * 		factory-method，那么 Spring 会尝试使 instantiateUsingFactoryMethod(beanName, mbd, args）方法
+	 * 		根据 RootBeanDefinition 中的配置生成 bean 的实例
+	 * 2）解析构造函数并进行构造函数的实例化。因为一个 bean 对应的类中可能会有多个构造
+	 * 		函数，而每个构造函数的参数不同，spring 在根据参数及类型去判断最终会使用哪个构造函数
+	 * 		进行实例化。但是，判断的过程是比较消耗性能的步骤，所以采用缓存机制，如果已经解析过则
+	 * 		不需要重复解析而是直接从 RootBeanDefinition 中的属性 resolvedConstructorOrFactoryMethod 缓存
+	 * 		的值去取，否则需要再次解析，将解析的结果添加至 RootBeanDefinition 中的属性
 	 */
 	protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
 		// Make sure bean class is actually resolved at this point.
