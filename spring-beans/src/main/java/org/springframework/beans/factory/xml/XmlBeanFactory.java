@@ -56,7 +56,7 @@ import org.springframework.core.io.Resource;
  * XmlBeanFactory 对 DefaultListableBeanFactorγ 类进行了扩展，主要用于从 XML 文档中读
  * BeanDefinition，对于注册及获取 bean 都是使用从父类 DefaultListabeBeanFactory 继承的方
  * 法去实现，而唯独与父类不同的个性化实现就是增加了 XmlBeanDefinitionReader 类型的 reader
- * 属性 XmlBeanFactory 中主要使用 reade 属性对资源文件进行读取和注册
+ * 属性 XmlBeanFactory 中主要使用 reader 属性对资源文件进行读取和注册
  */
 public class XmlBeanFactory extends DefaultListableBeanFactory {// Listable：可列出的
 
