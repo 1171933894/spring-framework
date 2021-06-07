@@ -29,6 +29,6 @@ public interface Phased {
 	/**
 	 * Return the phase value of this object.
 	 */
-	int getPhase();
+	int getPhase();// phase：阶段
 
 }

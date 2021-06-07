@@ -403,6 +403,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Publish event via parent context as well...
+		/**
+		 * 注意：父容器也是会发布一次，会导致某个事件会被执行多次
+		 */
 		if (this.parent != null) {
 			if (this.parent instanceof AbstractApplicationContext) {
 				((AbstractApplicationContext) this.parent).publishEvent(event, eventType);
@@ -694,9 +697,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
-		// 添加BeanPostProcessor
+		/**
+		 * 添加ApplicationContextAwareProcessor，其作用是对实
+		 * 现了Aware接口的bean在被初始化后可以取得一些对应的资源
+		 */
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
-		// 设置了几个忽略自动装配的接口
+		// 设置了几个忽略自动装配的接口（忽略以上被ApplicationContextAwareProcessor注入的属性）
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
