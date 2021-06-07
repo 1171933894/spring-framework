@@ -59,6 +59,10 @@ import org.springframework.util.CollectionUtils;
  * @see org.springframework.aop.framework.AopProxy
  */
 // 在Spring AOP中，Advisor(切面)就是将Advice(增强)和Pointcut(切入点)连接起来的东西。此类主要支持切面相关的操作。
+
+/**
+ * 可以简单把AdvisedSupport当作一个切面来理解
+ */
 public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/** use serialVersionUID from Spring 2.0 for interoperability. */

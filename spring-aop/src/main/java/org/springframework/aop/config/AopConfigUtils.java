@@ -154,6 +154,9 @@ public abstract class AopConfigUtils {
 		}
 	}
 
+	/**
+	 * 就一句话：自动注册 AnnotationAwareAspectJAutoProxyCreator 类的功能
+	 */
 	@Nullable
 	private static BeanDefinition registerOrEscalateApcAsRequired(
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {

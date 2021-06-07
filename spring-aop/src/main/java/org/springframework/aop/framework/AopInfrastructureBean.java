@@ -26,6 +26,6 @@ package org.springframework.aop.framework;
  * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator
  * @see org.springframework.aop.scope.ScopedProxyFactoryBean
  */
-public interface AopInfrastructureBean {
+public interface AopInfrastructureBean {// infrastructure：基础设施
 
 }
