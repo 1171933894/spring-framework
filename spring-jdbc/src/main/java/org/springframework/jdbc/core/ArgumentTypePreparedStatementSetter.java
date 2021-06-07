@@ -57,7 +57,7 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
 
 	@Override
 	public void setValues(PreparedStatement ps) throws SQLException {
-		int parameterPosition = 1;
+		int parameterPosition = 1;// PreparedStatement的起始位置都是1，不是0
 		if (this.args != null && this.argTypes != null) {
 			// 遍历每个参数以作类型匹配及转换
 			for (int i = 0; i < this.args.length; i++) {
