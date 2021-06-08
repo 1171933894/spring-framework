@@ -133,6 +133,9 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 				// Create the TransactionAttributeSource definition.
 				// 2、创建AnnotationTransactionAttributeSource的BeanDefinition
+				/**
+				 * 类AnnotationTransactionAttributeSource的作用就是解析方法、类、接口上的@Transactional注解
+				 */
 				RootBeanDefinition sourceDef = new RootBeanDefinition(
 						"org.springframework.transaction.annotation.AnnotationTransactionAttributeSource");
 				sourceDef.setSource(eleSource);
@@ -143,6 +146,9 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 				// Create the TransactionInterceptor definition.
 				// 3、创建TransactionInterceptor的BeanDefinition
+				/**
+				 * 类TransactionInterceptor的作用：事务拦截器的作用，内部在原来逻辑上保证了事务控制的能力
+				 */
 				RootBeanDefinition interceptorDef = new RootBeanDefinition(TransactionInterceptor.class);
 				interceptorDef.setSource(eleSource);
 				// 设置Role属性，ROLE_INFRASTRUCTURE表示Spring的内部bean
