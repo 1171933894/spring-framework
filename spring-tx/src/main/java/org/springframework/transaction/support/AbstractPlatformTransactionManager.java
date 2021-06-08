@@ -796,7 +796,8 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 * @throws TransactionException in case of commit failure
 	 */
 	/**
-	 * 在提交过程中并不是直接提交的，而是考录了很多的方面，符合提交的条件如下：
+	 * 在提交过程中并不是直接提交的，而是考虑了很多的
+	 * 方面，符合提交的条件如下：
 	 * 1）当事务状态中有保存点信息的话便不会去提交事务
 	 * 2）当事务非新事务的时候也不会执行提交操作
 	 */

@@ -297,13 +297,19 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		// If the transaction attribute is null, the method is non-transactional.
 		TransactionAttributeSource tas = getTransactionAttributeSource();
-		// 获取对应事务属性（获取目标方法上的事务属性）
+		// 1、获取对应事务属性（获取目标方法上的事务属性）
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
-		// 获取beanFactory中的transactionManager（确定要使用的事务管理器）
+		// 2、获取beanFactory中的transactionManager（确定要使用的事务管理器）
 		final PlatformTransactionManager tm = determineTransactionManager(txAttr);
 		// 构造方法唯一标识（类.方法）
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
+		/**
+		 * 对于声明式事务的处理与编程式事务的处理的区别：
+		 * 1）第一点区别在于属性上，因为编程式的事务处理是不需要有事务属性的
+		 * 2）第二点就是在 TransactionManager 上， CallbackPreferringPlatformTransactionManager
+		 * 		实现 PlatformTransactionManager 接口，暴露出一个方法用于执行事务处理中的回调。
+		 */
 		// 声明式事务处理
 		if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
@@ -500,7 +506,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			@Nullable TransactionAttribute txAttr, final String joinpointIdentification) {
 
 		// If no name specified, apply method identification as transaction name.
-		// 如果没有名称指定则使用方法唯一标识，并使用DelegatingTransactionAttribute封装txAttr
+		// 1、如果没有名称指定则使用方法唯一标识，并使用DelegatingTransactionAttribute封装txAttr
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionAttribute(txAttr) {
 				@Override
@@ -513,7 +519,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		TransactionStatus status = null;
 		if (txAttr != null) {
 			if (tm != null) {
-				// 获取TransactionStatus
+				// 2、获取Transaction（核心步骤）
 				status = tm.getTransaction(txAttr);
 			}
 			else {
@@ -523,7 +529,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 		}
-		// 根据指定的属性与status准备一个TransactionInfo
+		// 3、根据指定的属性与status准备一个TransactionInfo
 		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
 	}
 

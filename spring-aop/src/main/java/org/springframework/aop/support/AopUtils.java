@@ -283,7 +283,7 @@ public abstract class AopUtils {
 		if (advisor instanceof IntroductionAdvisor) {
 			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
 		}
-		else if (advisor instanceof PointcutAdvisor) {// 比如：BeanFactoryTransactionAttributeSourceAdvisor
+		else if (advisor instanceof PointcutAdvisor) {// 比如：BeanFactoryTransactionAttributeSourceAdvisor（该类是事务Advisor）
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;
 			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
 		}

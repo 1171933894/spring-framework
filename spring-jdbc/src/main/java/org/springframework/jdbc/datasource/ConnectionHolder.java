@@ -197,6 +197,7 @@ public class ConnectionHolder extends ResourceHolderSupport {
 	@Override
 	public void released() {
 		super.released();
+		// 当引用计数<=0以后就会关闭
 		if (!isOpen() && this.currentConnection != null) {
 			if (this.connectionHandle != null) {
 				this.connectionHandle.releaseConnection(this.currentConnection);
