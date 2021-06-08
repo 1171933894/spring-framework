@@ -140,6 +140,11 @@ public class ContextLoader {
 		// This is currently strictly internal and not meant to be customized
 		// by application developers.
 		try {
+			/**
+			 * 自动加载如下key和value
+			 * key：org.springframework.web.context.WebApplicationContext
+			 * value：org.springframework.web.context.support.XmlWebApplicationContext
+			 */
 			ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, ContextLoader.class);
 			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 		}
@@ -278,7 +283,7 @@ public class ContextLoader {
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
 			if (this.context == null) {
-				// 创建WebApplicationContext
+				// 创建WebApplicationContext（直接使用反射简单粗暴实例化）
 				this.context = createWebApplicationContext(servletContext);
 			}
 			if (this.context instanceof ConfigurableWebApplicationContext) {

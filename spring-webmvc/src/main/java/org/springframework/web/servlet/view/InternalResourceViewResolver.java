@@ -46,6 +46,12 @@ import org.springframework.util.ClassUtils;
  * @see InternalResourceView
  * @see JstlView
  */
+
+/**
+ * InternalResourceViewResolver 是一个辅助 bean ，会在 ModelAndView 返回的视图
+ * 名前加上 prefix指定的前缀，再在最后加上 suffix 指定的后缀，例如：由于 XXController
+ * 返回的 ModelAndView 的视图 testview ，故该视图解析器将在/WEB-INF/jsp/testview.jsp处查找视图。
+ */
 public class InternalResourceViewResolver extends UrlBasedViewResolver {
 
 	private static final boolean jstlPresent = ClassUtils.isPresent(
