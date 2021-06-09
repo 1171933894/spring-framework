@@ -67,6 +67,9 @@ public class Constants {
 			if (ReflectionUtils.isPublicStaticFinal(field)) {
 				String name = field.getName();
 				try {
+					/**
+					 * 静态常量获取不需要实例对象
+					 */
 					Object value = field.get(null);
 					this.fieldCache.put(name, value);
 				}
