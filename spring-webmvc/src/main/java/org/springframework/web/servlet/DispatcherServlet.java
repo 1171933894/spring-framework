@@ -683,13 +683,19 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		/**
 		 * 2、如果没有定义 handlerMapping 的话，则 SpringMVC 将按照 org.Springframework.
-		 * web.servlet.DispatcherServlet 在目录下的DispatcherServlet.properties 中所定义的 org.Springframework
+		 * web.servlet.DispatcherServlet 在目录下的 DispatcherServlet.properties 中所定义的 org.Springframework
 		 * web.servlet.HandlerMapping 的内容来确认的 handlerMapping （用户没有自定义 Strategies 情况下）
 		 */
 
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
 		if (this.handlerMappings == null) {
+			/**
+			 * DispatcherServlet.properties
+			 * key: org.springframework.web.servlet.HandlerMapping
+			 * val: org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
+			 * val: org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+			 */
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +
