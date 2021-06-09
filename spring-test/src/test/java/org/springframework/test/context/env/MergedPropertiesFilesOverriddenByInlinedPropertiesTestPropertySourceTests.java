@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 
 package org.springframework.test.context.env;
 
@@ -22,6 +23,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.*;
 
+*/
 /**
  * Integration tests that verify support for overriding properties from
  * properties files via inlined properties configured with
@@ -29,7 +31,8 @@ import static org.junit.Assert.*;
  *
  * @author Sam Brannen
  * @since 4.1
- */
+ *//*
+
 @TestPropertySource(properties = { "explicit = inlined", "extended = inlined1", "extended = inlined2" })
 public class MergedPropertiesFilesOverriddenByInlinedPropertiesTestPropertySourceTests extends
 		MergedPropertiesFilesTestPropertySourceTests {
@@ -47,3 +50,4 @@ public class MergedPropertiesFilesOverriddenByInlinedPropertiesTestPropertySourc
 	}
 
 }
+*/

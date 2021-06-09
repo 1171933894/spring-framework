@@ -1464,7 +1464,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	 */
 	protected DataAccessException translateException(String task, @Nullable String sql, SQLException ex) {
 		DataAccessException dae = getExceptionTranslator().translate(task, sql, ex);
-		return (dae != null ? dae : new UncategorizedSQLException(task, sql, ex));
+		return (dae != null ? dae : new UncategorizedSQLException(task, sql, ex));// uncategorized：未分类
 	}
 
 

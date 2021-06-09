@@ -39,6 +39,10 @@ abstract class AbstractPropertyLoadingBeanDefinitionParser extends AbstractSingl
 		return true;
 	}
 
+	/**
+	 * <!-- 加载java资源文件 -->
+	 * <context:property-placeholder location="classpath*:properties/*.properties"/>
+	 */
 	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		String location = element.getAttribute("location");
