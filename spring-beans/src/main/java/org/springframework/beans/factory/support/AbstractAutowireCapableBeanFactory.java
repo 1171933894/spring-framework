@@ -302,7 +302,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 
 	//-------------------------------------------------------------------------
-	// Typical methods for creating and populating external bean instances
+	// Typical（典型的）methods for creating and populating external bean instances
 	//-------------------------------------------------------------------------
 
 	@Override

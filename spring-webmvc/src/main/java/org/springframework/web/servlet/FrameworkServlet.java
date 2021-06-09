@@ -518,6 +518,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
+	/**
+	 * ContextLoaderListener 的时候已经建立了 WebApplicationContext 实例，而在这个函数中最重要的就是对这个实例进行进一步的补充初始
+	 */
 	@Override
 	protected final void initServletBean() throws ServletException {
 		getServletContext().log("Initializing Spring " + getClass().getSimpleName() + " '" + getServletName() + "'");
@@ -529,7 +532,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		try {
 			// 创建springmvc的ioc容器实例
 			this.webApplicationContext = initWebApplicationContext();
-			initFrameworkServlet();// 设计为子类覆盖
+			initFrameworkServlet();// 设计为子类覆盖（暂无实现）
 		}
 		catch (ServletException | RuntimeException ex) {
 			logger.error("Context initialization failed", ex);
