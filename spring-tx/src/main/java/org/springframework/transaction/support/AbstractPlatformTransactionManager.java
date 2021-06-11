@@ -112,7 +112,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
 	private boolean validateExistingTransaction = false;
 
-	private boolean globalRollbackOnParticipationFailure = true;
+	private boolean globalRollbackOnParticipationFailure = true;// 参与失败时全局回滚
 
 	private boolean failEarlyOnGlobalRollbackOnly = false;
 
