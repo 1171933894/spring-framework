@@ -944,6 +944,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Instantiate all remaining (non-lazy-init) singletons.
 		// 初始化剩下的单实例（非惰性的）
+		/**
+		 * 对bean进行了一系列的配置操作，并最终进入最后一行，调用beanFactory的preInstantiateSingletons()方法进行初始化所有非lazy-init的bean
+		 */
 		beanFactory.preInstantiateSingletons();
 	}
 
