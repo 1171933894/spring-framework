@@ -62,7 +62,10 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.PlatformTransactionManager
  */
 @SuppressWarnings("serial")
-// ransactionTemplate的编程式事务管理是使用模板方法设计模式对原始事务管理方式的封装
+// TransactionTemplate的编程式事务管理是使用模板方法设计模式对原始事务管理方式的封装
+/**
+ * 有事务传播性控制，但是初始化之后可能事务隔离级别以及传播性已经被固定，还是没有注解来的灵活（除非配置多个...）
+ */
 public class TransactionTemplate extends DefaultTransactionDefinition
 		implements TransactionOperations, InitializingBean {
 

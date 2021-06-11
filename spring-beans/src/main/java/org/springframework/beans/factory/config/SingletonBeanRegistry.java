@@ -131,6 +131,6 @@ public interface SingletonBeanRegistry {
 	 * @return the mutex object (never {@code null})
 	 * @since 4.2
 	 */
-	Object getSingletonMutex();
+	Object getSingletonMutex();// 返回注册中心的单例互斥锁
 
 }

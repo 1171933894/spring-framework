@@ -69,6 +69,7 @@ public abstract class AbstractApplicationEventMulticaster
 	@Nullable
 	private ClassLoader beanClassLoader;
 
+	// 实现此BeanFactoryAware接口，初始化时，将会将beanFactory注入到该实例中。便于后续获取bean
 	@Nullable
 	private BeanFactory beanFactory;
 
@@ -395,7 +396,7 @@ public abstract class AbstractApplicationEventMulticaster
 				}
 			}
 			if (!this.preFiltered || !this.applicationListenerBeans.isEmpty()) {
-				AnnotationAwareOrderComparator.sort(allListeners);
+				AnnotationAwareOrderComparator.sort(allListeners);// 有排序
 			}
 			return allListeners;
 		}
